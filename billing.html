@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice | Sugarmukt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #004836;
+            --primary-light: #028665;
+            --accent: #b6e154;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #f8fffa;
+            padding: 20px; 
+        }
+        h1,h2,h3 { font-family: 'Playfair Display', serif; }
+        
+        /* Floating Success Toast */
+        .toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,72,54,0.4);
+            z-index: 9999;
+            font-weight: 600;
+            font-size: 16px;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast i {
+            font-size: 24px;
+        }
+        
+        .invoice-container { 
+            background: white; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 35px 40px; 
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 100px;
+            color: rgba(0,72,54,0.03);
+            font-weight: 900;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .invoice-header { 
+            text-align: center; 
+            border-bottom: 3px solid var(--accent); 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+        }
+        .invoice-header h1 { 
+            color: var(--primary); 
+            font-size: 32px; 
+            margin-bottom: 5px; 
+        }
+        .invoice-header p { color: #52796f; font-size: 14px; }
+        
+        .success-badge { 
+            background: #d4edda;
+            color: #155724; 
+            padding: 12px 25px; 
+            border-radius: 50px; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            font-weight: 700;
+            font-size: 14px;
+            border: 2px solid #c3e6cb;
+        }
+        .success-badge i { margin-right: 8px; }
+        
+        .section { margin-bottom: 18px; position: relative; z-index: 1; page-break-inside: avoid; }
+        .section h3 { 
+            color: var(--primary); 
+            font-size: 18px; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid var(--accent); 
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section h3 i { color: var(--accent); font-size: 16px; }
+        
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
+        .info-item { 
+            font-size: 13px;
+            background: #f8fffa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+        .info-item strong { 
+            color: var(--primary); 
+            display: block; 
+            margin-bottom: 3px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-item span { 
+            color: #354f52; 
+            font-weight: 500;
+            word-break: break-word;
+        }
+        .info-item .txn-id {
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 12px;
+            background: #fff;
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            border: 1px solid #e0e0e0;
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 12px;
+        }
+        table th, table td { 
+            padding: 12px; 
+            text-align: left; 
+            border-bottom: 1px solid #e8f5e9; 
+            font-size: 13px;
+        }
+        table th { 
+            background: var(--primary);
+            color: #fff; 
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .total-row { 
+            font-size: 16px; 
+            font-weight: 700; 
+            color: var(--primary);
+            background: #f8fffa;
+        }
+        
+        .download-section {
+            background: #fff8e1;
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0 15px;
+            text-align: center;
+        }
+        .download-section h3 {
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .download-section p {
+            color: #52796f;
+            font-size: 13px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .download-btn {
+            background: var(--primary);
+            color: white; 
+            border: none; 
+            padding: 14px 35px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: 700;
+            font-size: 15px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px;
+        }
+        .download-btn:hover { 
+            background: var(--primary-light);
+        }
+        
+        .footer { 
+            text-align: center; 
+            margin-top: 20px; 
+            padding-top: 15px; 
+            border-top: 2px solid #e8f5e9; 
+            color: #6c757d; 
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .confirm-btn { 
+            background: #ccc;
+            color: #666; 
+            border: none; 
+            padding: 16px 50px; 
+            border-radius: 50px; 
+            cursor: not-allowed; 
+            margin: 15px 5px 0;
+            font-weight: 700;
+            font-size: 16px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .confirm-btn.enabled { 
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,72,54,0.3);
+        }
+        .confirm-btn.enabled:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,72,54,0.4);
+        }
+        .confirm-hint {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        .confirm-hint.hidden {
+            display: none;
+        }
+        
+        @media print { 
+            @page { size: A4; margin: 10mm; }
+            body { background: white; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; } 
+            .invoice-container { border: none; padding: 0; max-width: 100%; }
+            .download-section, .confirm-btn, .confirm-hint, .toast { display: none !important; } 
+            .watermark { display: block; }
+            * { page-break-inside: avoid; }
+        }
+        @media (max-width: 600px) { 
+            .info-grid { grid-template-columns: 1fr; } 
+            .invoice-container { padding: 25px 20px; }
+            .invoice-header h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Success Toast -->
+    <div class="toast" id="successToast">
+        <i class="fas fa-check-circle"></i>
+        <span>Your order has been placed successfully. Thank you!</span>
+    </div>
+
+    <div class="invoice-container" id="invoice">
+        <div class="watermark">PAID</div>
+        
+        <div class="invoice-header">
+            <h1>🌿 Sugarmukt</h1>
+            <p>Natural Diabetes Care | 100% Ayurvedic</p>
+        </div>
+        
+        <div class="success-badge">
+            <i class="fas fa-check-circle"></i> Payment Successful - Order Confirmed
+        </div>
+        
+        <div class="section">
+            <h3><i class="fas fa-file-invoice"></i> Invoice Details</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Order ID</strong>
+                    <span id="orderId">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Payment Date & Time</strong>
+                    <span id="paymentDate">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Payment Method</strong>
+                    <span id="paymentMethod">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Transaction ID</strong>
+                    <span id="transactionId" class="txn-id">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Payment Status</strong>
+                    <span style="color: #155724; font-weight: 700;"><i class="fas fa-check-circle"></i> Paid</span>
+                </div>
+                <div class="info-item">
+                    <strong>Customer Name</strong>
+                    <span id="custName">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3><i class="fas fa-map-marker-alt"></i> Delivery Details</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Mobile</strong>
+                    <span id="custPhone">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Address</strong>
+                    <span id="fullAddress">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3><i class="fas fa-shopping-bag"></i> Order Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="productName">-</td>
+                        <td id="productQty">-</td>
+                        <td id="productPrice">-</td>
+                        <td id="productTotal">-</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Shipping Charges</td>
+                        <td id="shipping">-</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="3">Grand Total</td>
+                        <td id="grandTotal">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="download-section">
+            <h3><i class="fas fa-download"></i> Download Your Invoice</h3>
+            <p><strong>Please take screenshot or download the invoice for your purchase.</strong><br>Click one option below to proceed.</p>
+            <button class="download-btn" onclick="downloadPDF()">
+                <i class="fas fa-file-pdf"></i> Download Invoice
+            </button>
+            <button class="download-btn" onclick="downloadScreenshot()">
+                <i class="fas fa-camera"></i> Take Screenshot
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Thank you for choosing Sugarmukt!</strong></p>
+            <p><i class="fas fa-envelope"></i> Aushadhimantra99@gmail.com | <i class="fas fa-phone"></i> +91-74190 74650</p>
+            <p style="margin-top: 5px; font-size: 11px; color: #999;">This is a computer-generated invoice. No signature required.</p>
+            <div>
+                <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmOrder()">
+                    <i class="fas fa-check-circle"></i> Click to Confirm Order
+                </button>
+                <p class="confirm-hint" id="confirmHint"><i class="fas fa-lock"></i> Please download or screenshot your invoice first</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let invoiceDownloaded = false;
+        
+        window.onload = function() {
+            const stored = localStorage.getItem('sugarmukt_order');
+            if (!stored) {
+                alert('No order found!');
+                window.location.href = 'order.html';
+                return;
+            }
+            
+            const order = JSON.parse(stored);
+            
+            if (order.paymentStatus !== 'success') {
+                alert('Payment not completed!');
+                window.location.href = 'payment.html';
+                return;
+            }
+            
+            document.getElementById('orderId').textContent = order.orderId;
+            document.getElementById('paymentDate').textContent = new Date(order.paymentDate).toLocaleString('en-IN', {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            });
+            document.getElementById('paymentMethod').textContent = order.paymentMethod;
+            document.getElementById('transactionId').textContent = order.transactionId || 'N/A';
+            document.getElementById('custName').textContent = order.name;
+            document.getElementById('custPhone').textContent = order.phone;
+            document.getElementById('fullAddress').textContent = 
+                `${order.house}, ${order.area}, ${order.city}, ${order.district}, ${order.state} - ${order.pincode}`;
+            
+            document.getElementById('productName').textContent = order.product;
+            document.getElementById('productQty').textContent = order.quantity;
+            document.getElementById('productPrice').textContent = `₹${order.price}`;
+            document.getElementById('productTotal').textContent = `₹${order.subtotal}`;
+            document.getElementById('shipping').textContent = `₹${order.shipping}`;
+            document.getElementById('grandTotal').textContent = `₹${order.total}`;
+        }
+        
+        function enableConfirmButton() {
+            if (invoiceDownloaded) return;
+            invoiceDownloaded = true;
+            const confirmBtn = document.getElementById('confirmBtn');
+            const confirmHint = document.getElementById('confirmHint');
+            confirmBtn.disabled = false;
+            confirmBtn.classList.add('enabled');
+            confirmHint.classList.add('hidden');
+        }
+        
+        function downloadPDF() {
+            window.print();
+            setTimeout(enableConfirmButton, 1500);
+        }
+        
+        function downloadScreenshot() {
+            const element = document.getElementById('invoice');
+            const order = JSON.parse(localStorage.getItem('sugarmukt_order'));
+            const filename = `Sugarmukt-Invoice-${order.orderId}.png`;
+            
+            const downloadSection = document.querySelector('.download-section');
+            const originalDisplay = downloadSection.style.display;
+            downloadSection.style.display = 'none';
+            
+            html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff',
+                windowWidth: element.scrollWidth,
+                windowHeight: element.scrollHeight
+            }).then(canvas => {
+                downloadSection.style.display = originalDisplay;
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                enableConfirmButton();
+            }).catch(err => {
+                downloadSection.style.display = originalDisplay;
+                alert('Screenshot failed. Please use Download Invoice option.');
+                console.error(err);
+            });
+        }
+        
+        function confirmOrder() {
+            if (!invoiceDownloaded) {
+                alert('Please download or screenshot your invoice first!');
+                return;
+            }
+            
+            const toast = document.getElementById('successToast');
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                localStorage.removeItem('sugarmukt_order');
+                window.location.href = 'index.html';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
