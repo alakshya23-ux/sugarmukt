@@ -636,18 +636,6 @@
     </style>
 </head>
 <body>
-    <!-- Processing Toast -->
-    <div class="toast" id="processingToast">
-        <i class="fas fa-spinner"></i>
-        <span>We are processing your payment. Please continue to get the bill</span>
-    </div>
-    
-    <!-- Timer Display -->
-    <div class="timer-box" id="timerBox">
-        <h4>Complete payment within</h4>
-        <div class="time" id="timer">02:00</div>
-        <p>Waiting for payment confirmation...</p>
-    </div>
 
     <div class="payment-container">
         <div class="payment-header">
@@ -683,6 +671,7 @@
         </div>
         
         <div class="order-summary">
+          
             <h3><i class="fas fa-receipt"></i> Order Summary</h3>
             <div class="summary-row">
                 <span>Product:</span>
@@ -708,101 +697,9 @@
                 <span>Total Amount:</span>
                 <span id="summaryTotal">-</span>
             </div>
-        </div>
-        
-        <div class="payment-methods">
-            <h3><i class="fas fa-wallet"></i> Select Payment Method</h3>
-            
-            <div class="method-option" onclick="selectPaymentMethod('upiapp')">
-                <input type="radio" name="paymentMethod" value="upiapp" id="upiappRadio">
-                <i class="fas fa-mobile-alt method-icon" style="color: #5f259f;"></i>
-                <div class="method-details">
-                    <h4>UPI Apps</h4>
-                    <p>PhonePe, Google Pay, Paytm & other UPI apps</p>
-                </div>
-            </div>
-            
-            <div class="method-option" onclick="selectPaymentMethod('upiid')">
-                <input type="radio" name="paymentMethod" value="upiid" id="upiidRadio">
-                <i class="fas fa-qrcode method-icon"></i>
-                <div class="method-details">
-                    <h4>UPI ID / QR Code</h4>
-                    <p>Scan QR or pay to UPI ID manually</p>
-                </div>
-            </div>
-            
-            <div class="method-option" onclick="selectPaymentMethod('cod')">
-                <input type="radio" name="paymentMethod" value="cod" id="codRadio">
-                <i class="fas fa-money-bill-wave method-icon"></i>
-                <div class="method-details">
-                    <h4>Cash on Delivery</h4>
-                    <p>Pay when you receive the product (+₹50 extra)</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- UPI Apps Payment Form -->
-        <div class="payment-form" id="upiappForm">
-            <div class="upi-apps-box">
-                <h4><i class="fas fa-bolt"></i> Instant UPI Payment</h4>
-                <div class="merchant-info">
-                    <div class="row">
-                        <span class="label">Merchant:</span>
-                        <span class="value">Sugarmukt Ayurveda</span>
-                    </div>
-                    <div class="row">
-                        <span class="label">UPI ID:</span>
-                        <span class="value">sugarmukt@paytm</span>
-                    </div>
-                    <div class="row">
-                        <span class="label">Amount:</span>
-                        <span class="value amount">₹<span id="upiAppAmount">0</span></span>
-                    </div>
-                    <div class="note"><i class="fas fa-lock"></i> Amount is fixed and cannot be edited</div>
-                </div>
-                
-                <div class="upi-app-buttons">
-                    <button class="upi-btn" onclick="payViaApp('phonepe')">
-                        <i class="fas fa-mobile-alt" style="color: #5f259f;"></i>
-                        <span>PhonePe</span>
-                    </button>
-                    <button class="upi-btn" onclick="payViaApp('gpay')">
-                        <i class="fab fa-google-pay" style="color: #4285f4;"></i>
-                        <span>Google Pay</span>
-                    </button>
-                    <button class="upi-btn" onclick="payViaApp('paytm')">
-                        <i class="fas fa-wallet" style="color: #00baf2;"></i>
-                        <span>Paytm</span>
-                    </button>
-                    <button class="upi-btn" onclick="payViaApp('other')">
-                        <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
-                        <span>Other UPI</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- UPI ID + QR Form -->
-        <div class="payment-form" id="upiidForm">
-            <div class="qr-section">
-                <h4><i class="fas fa-qrcode"></i> Scan QR Code to Pay</h4>
-                <div class="qr-display">
-                    <img id="qrImage" src="" alt="QR Code">
-                </div>
-                <div class="qr-info">
-                    <div class="upi-id">sugarmukt@paytm</div>
-                    <div class="amount">Amount: ₹<span id="qrAmount">0</span></div>
-                </div>
-            </div>
-            
-            <div class="txn-input-section" id="txnSection">
-                <h4><i class="fas fa-receipt"></i> Enter Transaction ID After Payment</h4>
-                <div class="txn-input-group">
-                    <input type="text" id="txnIdInput" placeholder="Enter UPI Transaction ID" maxlength="20">
-                    <button class="txn-submit" onclick="submitTxnId()">Submit</button>
-                </div>
-            </div>
-        </div>
+        </div>  <button class="btn-pay" onclick="payWithRazorpay()">
+    💳 Pay ₹<span id="payAmount">0</span>
+</button>
         
         <!-- COD Form -->
         <div class="payment-form" id="codForm">
@@ -823,20 +720,12 @@
             <i class="fas fa-shield-alt"></i> 100% Secure Payment | SSL Encrypted
         </div>
     </div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
-        let selectedMethod = '';
+      
         let orderData = null;
-        let paymentTimer = null;
-        let timeRemaining = 120; // 2 minutes
         let baseTotal = 0;
-        
-        // QR codes for different quantities - replace with your actual QR codes
-        const qrCodes = {
-            1: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=sugarmukt@paytm&pn=Sugarmukt&am=AMOUNT&cu=INR',
-            2: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=sugarmukt@paytm&pn=Sugarmukt&am=AMOUNT&cu=INR',
-            3: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=sugarmukt@paytm&pn=Sugarmukt&am=AMOUNT&cu=INR'
-        };
         
         window.onload = function() {
             const stored = localStorage.getItem('sugarmukt_order');
@@ -860,108 +749,56 @@
         
         function updateDisplay() {
             let displayTotal = baseTotal;
+            document.getElementById("payAmount").textContent = displayTotal;
             
             // Add COD charges if selected
-            if (selectedMethod === 'cod') {
-                displayTotal += 50;
-                document.getElementById('codChargeRow').style.display = 'flex';
-            } else {
-                document.getElementById('codChargeRow').style.display = 'none';
-            }
+           document.getElementById('codChargeRow').style.display = 'none';
             
             document.getElementById('summaryProduct').textContent = orderData.product;
             document.getElementById('summaryQty').textContent = orderData.quantity;
             document.getElementById('summarySubtotal').textContent = `₹${orderData.subtotal}`;
             document.getElementById('summaryShipping').textContent = `₹${orderData.shipping}`;
             document.getElementById('summaryTotal').textContent = `₹${displayTotal}`;
-            document.getElementById('upiAppAmount').textContent = displayTotal;
-            document.getElementById('qrAmount').textContent = displayTotal;
+            
+           
             
             // Update QR code based on quantity
             const qty = orderData.quantity;
-            const qrUrl = (qrCodes[qty] || qrCodes[1]).replace('AMOUNT', displayTotal);
-            document.getElementById('qrImage').src = qrUrl;
+          
+
         }
-        
-        function selectPaymentMethod(method) {
-            selectedMethod = method;
-            
-            document.querySelectorAll('.method-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-            document.getElementById(method + 'Radio').checked = true;
-            
-            document.querySelectorAll('.payment-form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(method + 'Form').classList.add('active');
-            
-            updateDisplay();
-            
-            // Show transaction input for QR mode
-            if (method === 'upiid') {
-                document.getElementById('txnSection').classList.add('show');
-            }
+    function payWithRazorpay() {
+
+    let amount = baseTotal * 100; // convert ₹ to paise
+
+    var options = {
+        key: "rzp_test_xxxxx", // 🔥 put your key here
+        amount: amount,
+        currency: "INR",
+
+        name: "Sugarmukt Ayurveda",
+        description: "Order Payment",
+
+        handler: function (response) {
+            completePayment("ONLINE", response.razorpay_payment_id);
+        },
+
+        prefill: {
+            name: orderData.name,
+            contact: orderData.phone
+        },
+
+        theme: {
+            color: "#004836"
         }
-        
-        function showToast() {
-            const toast = document.getElementById('processingToast');
-            toast.classList.add('show');
-        }
-        
-        function startTimer() {
-            const timerBox = document.getElementById('timerBox');
-            const timerEl = document.getElementById('timer');
-            timerBox.classList.add('show');
-            timeRemaining = 120;
-            
-            paymentTimer = setInterval(() => {
-                timeRemaining--;
-                const minutes = Math.floor(timeRemaining / 60);
-                const seconds = timeRemaining % 60;
-                timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                
-                if (timeRemaining <= 0) {
-                    clearInterval(paymentTimer);
-                    alert('Payment time expired. Please try again.');
-                    window.location.reload();
-                }
-            }, 1000);
-        }
-        
-        function payViaApp(app) {
-            const amount = baseTotal;
-            const upiLink = `upi://pay?pa=sugarmukt@paytm&pn=Sugarmukt%20Ayurveda&am=${amount}&cu=INR&tn=Order-${orderData.orderId}&tr=${orderData.orderId}`;
-            
-            showToast();
-            startTimer();
-            document.getElementById('organAnimation').classList.add('show');
-            
-            // Redirect to UPI app
-            setTimeout(() => {
-                window.location.href = upiLink;
-            }, 500);
-            
-            // Auto-complete after 2 minutes
-            setTimeout(() => {
-                completePayment('UPI_' + app.toUpperCase());
-            }, 120000);
-        }
-        
-        function submitTxnId() {
-            const txnId = document.getElementById('txnIdInput').value.trim();
-            
-            if (!txnId || txnId.length < 8) {
-                alert('Please enter a valid Transaction ID');
-                return;
-            }
-            
-            completePayment('UPI_MANUAL', txnId);
-        }
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+}
         
         function completePayment(method, txnId = null) {
-            if (paymentTimer) clearInterval(paymentTimer);
+         //   if (paymentTimer) clearInterval(paymentTimer);
             
             orderData.paymentMethod = method;
             orderData.paymentStatus = 'success';
@@ -984,5 +821,6 @@
             }, 2000);
         }
     </script>
+   
 </body>
 </html>
