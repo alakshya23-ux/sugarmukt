@@ -6,14 +6,13 @@
     <title>Payment | Sugarmukt</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         :root {
             --primary: #004836;
             --primary-light: #028665;
             --accent: #b6e154;
             --danger: #dc3545;
-            --warning: #ffc107;
             --success: #28a745;
             --shadow: 0 25px 80px rgba(0,72,54,0.12);
         }
@@ -25,75 +24,6 @@
             min-height: 100vh;
         }
         h1,h2,h3 { font-family: 'Playfair Display', serif; }
-        
-        /* Processing Toast */
-        .toast {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 18px 35px;
-            border-radius: 50px;
-            box-shadow: 0 10px 40px rgba(0,72,54,0.4);
-            z-index: 9999;
-            font-weight: 600;
-            font-size: 15px;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            max-width: 90%;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        .toast i {
-            font-size: 22px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Timer Display */
-        .timer-box {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            border: 3px solid var(--warning);
-            border-radius: 15px;
-            padding: 15px 30px;
-            box-shadow: 0 10px 30px rgba(255,193,7,0.3);
-            z-index: 9998;
-            display: none;
-            text-align: center;
-        }
-        .timer-box.show {
-            display: block;
-        }
-        .timer-box h4 {
-            color: var(--primary);
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        .timer-box .time {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--danger);
-            font-family: 'Courier New', monospace;
-        }
-        .timer-box p {
-            color: #6c757d;
-            font-size: 12px;
-            margin-top: 5px;
-        }
         
         .payment-container { 
             background: white; 
@@ -114,167 +44,6 @@
             margin-bottom: 10px; 
         }
         .payment-header p { color: #52796f; font-size: 15px; }
-
-        /* ANIMATION 1: Sugar Meter */
-        .sugar-animation {
-            text-align: center;
-            padding: 30px;
-            background: linear-gradient(135deg, #f8fffa, #e8f5e9);
-            border-radius: 20px;
-            margin: 20px 0;
-            display: none;
-        }
-        .sugar-animation.show { display: block; }
-        .meter {
-            width: 200px;
-            height: 100px;
-            margin: 0 auto 20px;
-            position: relative;
-            background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
-            border-radius: 100px 100px 0 0;
-            overflow: hidden;
-        }
-        .meter-fill {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            transform-origin: bottom;
-            animation: dropSugar 3s ease-out forwards;
-        }
-        @keyframes dropSugar {
-            0% { transform: scaleY(0.2); }
-            100% { transform: scaleY(0.7); }
-        }
-        .needle {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 4px;
-            height: 80px;
-            background: #004836;
-            transform-origin: bottom;
-            animation: needleMove 3s ease-out forwards;
-        }
-        @keyframes needleMove {
-            0% { transform: translateX(-50%) rotate(60deg); }
-            100% { transform: translateX(-50%) rotate(-20deg); }
-        }
-        .meter-text {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        .success-msg {
-            color: var(--success);
-            font-weight: 600;
-            opacity: 0;
-            animation: fadeIn 1s 2.5s forwards;
-        }
-
-        /* ANIMATION 2: Organs Glow */
-        .organ-animation {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-            padding: 40px;
-            background: #f8fffa;
-            border-radius: 20px;
-            margin: 20px 0;
-            position: relative;
-            display: none;
-        }
-        .organ-animation.show { display: flex; }
-        .organ {
-            text-align: center;
-            opacity: 0.4;
-            animation: glowUp 2s 1s forwards;
-        }
-        .organ i {
-            font-size: 60px;
-            color: #dc3545;
-            display: block;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 0px #28a745);
-            animation: pulse 2s 1s infinite;
-        }
-        .organ span {
-            font-weight: 600;
-            color: var(--primary);
-        }
-        .medicine-drop {
-            font-size: 40px;
-            animation: dropIn 1s ease-out, float 2s 1s infinite ease-in-out;
-        }
-        .heal-text {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            font-weight: 700;
-            color: var(--success);
-            opacity: 0;
-            animation: fadeIn 1s 2s forwards;
-            left: 0;
-        }
-        @keyframes glowUp {
-            to { 
-                opacity: 1;
-                transform: scale(1.1);
-            }
-        }
-        @keyframes pulse {
-            0%, 100% { 
-                filter: drop-shadow(0 0 5px #28a745);
-                transform: scale(1);
-            }
-            50% { 
-                filter: drop-shadow(0 0 20px #28a745);
-                transform: scale(1.1);
-            }
-        }
-        @keyframes dropIn {
-            from { 
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* ANIMATION 3: Lottie */
-        .lottie-health {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8fffa, #e8f5e9);
-            border-radius: 20px;
-            margin: 20px 0;
-            display: none;
-        }
-        .lottie-health.show { display: block; }
-        .lottie-text {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-top: 15px;
-        }
-        .lottie-text span {
-            font-size: 14px;
-            color: #52796f;
-            font-weight: 500;
-        }
         
         .order-summary {
             background: linear-gradient(135deg, #f8fffa, #e8f5e9);
@@ -311,312 +80,107 @@
             margin-top: 12px;
             font-size: 18px;
         }
-        .cod-charge {
-            color: var(--danger) !important;
-            font-size: 13px;
-            font-weight: 600;
-        }
         
-        .payment-methods {
-            margin-bottom: 30px;
-        }
-        .payment-methods h3 {
-            color: var(--primary);
-            font-size: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .payment-methods h3 i { color: var(--accent); }
-        
-        .method-option {
-            background: #f8fffa;
-            border: 2px solid #e8f5e9;
+        .locked-notice {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 3px solid var(--success);
             border-radius: 15px;
             padding: 20px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: 0.3s;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        .method-option:hover {
-            border-color: var(--accent);
-            background: #fff;
-            transform: translateX(5px);
+        .locked-notice i {
+            font-size: 40px;
+            color: var(--success);
         }
-        .method-option.active {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 5px 20px rgba(0,72,54,0.1);
+        .locked-notice .text h4 {
+            color: #155724;
+            font-size: 18px;
+            margin-bottom: 5px;
         }
-        .method-option input[type="radio"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--primary);
-        }
-        .method-icon {
-            font-size: 32px;
-            color: var(--primary);
-        }
-        .method-details {
-            flex: 1;
-        }
-        .method-details h4 {
-            color: var(--primary);
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-        .method-details p {
-            color: #6c757d;
-            font-size: 13px;
+        .locked-notice .text p {
+            color: #155724;
+            font-size: 14px;
+            margin: 0;
         }
         
-        .payment-form {
-            display: none;
+        .upi-section {
+            margin-bottom: 30px;
         }
-        .payment-form.active {
-            display: block;
-        }
-        
-        .upi-apps-box {
-            background: linear-gradient(135deg, #5f259f, #7b3fe4);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .upi-apps-box h4 {
-            color: white;
+        .upi-section h3 {
+            color: var(--primary);
             font-size: 20px;
-            margin-bottom: 15px;
-        }
-        .upi-apps-box p {
-            color: rgba(255,255,255,0.9);
-            font-size: 14px;
             margin-bottom: 20px;
-        }
-        .merchant-info {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .merchant-info .row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        .merchant-info .row:last-child {
-            margin-bottom: 0;
-        }
-        .merchant-info .label {
-            color: #52796f;
-            font-weight: 600;
-        }
-        .merchant-info .value {
-            color: var(--primary);
-            font-weight: 700;
-        }
-        .merchant-info .amount {
-            font-size: 24px;
-        }
-        .merchant-info .note {
-            font-size: 12px;
-            color: var(--danger);
-            margin-top: 10px;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .upi-app-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .upi-btn {
-            background: white;
-            border: 2px solid #e8f5e9;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: 0.3s;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 600;
-            color: var(--primary);
-        }
-        .upi-btn:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(182,225,84,0.2);
-        }
-        .upi-btn i {
-            font-size: 24px;
-        }
-        
-        .qr-section {
-            background: linear-gradient(135deg, #fff8e1, #ffe0b2);
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-        .qr-section h4 {
-            color: var(--primary);
-            font-size: 18px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .qr-display {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .qr-display img {
-            width: 250px;
-            height: 250px;
-            border: 3px solid var(--accent);
-            border-radius: 10px;
-        }
-        .qr-info {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .qr-info .upi-id {
-            background: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--primary);
-            font-family: 'Courier New', monospace;
-            border: 2px dashed var(--accent);
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .qr-info .amount {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .txn-input-section {
-            background: #fff3cd;
-            border: 2px solid var(--warning);
-            border-radius: 15px;
-            padding: 20px;
-            display: none;
-        }
-        .txn-input-section.show {
-            display: block;
-        }
-        .txn-input-section h4 {
-            color: #856404;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        .txn-input-group {
-            display: flex;
             gap: 10px;
         }
-        .txn-input-group input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #ffeaa7;
-            border-radius: 10px;
-            font-size: 15px;
-            font-family: 'Poppins', sans-serif;
-        }
-        .txn-input-group input:focus {
-            outline: none;
-            border-color: var(--warning);
-        }
-        .txn-submit {
-            background: var(--warning);
-            color: #856404;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-        }
-        .txn-submit:hover {
-            background: #ffb300;
-        }
+        .upi-section h3 i { color: var(--accent); }
         
-        .cod-box {
-            background: #d4edda;
-            border: 2px solid #c3e6cb;
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-        }
-        .cod-box i {
-            font-size: 48px;
-            color: #155724;
-            margin-bottom: 15px;
-        }
-        .cod-box h4 {
-            color: #155724;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        .cod-box p {
-            color: #155724;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        .cod-box .extra-charge {
-            background: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            display: inline-block;
-            font-weight: 700;
-            color: var(--danger);
-            font-size: 16px;
-        }
-        
-        .btn-pay {
+        .amount-display {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
-            border: none;
-            padding: 18px 50px;
-            border-radius: 50px;
-            cursor: pointer;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .amount-display .label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .amount-display .amount {
+            font-size: 42px;
             font-weight: 700;
-            font-size: 17px;
-            width: 100%;
+            margin-bottom: 5px;
+        }
+        .amount-display .note {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .amount-display .note i { margin-right: 5px; }
+        
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .app-btn {
+            background: white;
+            border: 3px solid #e8f5e9;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 8px 25px rgba(0,72,54,0.3);
-            margin-top: 30px;
+            text-align: center;
         }
-        .btn-pay:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0,72,54,0.4);
+        .app-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(182,225,84,0.3);
         }
-        .btn-pay:disabled {
-            background: #95d5b2;
-            cursor: not-allowed;
-            transform: none;
+        .app-btn i {
+            font-size: 50px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .app-btn .name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 16px;
+        }
+        .app-btn .sub {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
         }
         
         .secure-badge {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 30px;
             color: #6c757d;
             font-size: 13px;
             display: flex;
@@ -628,50 +192,40 @@
             color: var(--success);
         }
         
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading.show {
+            display: block;
+        }
+        .loading i {
+            font-size: 40px;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 600px) {
             .payment-container { padding: 35px 25px; }
             .payment-header h1 { font-size: 28px; }
-            .upi-app-buttons { grid-template-columns: 1fr; }
+            .app-grid { grid-template-columns: 1fr; }
+            .amount-display .amount { font-size: 36px; }
         }
     </style>
 </head>
 <body>
-
     <div class="payment-container">
         <div class="payment-header">
-            <h1><i class="fas fa-credit-card"></i> Payment</h1>
-            <p>Complete your order securely</p>
-        </div>
-        
-        <!-- ANIMATION 2: Organs Glow (shows during processing) -->
-        <div class="organ-animation" id="organAnimation">
-            <div class="organ heart">
-                <i class="fas fa-heart"></i>
-                <span>Heart</span>
-            </div>
-            <div class="medicine-drop">💊</div>
-            <div class="organ pancreas">
-                <i class="fas fa-capsules"></i>
-                <span>Pancreas</span>
-            </div>
-            <p class="heal-text">Sugarmukt Strengthens Your Body</p>
-        </div>
-        
-        <!-- ANIMATION 3: Lottie (shows on page load) -->
-        <div class="lottie-health show" id="lottieAnimation">
-            <lottie-player 
-                src="https://assets2.lottiefiles.com/packages/lf20_tutvdkg0.json" 
-                background="transparent" 
-                speed="1" 
-                style="width: 300px; height: 300px; margin: 0 auto;" 
-                loop 
-                autoplay>
-            </lottie-player>
-            <p class="lottie-text">Get Stronger with Sugarmukt 🌿<br><span>Natural Diabetes Care</span></p>
+            <h1><i class="fas fa-lock"></i> Secure UPI Payment</h1>
+            <p>Amount is locked by merchant. Cannot be edited.</p>
         </div>
         
         <div class="order-summary">
-          
             <h3><i class="fas fa-receipt"></i> Order Summary</h3>
             <div class="summary-row">
                 <span>Product:</span>
@@ -689,138 +243,149 @@
                 <span>Shipping:</span>
                 <span id="summaryShipping">-</span>
             </div>
-            <div class="summary-row" id="codChargeRow" style="display:none;">
-                <span>COD Charges:</span>
-                <span class="cod-charge">+ ₹50</span>
-            </div>
             <div class="summary-row total">
                 <span>Total Amount:</span>
                 <span id="summaryTotal">-</span>
             </div>
-        </div>  <button class="btn-pay" onclick="payWithRazorpay()">
-    💳 Pay ₹<span id="payAmount">0</span>
-</button>
+        </div>
         
-        <!-- COD Form -->
-        <div class="payment-form" id="codForm">
-            <div class="cod-box">
-                <i class="fas fa-truck"></i>
-                <h4>Cash on Delivery Selected</h4>
-                <p>You will pay when the product is delivered.</p>
-                <div class="extra-charge">
-                    <i class="fas fa-plus-circle"></i> Extra ₹50 COD charges applied
+        <div class="locked-notice">
+            <i class="fas fa-shield-alt"></i>
+            <div class="text">
+                <h4>Amount Locked by Merchant</h4>
+                <p>The amount ₹<span id="lockedAmount">0</span> cannot be changed in your UPI app. Secured by Razorpay.</p>
+            </div>
+        </div>
+        
+        <div class="upi-section">
+            <h3><i class="fas fa-mobile-alt"></i> Pay with UPI App</h3>
+            
+            <div class="amount-display">
+                <div class="label">Amount to Pay</div>
+                <div class="amount">₹<span id="payAmount">0</span></div>
+                <div class="note"><i class="fas fa-lock"></i> Locked & Secure</div>
+            </div>
+            
+            <div class="app-grid">
+                <div class="app-btn" onclick="initiatePayment()">
+                    <i class="fas fa-mobile-alt" style="color: #5f259f;"></i>
+                    <div class="name">PhonePe</div>
+                    <div class="sub">Tap to pay</div>
+                </div>
+                
+                <div class="app-btn" onclick="initiatePayment()">
+                    <i class="fab fa-google-pay" style="color: #4285f4;"></i>
+                    <div class="name">Google Pay</div>
+                    <div class="sub">Tap to pay</div>
+                </div>
+                
+                <div class="app-btn" onclick="initiatePayment()">
+                    <i class="fas fa-wallet" style="color: #00baf2;"></i>
+                    <div class="name">Paytm</div>
+                    <div class="sub">Tap to pay</div>
+                </div>
+                
+                <div class="app-btn" onclick="initiatePayment()">
+                    <i class="fas fa-qrcode" style="color: var(--primary);"></i>
+                    <div class="name">Other UPI</div>
+                    <div class="sub">BHIM, Amazon Pay, etc</div>
                 </div>
             </div>
-            <button class="btn-pay" onclick="processCOD()">
-                <i class="fas fa-check-circle"></i> Confirm Order
-            </button>
+            
+            <div class="loading" id="loading">
+                <i class="fas fa-spinner"></i>
+                <p>Opening payment gateway...</p>
+            </div>
         </div>
         
         <div class="secure-badge">
-            <i class="fas fa-shield-alt"></i> 100% Secure Payment | SSL Encrypted
+            <i class="fas fa-shield-alt"></i> Powered by Razorpay | PCI DSS Compliant | 256-bit SSL Encryption
         </div>
     </div>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
-      
         let orderData = null;
-        let baseTotal = 0;
         
         window.onload = function() {
             const stored = localStorage.getItem('sugarmukt_order');
             if (!stored) {
-                alert('No order found!');
+                alert('No order found! Redirecting to order page.');
                 window.location.href = 'order.html';
                 return;
             }
             
             orderData = JSON.parse(stored);
-            baseTotal = orderData.total;
-            
             updateDisplay();
-            
-            // Show sugar meter animation after 1 second
-            setTimeout(() => {
-                document.getElementById('lottieAnimation').classList.remove('show');
-                // You can show sugar-animation here if needed
-            }, 3000);
         }
         
         function updateDisplay() {
-            let displayTotal = baseTotal;
-            document.getElementById("payAmount").textContent = displayTotal;
-            
-            // Add COD charges if selected
-           document.getElementById('codChargeRow').style.display = 'none';
-            
-            document.getElementById('summaryProduct').textContent = orderData.product;
-            document.getElementById('summaryQty').textContent = orderData.quantity;
-            document.getElementById('summarySubtotal').textContent = `₹${orderData.subtotal}`;
-            document.getElementById('summaryShipping').textContent = `₹${orderData.shipping}`;
-            document.getElementById('summaryTotal').textContent = `₹${displayTotal}`;
-            
-           
-            
-            // Update QR code based on quantity
-            const qty = orderData.quantity;
-          
-
+            document.getElementById('summaryProduct').textContent = orderData.product || 'Sugarmukt';
+            document.getElementById('summaryQty').textContent = orderData.quantity || 1;
+            document.getElementById('summarySubtotal').textContent = `₹${orderData.subtotal || orderData.total}`;
+            document.getElementById('summaryShipping').textContent = `₹${orderData.shipping || 50}`;
+            document.getElementById('summaryTotal').textContent = `₹${orderData.total}`;
+            document.getElementById('lockedAmount').textContent = orderData.total;
+            document.getElementById('payAmount').textContent = orderData.total;
         }
-    function payWithRazorpay() {
-
-    let amount = baseTotal * 100; // convert ₹ to paise
-
-    var options = {
-        key: "rzp_test_xxxxx", // 🔥 put your key here
-        amount: amount,
-        currency: "INR",
-
-        name: "Sugarmukt Ayurveda",
-        description: "Order Payment",
-
-        handler: function (response) {
-            completePayment("ONLINE", response.razorpay_payment_id);
-        },
-
-        prefill: {
-            name: orderData.name,
-            contact: orderData.phone
-        },
-
-        theme: {
-            color: "#004836"
-        }
-    };
-
-    var rzp = new Razorpay(options);
-    rzp.open();
-}
         
-        function completePayment(method, txnId = null) {
-         //   if (paymentTimer) clearInterval(paymentTimer);
+        function initiatePayment() {
+            document.getElementById('loading').classList.add('show');
             
-            orderData.paymentMethod = method;
+            // RAZORPAY CHECKOUT - AMOUNT IS 100% LOCKED
+            var options = {
+                "key": "rzp_test_T4gjui0GH9R6FH", // YOUR TEST KEY
+                "amount": orderData.total * 100, // Amount in paise - LOCKED, CANNOT BE EDITED
+                "currency": "INR",
+                "name": "Sugarmukt Ayurveda",
+                "description": "Order " + orderData.orderId,
+                "image": "", // Add your logo URL here
+                "handler": function (response){
+                    // This runs ONLY after successful payment
+                    paymentSuccess(response.razorpay_payment_id);
+                },
+                "prefill": {
+                    "name": orderData.name,
+                    "contact": orderData.phone,
+                    "email": orderData.email || ""
+                },
+                "notes": {
+                    "order_id": orderData.orderId,
+                    "product": orderData.product
+                },
+                "theme": {
+                    "color": "#004836"
+                },
+                "modal": {
+                    "ondismiss": function(){
+                        document.getElementById('loading').classList.remove('show');
+                    }
+                }
+            };
+            
+            var rzp = new Razorpay(options);
+            
+            rzp.on('payment.failed', function (response){
+                document.getElementById('loading').classList.remove('show');
+                alert('Payment failed: ' + response.error.description);
+            });
+            
+            rzp.open();
+        }
+        
+        function paymentSuccess(paymentId) {
+            document.getElementById('loading').classList.remove('show');
+            
+            // Save payment details
+            orderData.paymentMethod = 'RAZORPAY_UPI';
             orderData.paymentStatus = 'success';
             orderData.paymentDate = new Date().toISOString();
-            orderData.transactionId = txnId || method + Date.now();
-            
-            if (method === 'COD') {
-                orderData.total = baseTotal + 50;
-            }
+            orderData.transactionId = paymentId;
             
             localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
+            
+            // Redirect to billing page
             window.location.href = 'billing.html';
         }
-        
-        function processCOD() {
-            showToast();
-            
-            setTimeout(() => {
-                completePayment('COD');
-            }, 2000);
-        }
     </script>
-   
 </body>
 </html>
