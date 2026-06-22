@@ -115,7 +115,7 @@
         }
         .payment-header p { color: #52796f; font-size: 15px; }
 
-        /* Sugar Meter Animation */
+        /* ANIMATION 1: Sugar Meter */
         .sugar-animation {
             text-align: center;
             padding: 30px;
@@ -174,7 +174,7 @@
             animation: fadeIn 1s 2.5s forwards;
         }
 
-        /* Organs Glow Animation */
+        /* ANIMATION 2: Organs Glow */
         .organ-animation {
             display: flex;
             align-items: center;
@@ -198,7 +198,7 @@
             color: #dc3545;
             display: block;
             margin-bottom: 10px;
-            filter: drop-shadow(0 0px #28a745);
+            filter: drop-shadow(0 0 0px #28a745);
             animation: pulse 2s 1s infinite;
         }
         .organ span {
@@ -254,7 +254,7 @@
             to { opacity: 1; }
         }
 
-        /* Lottie Animation */
+        /* ANIMATION 3: Lottie */
         .lottie-health {
             text-align: center;
             padding: 20px;
@@ -451,7 +451,6 @@
             gap: 10px;
             font-weight: 600;
             color: var(--primary);
-            text-decoration: none;
         }
         .upi-btn:hover {
             border-color: var(--accent);
@@ -763,22 +762,22 @@
                 </div>
                 
                 <div class="upi-app-buttons">
-                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
+                    <button class="upi-btn" onclick="payViaApp('phonepe')">
                         <i class="fas fa-mobile-alt" style="color: #5f259f;"></i>
                         <span>PhonePe</span>
-                    </a>
-                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
+                    </button>
+                    <button class="upi-btn" onclick="payViaApp('gpay')">
                         <i class="fab fa-google-pay" style="color: #4285f4;"></i>
                         <span>Google Pay</span>
-                    </a>
-                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
+                    </button>
+                    <button class="upi-btn" onclick="payViaApp('paytm')">
                         <i class="fas fa-wallet" style="color: #00baf2;"></i>
                         <span>Paytm</span>
-                    </a>
-                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
+                    </button>
+                    <button class="upi-btn" onclick="payViaApp('other')">
                         <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
                         <span>Other UPI</span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -855,7 +854,7 @@
             // Show sugar meter animation after 1 second
             setTimeout(() => {
                 document.getElementById('lottieAnimation').classList.remove('show');
-                document.getElementById('sugar-animation').classList.add('show');
+                // You can show sugar-animation here if needed
             }, 3000);
         }
         
@@ -931,14 +930,22 @@
             }, 1000);
         }
         
-        function startPayment() {
+        function payViaApp(app) {
+            const amount = baseTotal;
+            const upiLink = `upi://pay?pa=sugarmukt@paytm&pn=Sugarmukt%20Ayurveda&am=${amount}&cu=INR&tn=Order-${orderData.orderId}&tr=${orderData.orderId}`;
+            
             showToast();
             startTimer();
             document.getElementById('organAnimation').classList.add('show');
             
+            // Redirect to UPI app
+            setTimeout(() => {
+                window.location.href = upiLink;
+            }, 500);
+            
             // Auto-complete after 2 minutes
             setTimeout(() => {
-                completePayment('RAZORPAY_UPI');
+                completePayment('UPI_' + app.toUpperCase());
             }, 120000);
         }
         
