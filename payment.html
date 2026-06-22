@@ -6,6 +6,7 @@
     <title>Payment | Sugarmukt</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <style>
         :root {
             --primary: #004836;
@@ -113,6 +114,167 @@
             margin-bottom: 10px; 
         }
         .payment-header p { color: #52796f; font-size: 15px; }
+
+        /* Sugar Meter Animation */
+        .sugar-animation {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8fffa, #e8f5e9);
+            border-radius: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        .sugar-animation.show { display: block; }
+        .meter {
+            width: 200px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+            background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+            border-radius: 100px 100px 0 0;
+            overflow: hidden;
+        }
+        .meter-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            transform-origin: bottom;
+            animation: dropSugar 3s ease-out forwards;
+        }
+        @keyframes dropSugar {
+            0% { transform: scaleY(0.2); }
+            100% { transform: scaleY(0.7); }
+        }
+        .needle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            height: 80px;
+            background: #004836;
+            transform-origin: bottom;
+            animation: needleMove 3s ease-out forwards;
+        }
+        @keyframes needleMove {
+            0% { transform: translateX(-50%) rotate(60deg); }
+            100% { transform: translateX(-50%) rotate(-20deg); }
+        }
+        .meter-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .success-msg {
+            color: var(--success);
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1s 2.5s forwards;
+        }
+
+        /* Organs Glow Animation */
+        .organ-animation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding: 40px;
+            background: #f8fffa;
+            border-radius: 20px;
+            margin: 20px 0;
+            position: relative;
+            display: none;
+        }
+        .organ-animation.show { display: flex; }
+        .organ {
+            text-align: center;
+            opacity: 0.4;
+            animation: glowUp 2s 1s forwards;
+        }
+        .organ i {
+            font-size: 60px;
+            color: #dc3545;
+            display: block;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0px #28a745);
+            animation: pulse 2s 1s infinite;
+        }
+        .organ span {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .medicine-drop {
+            font-size: 40px;
+            animation: dropIn 1s ease-out, float 2s 1s infinite ease-in-out;
+        }
+        .heal-text {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-weight: 700;
+            color: var(--success);
+            opacity: 0;
+            animation: fadeIn 1s 2s forwards;
+            left: 0;
+        }
+        @keyframes glowUp {
+            to { 
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 5px #28a745);
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 20px #28a745);
+                transform: scale(1.1);
+            }
+        }
+        @keyframes dropIn {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Lottie Animation */
+        .lottie-health {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fffa, #e8f5e9);
+            border-radius: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        .lottie-health.show { display: block; }
+        .lottie-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 15px;
+        }
+        .lottie-text span {
+            font-size: 14px;
+            color: #52796f;
+            font-weight: 500;
+        }
         
         .order-summary {
             background: linear-gradient(135deg, #f8fffa, #e8f5e9);
@@ -220,20 +382,19 @@
         }
         
         .upi-apps-box {
-            background: linear-gradient(135deg, #f8fffa, #e8f5e9);
-            border: 2px solid var(--accent);
+            background: linear-gradient(135deg, #5f259f, #7b3fe4);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             margin-bottom: 20px;
         }
         .upi-apps-box h4 {
-            color: var(--primary);
-            font-size: 18px;
-            margin-bottom: 10px;
+            color: white;
+            font-size: 20px;
+            margin-bottom: 15px;
         }
         .upi-apps-box p {
-            color: #52796f;
+            color: rgba(255,255,255,0.9);
             font-size: 14px;
             margin-bottom: 20px;
         }
@@ -242,7 +403,7 @@
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
-            border: 2px dashed var(--accent);
+            text-align: left;
         }
         .merchant-info .row {
             display: flex;
@@ -290,6 +451,7 @@
             gap: 10px;
             font-weight: 600;
             color: var(--primary);
+            text-decoration: none;
         }
         .upi-btn:hover {
             border-color: var(--accent);
@@ -494,6 +656,33 @@
             <p>Complete your order securely</p>
         </div>
         
+        <!-- ANIMATION 2: Organs Glow (shows during processing) -->
+        <div class="organ-animation" id="organAnimation">
+            <div class="organ heart">
+                <i class="fas fa-heart"></i>
+                <span>Heart</span>
+            </div>
+            <div class="medicine-drop">💊</div>
+            <div class="organ pancreas">
+                <i class="fas fa-capsules"></i>
+                <span>Pancreas</span>
+            </div>
+            <p class="heal-text">Sugarmukt Strengthens Your Body</p>
+        </div>
+        
+        <!-- ANIMATION 3: Lottie (shows on page load) -->
+        <div class="lottie-health show" id="lottieAnimation">
+            <lottie-player 
+                src="https://assets2.lottiefiles.com/packages/lf20_tutvdkg0.json" 
+                background="transparent" 
+                speed="1" 
+                style="width: 300px; height: 300px; margin: 0 auto;" 
+                loop 
+                autoplay>
+            </lottie-player>
+            <p class="lottie-text">Get Stronger with Sugarmukt 🌿<br><span>Natural Diabetes Care</span></p>
+        </div>
+        
         <div class="order-summary">
             <h3><i class="fas fa-receipt"></i> Order Summary</h3>
             <div class="summary-row">
@@ -574,22 +763,22 @@
                 </div>
                 
                 <div class="upi-app-buttons">
-                    <button class="upi-btn" onclick="payViaApp('phonepe')">
+                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
                         <i class="fas fa-mobile-alt" style="color: #5f259f;"></i>
                         <span>PhonePe</span>
-                    </button>
-                    <button class="upi-btn" onclick="payViaApp('gpay')">
+                    </a>
+                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
                         <i class="fab fa-google-pay" style="color: #4285f4;"></i>
                         <span>Google Pay</span>
-                    </button>
-                    <button class="upi-btn" onclick="payViaApp('paytm')">
+                    </a>
+                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
                         <i class="fas fa-wallet" style="color: #00baf2;"></i>
                         <span>Paytm</span>
-                    </button>
-                    <button class="upi-btn" onclick="payViaApp('other')">
+                    </a>
+                    <a class="upi-btn" href="https://rzp.io/rzp/JqcaDENk" target="_blank" onclick="startPayment()">
                         <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
                         <span>Other UPI</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -662,6 +851,12 @@
             baseTotal = orderData.total;
             
             updateDisplay();
+            
+            // Show sugar meter animation after 1 second
+            setTimeout(() => {
+                document.getElementById('lottieAnimation').classList.remove('show');
+                document.getElementById('sugar-animation').classList.add('show');
+            }, 3000);
         }
         
         function updateDisplay() {
@@ -704,6 +899,11 @@
             document.getElementById(method + 'Form').classList.add('active');
             
             updateDisplay();
+            
+            // Show transaction input for QR mode
+            if (method === 'upiid') {
+                document.getElementById('txnSection').classList.add('show');
+            }
         }
         
         function showToast() {
@@ -731,21 +931,14 @@
             }, 1000);
         }
         
-        function payViaApp(app) {
-            const amount = baseTotal;
-            const upiLink = `upi://pay?pa=sugarmukt@paytm&pn=Sugarmukt%20Ayurveda&am=${amount}&cu=INR&tn=Order-${orderData.orderId}&tr=${orderData.orderId}`;
-            
+        function startPayment() {
             showToast();
             startTimer();
-            
-            // Redirect to UPI app
-            setTimeout(() => {
-                window.location.href = upiLink;
-            }, 500);
+            document.getElementById('organAnimation').classList.add('show');
             
             // Auto-complete after 2 minutes
             setTimeout(() => {
-                completePayment('UPI_' + app.toUpperCase());
+                completePayment('RAZORPAY_UPI');
             }, 120000);
         }
         
