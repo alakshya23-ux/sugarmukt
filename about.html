@@ -1,353 +1,808 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | गौ-शक्ति नाड़ी धाम</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/all.min.css">
-    <link rel="stylesheet" href="css/font.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5 {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .about-hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/banner.jpeg');
-            background-size: cover;
-            background-position: center;
-            padding: 80px 0;
-            text-align: center;
-            color: #fff;
-        }
-
-        .about-hero h1 {
-            font-size: 42px;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .about-hero p {
-            font-size: 16px;
-            color: #eee;
-        }
-
-        .about-card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 35px 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            height: 100%;
-            text-align: center;
-            transition: 0.3s;
-        }
-
-        .about-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .about-card h4 {
-            color: #2d6a4f;
-            margin: 15px 0 10px;
-            font-size: 20px;
-        }
-
-        .about-card p {
-            font-size: 14px;
-            color: #666;
-            margin: 0;
-            line-height: 1.8;
-        }
-
-        .about-card .icon {
-            font-size: 40px;
-        }
-
-        .about-section {
-            background: linear-gradient(135deg, #f0f7f4, #e8f5e9);
-            padding: 80px 0;
-        }
-
-        .mission-section {
-            background: linear-gradient(135deg, #fff8e1, #ffe0b2);
-            padding: 80px 0;
-        }
-
-        .ingredients-section {
-            background: #fff;
-            padding: 80px 0;
-        }
-
-        .ingredient-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, #2d6a4f, #6caaa8);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 13px;
-            margin: 5px;
-            font-weight: 500;
-        }
-
-        .stats-box {
-            background: linear-gradient(135deg, #2d6a4f, #6caaa8);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            color: #fff;
-            margin-bottom: 30px;
-        }
-
-        .stats-box h2 {
-            color: #fff;
-            font-size: 40px;
-            margin-bottom: 5px;
-        }
-
-        .stats-box p {
-            margin: 0;
-            font-size: 15px;
-        }
-    </style>
-</head>
-<!-- Google tag (gtag.js) -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | SugarMukt by Vayur</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KYLKNNGJBG"></script>
 <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-KYLKNNGJBG');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KYLKNNGJBG');
 </script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --forest:#0a1f14;
+  --forest2:#0d2818;
+  --forest3:#0f3020;
+  --gold:#c9a84c;
+  --gold2:#e8c96a;
+  --mid:#2d6a4f;
+  --text:#e8f0e9;
+  --muted:#8faa96;
+  --border:rgba(201,168,76,0.2);
+  --border-bright:rgba(201,168,76,0.45);
+  --card:rgba(255,255,255,0.04);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--forest);color:var(--text);overflow-x:hidden;line-height:1.6;}
+h1,h2,h3,h4,h5{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.2;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--forest2);}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
 
+/* ANNOUNCEMENT BAR */
+.ann-bar{background:var(--gold);color:var(--forest);padding:9px 0;overflow:hidden;white-space:nowrap;position:relative;z-index:100;}
+.ann-bar-inner{display:inline-block;animation:ticker 28s linear infinite;font-size:13px;font-weight:600;letter-spacing:0.5px;}
+.ann-bar-inner span{margin:0 40px;}
+@keyframes ticker{0%{transform:translateX(100vw);}100%{transform:translateX(-100%);}}
+
+/* NAVBAR */
+.navbar{position:sticky;top:0;z-index:999;background:rgba(10,31,20,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:72px;transition:all 0.3s ease;}
+.navbar.scrolled{background:rgba(8,20,12,0.98);height:64px;box-shadow:0 4px 30px rgba(0,0,0,0.4);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold);letter-spacing:1px;display:flex;align-items:center;gap:10px;}
+.nav-logo-wrap{display:flex;flex-direction:column;line-height:1;}
+.nav-logo .logo-sub{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:400;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-top:2px;}
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none;}
+.nav-links a{color:var(--muted);font-size:0.78rem;font-weight:500;padding:8px 14px;border-radius:8px;transition:all 0.25s;font-family:'DM Sans',sans-serif;letter-spacing:0.08em;text-transform:uppercase;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:4px;left:14px;right:14px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-links a.nav-active{color:var(--gold);}
+.nav-links a.nav-active::after{transform:scaleX(1);}
+.nav-links .nav-cta{background:var(--gold);color:var(--forest)!important;font-weight:700;border-radius:50px;padding:9px 22px!important;letter-spacing:0.05em;}
+.nav-links .nav-cta::after{display:none!important;}
+.nav-links .nav-cta:hover{background:var(--gold2);transform:translateY(-1px);}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none;}
+.burger span{width:26px;height:2px;background:var(--gold);border-radius:2px;transition:all 0.3s;display:block;}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(8,20,12,0.98);backdrop-filter:blur(20px);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:24px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--text);transition:color 0.2s;}
+.mobile-menu a:hover{color:var(--gold);}
+.mobile-menu .mob-close{position:absolute;top:28px;right:28px;font-size:28px;cursor:pointer;color:var(--muted);background:none;border:none;}
+.mobile-menu .mob-cta{background:var(--gold);color:var(--forest)!important;padding:14px 48px;border-radius:50px;font-size:22px!important;font-weight:700!important;margin-top:12px;}
+
+/* HERO */
+.about-hero{position:relative;min-height:62vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,31,20,0.93) 0%,rgba(45,106,79,0.25) 50%,rgba(10,31,20,0.96) 100%),url('images/a1.jpeg') center/cover no-repeat;z-index:0;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:60px 60px;z-index:1;}
+.hero-orb{position:absolute;width:420px;height:420px;background:radial-gradient(circle,rgba(45,106,79,0.22) 0%,transparent 70%);border-radius:50%;top:-80px;right:-80px;z-index:1;animation:orbPulse 6s ease-in-out infinite;}
+@keyframes orbPulse{0%,100%{transform:scale(1);opacity:0.6;}50%{transform:scale(1.1);opacity:1;}}
+.hero-content{position:relative;z-index:2;text-align:center;padding:120px 20px 90px;max-width:820px;}
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+
+  /* 🔥 ADD THIS PART */
+  background: rgba(0,0,0,0.4);
+  padding:8px 18px;
+  border-radius:30px;
+  backdrop-filter: blur(6px);
+  border:1px solid rgba(255,255,255,0.2);
+}
+.hero-eyebrow .line{
+  width:40px;
+  height:2px; /* thicker */
+  background:linear-gradient(to right, transparent, #ffd369, transparent);
+}
+.hero-eyebrow span{
+  color:#ffd369;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:4px;
+
+  /* 🔥 STRONG VISIBILITY */
+  text-shadow: 
+    0 2px 6px rgba(0,0,0,0.9),
+    0 0 12px rgba(255,211,105,0.8);
+}
+.hero-title{
+  font-size:clamp(42px,6vw,78px); /* slightly bigger */
+  color:#ffffff;
+  font-weight:700;
+
+  /* 🔥 strong visibility */
+  text-shadow: 
+    0 6px 25px rgba(0,0,0,0.95),
+    0 2px 8px rgba(0,0,0,0.9);
+}
+.hero-title em{color:var(--gold);font-style:italic;}
+.hero-sub{
+  font-size:18px;
+  color:#ffffff;
+  max-width:600px;
+  margin:0 auto 36px;
+  line-height:1.9;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+
+  /* 🔥 MAIN VISIBILITY FIX */
+  text-shadow: 
+    0 2px 4px rgba(0,0,0,0.8),
+    0 4px 12px rgba(0,0,0,0.9);
+}
+.hero-box{
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:10px;
+
+  /* 🔥 makes text readable on any image */
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* SECTION COMMON */
+.section{padding:100px 5%;}
+.section-alt{background:var(--forest2);}
+.section-label{display:inline-block;color:var(--gold);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;position:relative;padding-left:28px;}
+.section-label::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:18px;height:1px;background:var(--gold);}
+.section-title{font-size:clamp(30px,4vw,52px);color:#fff;margin-bottom:16px;}
+.section-title em{color:var(--gold);font-style:italic;}
+.section-line{width:60px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:48px;}
+.center{text-align:center;}
+.center .section-line{margin-left:auto;margin-right:auto;}
+.center .section-label{padding-left:0;}
+.center .section-label::before{display:none;}
+
+/* ── OUR STORY SECTION (FIXED) ───────────────────────── */
+.story-section{
+  padding:100px 5%;
+  background:var(--forest2);
+}
+.story-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:start;
+}
+/* LEFT: image side */
+.story-img-col{position:relative;}
+.story-img-frame{
+  position:relative;
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  display:block;
+}
+.story-img-frame img{
+  width:100%;
+  height:480px;
+  object-fit:cover;
+  display:block;
+  transition:transform 0.6s ease;
+}
+.story-img-frame:hover img{transform:scale(1.04);}
+.story-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,31,20,0.8) 0%,transparent 55%);
+  pointer-events:none;
+}
+.story-img-badge{
+  position:absolute;
+  bottom:24px;left:24px;
+  background:var(--gold);color:var(--forest);
+  padding:10px 20px;border-radius:10px;
+  font-weight:700;font-size:13px;letter-spacing:0.5px;
+}
+.story-float-card{
+  position:absolute;
+  top:24px;right:-24px;
+  background:var(--forest);
+  border:1px solid var(--border-bright);
+  border-radius:16px;
+  padding:18px 22px;
+  text-align:center;
+  min-width:130px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.5);
+  z-index:2;
+}
+.story-float-card .fc-num{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--gold);display:block;line-height:1;}
+.story-float-card .fc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+
+/* RIGHT: text side — fully isolated, no overlap */
+.story-text-col{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+.story-text-col .section-label{margin-bottom:10px;}
+.story-text-col .section-title{margin-bottom:6px;font-size:clamp(28px,3.5vw,48px);}
+.story-text-col .section-line{margin-bottom:28px;}
+.story-text-col p{
+  font-size:15px;
+  color:var(--muted);
+  line-height:1.9;
+  margin-bottom:16px;
+}
+.story-text-col p strong{color:var(--text);}
+.story-highlight{
+  background:rgba(201,168,76,0.07);
+  border-left:3px solid var(--gold);
+  padding:18px 22px;
+  border-radius:0 12px 12px 0;
+  margin:20px 0 24px;
+}
+.story-highlight p{margin:0;color:var(--text)!important;font-style:italic;}
+.story-features{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:8px;
+}
+.sf-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--border);
+  padding:11px 14px;border-radius:12px;transition:all 0.3s;
+}
+.sf-item:hover{background:rgba(201,168,76,0.06);border-color:var(--border-bright);}
+.sf-icon{width:32px;height:32px;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.sf-item span{font-size:13px;font-weight:500;color:var(--text);}
+
+/* ── STATS (FIXED — full visibility) ─────────────────── */
+.stats-section{
+  background:var(--forest);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:80px 5%;
+}
+.stats-section-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+.stats-title-row{
+  text-align:center;
+  margin-bottom:60px;
+}
+.stats-title-row .section-label{padding-left:0;}
+.stats-title-row .section-label::before{display:none;}
+.stats-title-row .section-title{font-size:clamp(28px,4vw,48px);}
+.stats-title-row .section-line{margin:0 auto 0;}
+
+/* The 4-box grid */
+.stats-grid-4{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+}
+.stat-card{
+  background:var(--forest2);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:44px 20px 36px;
+  text-align:center;
+  transition:all 0.35s ease;
+  position:relative;
+  overflow:hidden;
+}
+.stat-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform 0.4s ease;
+}
+.stat-card:hover{
+  transform:translateY(-8px);
+  border-color:var(--border-bright);
+  box-shadow:0 24px 60px rgba(0,0,0,0.35);
+}
+.stat-card:hover::before{transform:scaleX(1);}
+.stat-card-icon{
+  width:52px;height:52px;
+  background:rgba(201,168,76,0.1);
+  border:1px solid var(--border-bright);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  margin:0 auto 20px;
+}
+.stat-card-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:56px;
+  font-weight:700;
+  color:var(--gold);
+  display:block;
+  line-height:1;
+  margin-bottom:10px;
+}
+.stat-card-label{
+  font-size:13px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  font-weight:500;
+  line-height:1.4;
+}
+
+/* VIDEOS */
+.video-section{padding:100px 5%;background:var(--forest2);}
+.video-inner{max-width:1200px;margin:0 auto;}
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:60px;}
+.video-card{background:var(--forest);border:1px solid var(--border);border-radius:24px;overflow:hidden;transition:all 0.35s;}
+.video-card:hover{border-color:var(--border-bright);transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.4);}
+.video-card video{width:100%;display:block;max-height:340px;object-fit:cover;}
+.video-card-body{padding:24px;}
+.video-card-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;margin-bottom:10px;}
+.video-card-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.sound-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(201,168,76,0.1);border:1px solid var(--border-bright);
+  color:var(--gold);padding:9px 20px;border-radius:50px;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s;
+  font-family:'DM Sans',sans-serif;
+}
+.sound-btn:hover{background:rgba(201,168,76,0.18);}
+
+/* HERBS */
+.herbs-section{padding:100px 5%;background:var(--forest);}
+.herbs-inner{max-width:1100px;margin:0 auto;}
+.herbs-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:48px;}
+.herb-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(201,168,76,0.07);
+  border:1px solid var(--border);
+  padding:10px 20px;border-radius:50px;
+  font-size:13px;font-weight:500;color:var(--text);
+  transition:all 0.3s;cursor:default;
+}
+.herb-chip:hover{background:rgba(201,168,76,0.14);border-color:var(--border-bright);color:var(--gold);transform:translateY(-2px);}
+.herb-chip .h-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;flex-shrink:0;}
+
+/* MISSION CARDS */
+.mission-section{padding:100px 5%;background:var(--forest2);}
+.mission-inner{max-width:1200px;margin:0 auto;}
+.mission-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:60px;}
+.mission-card{
+  background:var(--forest);border:1px solid var(--border);
+  border-radius:24px;padding:40px 28px;text-align:center;transition:all 0.35s;position:relative;overflow:hidden;
+}
+.mission-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform 0.4s;}
+.mission-card:hover{transform:translateY(-8px);border-color:var(--border-bright);box-shadow:0 24px 60px rgba(0,0,0,0.35);}
+.mission-card:hover::after{transform:scaleX(1);}
+.mc-icon{width:68px;height:68px;background:rgba(201,168,76,0.1);border:1px solid var(--border-bright);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 24px;}
+.mc-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;margin-bottom:12px;}
+.mc-text{font-size:14px;color:var(--muted);line-height:1.8;}
+
+/* CTA SECTION */
+.cta-section{padding:100px 5%;background:var(--forest);text-align:center;}
+.cta-inner{max-width:700px;margin:0 auto;}
+.cta-price{margin:32px 0 20px;}
+.cta-price .price-old{font-size:18px;color:var(--muted);text-decoration:line-through;display:block;margin-bottom:6px;}
+.cta-price .price-main{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:700;color:var(--gold);line-height:1;}
+.cta-upi{display:inline-flex;align-items:center;gap:10px;background:rgba(201,168,76,0.08);border:1px solid var(--border-bright);border-radius:12px;padding:12px 24px;margin:16px 0 32px;font-size:14px;color:var(--muted);}
+.cta-upi strong{color:var(--gold);}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn-gold{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--forest);padding:16px 40px;border-radius:50px;font-weight:700;font-size:15px;transition:all 0.3s;letter-spacing:0.05em;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-3px);box-shadow:0 16px 40px rgba(201,168,76,0.35);}
+.btn-outline{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--gold);border:1px solid var(--border-bright);padding:15px 38px;border-radius:50px;font-weight:600;font-size:15px;transition:all 0.3s;letter-spacing:0.05em;}
+.btn-outline:hover{background:rgba(201,168,76,0.06);transform:translateY(-2px);}
+
+/* FOOTER */
+.footer{background:#050e09;border-top:1px solid var(--border);padding:70px 5% 30px;}
+.footer-inner{max-width:1200px;margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:50px;}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);margin-bottom:14px;}
+.footer-desc{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:20px;}
+.footer-contact-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);margin-bottom:10px;transition:color 0.2s;}
+.footer-contact-item:hover{color:var(--gold);}
+.footer-contact-item i{color:var(--gold);width:16px;flex-shrink:0;}
+.footer-col-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:10px;}
+.footer-links a{font-size:14px;color:var(--muted);transition:color 0.2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-copy{font-size:13px;color:var(--muted);}
+.footer-disclaimer{font-size:11px;color:rgba(143,170,150,0.6);max-width:700px;line-height:1.6;}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* WHATSAPP */
+.wa-btn{position:fixed;bottom:32px;right:32px;z-index:500;width:50px;height:50px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 4px 20px rgba(37,211,102,0.35);transition:all 0.3s;}
+.wa-btn:hover{transform:scale(1.1);}
+
+/* MOBILE ORDER BAR */
+.mob-order-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:900;background:var(--forest2);border-top:1px solid var(--border);padding:12px 20px;}
+.mob-order-bar a{display:block;background:var(--gold);color:var(--forest);text-align:center;padding:14px;border-radius:12px;font-weight:700;font-size:15px;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .story-inner{grid-template-columns:1fr;gap:40px;}
+  .story-float-card{right:16px;top:16px;}
+  .stats-grid-4{grid-template-columns:repeat(2,1fr);}
+  .video-grid{grid-template-columns:1fr;}
+  .mission-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .burger{display:flex;}
+  .story-features{grid-template-columns:1fr;}
+  .stats-grid-4{grid-template-columns:repeat(2,1fr);gap:16px;}
+  .stat-card{padding:30px 16px 26px;}
+  .stat-card-num{font-size:42px;}
+  .mission-grid{grid-template-columns:1fr 1fr;}
+  .cta-btns{flex-direction:column;align-items:center;}
+  .footer-grid{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+  .mob-order-bar{display:block;}
+  .wa-btn{bottom:80px;}
+}
+@media(max-width:480px){
+  .stats-grid-4{grid-template-columns:1fr 1fr;}
+  .mission-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
 <body>
 
-    <!-- header start -->
-    <div class="pa-main-header">
-        <div class="container-fluid">
-            <div class="row">  
-                <div class="col-md-3 col-6">
-                    <div class="pa-logo" style="width: 180px;">
-                        <a href="index.html"><img src="images/logo.png" alt="logo" class="img-fluid" /></a>
-                    </div>
-                </div>
-                <div class="col-md-9 col-6">  
-                    <div class="pa-nav-bar">
-                        <div class="pa-menu" id="mainMenu">
-                            <ul>
-                                <li><a href="index.html"style="background:#2d6a4f; color:#fff; padding:6px 14px; border-radius:6px;">Home</a></li>
-                                <li><a href="about.html"style="background:#2d6a4f; color:#fff; padding:6px 14px; border-radius:6px;">About Us</a></li>
-                                <li><a href="contact.html"style="background:#2d6a4f; color:#fff; padding:6px 14px; border-radius:6px;">Contact Us</a></li>
-                                <li>
-                                    <a href="mailto:Aushadhimantra99@gmail.com?subject=Query&body=Hello"
-                                        style="background:#2d6a4f; color:#fff; padding:6px 14px; border-radius:6px;">
-                                        Query
-                                    </a>
-                                </li>
-                                  <li><a href="order.html"
-                                            style="background:#2d6a4f; color:#fff; padding:6px 14px; border-radius:6px;">Order Now
-                                            </a></li> 
-                            </ul>
-                        </div>
-                        <div class="pa-toggle-nav" id="burgerBtn"
-                            onclick="document.getElementById('mainMenu').classList.toggle('pa-open-nav')">
-                            <span></span><span></span><span></span>
-                        </div>
+<!-- ANNOUNCEMENT BAR -->
+<div class="ann-bar">
+  <div class="ann-bar-inner">
+    <span>🌿 Free Delivery Pan India</span>
+    <span>📞 +91 74190 74650</span>
+    <span>✅ 2500+ Satisfied Customers</span>
+    <span>🌿 23+ Powerful Ayurvedic Herbs</span>
+    <span>🛡️ 100% Natural — No Side Effects</span>
+    <span>💳 COD Available</span>
+    <span>🌿 Free Delivery Pan India</span>
+    <span>📞 +91 74190 74650</span>
+    <span>✅ 2500+ Satisfied Customers</span>
+  </div>
+</div>
 
-                    </div>
-                </div>
-            </div>
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo">
+    <span>🌿</span>
+    <div class="nav-logo-wrap">
+      <span>SugarMukt</span>
+      <span class="logo-sub">by Vayur</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html" class="nav-active">About Us</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="mailto:Aushadhimantra99@gmail.com?subject=Query&body=Hello">Query</a></li>
+    <li><a href="order.html" class="nav-cta">Order Now</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mob-close" id="mobClose">✕</button>
+  <a href="index.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Home</a>
+  <a href="about.html" onclick="document.getElementById('mobileMenu').classList.remove('open')" style="color:var(--gold)">About Us</a>
+  <a href="contact.html" onclick="document.getElementById('mobileMenu').classList.remove('open')">Contact</a>
+  <a href="mailto:Aushadhimantra99@gmail.com?subject=Query" onclick="document.getElementById('mobileMenu').classList.remove('open')">Query</a>
+  <a href="order.html" class="mob-cta" onclick="document.getElementById('mobileMenu').classList.remove('open')">Order Now</a>
+</div>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-content reveal">
+    <div class="hero-eyebrow">
+      <span class="line"></span>
+      <span>Our Story</span>
+      <span class="line"></span>
+    </div>
+    <h1 class="hero-title">About <em>SugarMukt</em><br>by Vayur</h1>
+   <p class="hero-sub hero-box">
+  गौ-शक्ति नाड़ी धाम | 100% आयुर्वेद, प्राकृतिक चिकित्सा एवं उपचार
+</p>
+  </div>
+</section>
+
+<!-- ── OUR STORY ───────────────────────────────────────── -->
+<section class="story-section">
+  <div class="story-inner">
+
+    <!-- LEFT: image -->
+    <div class="story-img-col reveal">
+      <div class="story-img-frame">
+        <img src="images/a2.jpeg" alt="Ayurvedic Medicine SugarMukt">
+        <div class="story-img-overlay"></div>
+        <div class="story-img-badge">🌿 100% Natural Ayurvedic</div>
+      </div>
+      <div class="story-float-card">
+        <span class="fc-num">23+</span>
+        <span class="fc-label">Herbs Used</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: text — completely separate column, no overlap -->
+    <div class="story-text-col reveal">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-title">SugarMukt by <em>Vayur</em></h2>
+      <div class="section-line"></div>
+
+      <p>हम एक <strong>100% प्राकृतिक आयुर्वेदिक चिकित्सा केंद्र</strong> हैं जो मधुमेह (Diabetes) और अन्य बीमारियों के लिए प्राकृतिक उपचार प्रदान करते हैं।</p>
+
+      <p>Ayurvedic blood sugar medicines are rooted in centuries-old herbal wisdom, focusing on balancing the body rather than just managing symptoms. Our formulations combine potent herbs like <strong>Neem, Karela, Jamun, Gudmar, and Fenugreek</strong> — known for their natural ability to support healthy glucose metabolism.</p>
+
+      <div class="story-highlight">
+        <p>Instead of causing sudden drops, SugarMukt works gradually to improve insulin sensitivity, enhance pancreatic function, and reduce sugar absorption in the bloodstream.</p>
+      </div>
+
+      <p>A key strength of Ayurveda lies in its holistic approach — along with herbal supplements, it emphasizes mindful eating, regular physical activity, stress management, and proper digestion (Agni balance).</p>
+
+      <div class="story-features">
+        <div class="sf-item"><div class="sf-icon">🌿</div><span>100% Organic Herbs</span></div>
+        <div class="sf-item"><div class="sf-icon">✅</div><span>No Side Effects</span></div>
+        <div class="sf-item"><div class="sf-icon">🔬</div><span>Clinically Tested</span></div>
+        <div class="sf-item"><div class="sf-icon">🚚</div><span>Pan India Delivery</span></div>
+        <div class="sf-item"><div class="sf-icon">💊</div><span>Expert Guidance</span></div>
+        <div class="sf-item"><div class="sf-icon">🛡️</div><span>Trusted by 2500+</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── STATS (FIXED — 4 big cards, fully visible) ─────── -->
+<section class="stats-section">
+  <div class="stats-section-inner">
+
+    <div class="stats-title-row reveal">
+      <span class="section-label" style="padding-left:0;">Our Achievements</span>
+      <h2 class="section-title" style="font-size:clamp(28px,4vw,48px);">Numbers That <em>Speak</em></h2>
+      <div class="section-line" style="margin:16px auto 0;"></div>
+    </div>
+
+    <div class="stats-grid-4" style="margin-top:48px;">
+      <div class="stat-card reveal">
+        <div class="stat-card-icon">👥</div>
+        <span class="stat-card-num">2500+</span>
+        <span class="stat-card-label">Satisfied Customers</span>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card-icon">🌿</div>
+        <span class="stat-card-num">23+</span>
+        <span class="stat-card-label">Powerful Herbs</span>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card-icon">✅</div>
+        <span class="stat-card-num">100%</span>
+        <span class="stat-card-label">Natural &amp; Safe Results</span>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card-icon">🛡️</div>
+        <span class="stat-card-num">0</span>
+        <span class="stat-card-label">Side Effects Reported</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section class="video-section">
+  <div class="video-inner">
+    <div class="center reveal">
+      <span class="section-label" style="padding-left:0;">Watch &amp; Learn</span>
+      <h2 class="section-title">See SugarMukt <em>in Action</em></h2>
+      <div class="section-line" style="margin-left:auto;margin-right:auto;"></div>
+    </div>
+    <div class="video-grid">
+      <div class="video-card reveal">
+        <video id="vid1" autoplay muted loop playsinline preload="auto" poster="images/a1.jpeg">
+          <source src="images/v1.mp4" type="video/mp4">
+        </video>
+        <div class="video-card-body">
+          <h3 class="video-card-title">🌿 Ayurvedic Treatment — Part 1</h3>
+          <p class="video-card-desc">Jaaniye kaise SugarMukt ke ingredients naturally diabetes ko control karte hain aur pancreas ko heal karte hain.</p>
+          <button class="sound-btn" onclick="toggleSound(1)" id="soundBtn1">
+            <i class="fas fa-volume-mute" id="soundIcon1"></i> Enable Sound
+          </button>
         </div>
-    </div>
-    <!-- header end -->
-
-    <!-- hero start -->
-    <div class="about-hero">
-        <h1>About Us</h1>
-        <p>गौ-शक्ति नाड़ी धाम | 100% आयुर्वेद, प्राकृतिक चिकित्सा एवं उपचार</p>
-    </div>
-    <!-- hero end -->
-
-    <!-- about section start -->
-    <div class="about-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <div
-                        style="background:#fff; border-radius:20px; padding:30px; box-shadow: 0 15px 40px rgba(45,106,79,0.15); text-align:center;">
-                        <img src="images/prodct.png" alt="Ayurvedic Medicine" class="img-fluid"
-                            style="border-radius:10px; max-height:300px; object-fit:contain;" />
-                        <p style="margin-top:15px; color:#2d6a4f; font-weight:600; font-size:14px; letter-spacing:1px;">
-                            🌿 100% Natural Ayurvedic Medicine</p>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
-                    <p style="font-size:15px; line-height:1.9; color:#444; margin-bottom:15px;">हम एक 100% प्राकृतिक
-                        आयुर्वेदिक चिकित्सा केंद्र हैं जो मधुमेह (Diabetes) और अन्य बीमारियों के लिए प्राकृतिक उपचार
-                        प्रदान करते हैं।</p>
-                    <p style="font-size:15px; line-height:1.9; color:#444; margin-bottom:15px;">Ayurvedic blood sugar
-                        medicines are rooted in centuries-old herbal wisdom, focusing on balancing the body rather than
-                        just managing symptoms. These formulations typically combine potent herbs like neem, karela
-                        (bitter gourd), jamun, gudmar, and fenugreek—known for their natural ability to support healthy
-                        glucose metabolism. Instead of causing sudden drops, Ayurvedic remedies work gradually to
-                        improve insulin sensitivity, enhance pancreatic function, and reduce sugar absorption in the
-                        bloodstream.</p>
-                    <p style="font-size:15px; line-height:1.9; color:#444;">A key strength of Ayurveda lies in its
-                        holistic approach. Along with herbal supplements, it emphasizes lifestyle changes such as
-                        mindful eating, regular physical activity, stress management, and proper digestion (Agni
-                        balance). This integrated method not only helps in controlling blood sugar levels but also
-                        supports overall well-being, energy levels, and long-term metabolic health.</p>
-                    <p style="font-size:15px; line-height:1.9; color:#444;">Ayurvedic blood sugar control is especially
-                        valued for being gentle on the body with minimal side effects when taken correctly. It aims to
-                        address the root cause—imbalances in doshas (primarily Kapha and Vata)—rather than offering
-                        temporary relief. With consistent use and a disciplined lifestyle, Ayurvedic medicine can be an
-                        effective and natural way to manage blood sugar and maintain a healthier life.
-                    </p>
-                    <a href="contact.html" class="pa-btn mt-3">Contact Us</a>
-
-                </div>
-            </div>
+      </div>
+      <div class="video-card reveal">
+        <video id="vid2" autoplay muted loop playsinline preload="auto" poster="images/a2.jpeg">
+          <source src="images/v2.mp4" type="video/mp4">
+        </video>
+        <div class="video-card-body">
+          <h3 class="video-card-title">🌿 Patient Results — Part 2</h3>
+          <p class="video-card-desc">Real patients ke experiences aur SugarMukt ke amazing results — 100% Ayurvedic, 0 side effects.</p>
+          <button class="sound-btn" onclick="toggleSound(2)" id="soundBtn2">
+            <i class="fas fa-volume-mute" id="soundIcon2"></i> Enable Sound
+          </button>
         </div>
+      </div>
     </div>
-    <!-- about section end -->
+  </div>
+</section>
 
-    <!-- stats start -->
-    <div class="spacer-top spacer-bottom" style="background:#fff;">
-        <div class="container">
-            <div class="pa-heading">
-                <h1>Hamare Achievements</h1>
-                <h5>Numbers Speak for Themselves</h5>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="stats-box">
-                        <h2>2500+</h2>
-                        <p>Satisfied Customers</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stats-box">
-                        <h2>23+</h2>
-                        <p>Powerful Herbs</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stats-box">
-                        <h2>100%</h2>
-                        <p>Natural & Safe</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stats-box">
-                        <h2>Pan</h2>
-                        <p>India Delivery</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- HERBS -->
+<section class="herbs-section">
+  <div class="herbs-inner">
+    <div class="center reveal">
+      <span class="section-label" style="padding-left:0;">Natural Ingredients</span>
+      <h2 class="section-title">23+ Powerful <em>Ayurvedic Herbs</em></h2>
+      <div class="section-line" style="margin-left:auto;margin-right:auto;"></div>
     </div>
-    <!-- stats end -->
-
-    <!-- ingredients start -->
-    <div class="ingredients-section">
-        <div class="container">
-            <div class="pa-heading">
-                <h1>Hamare Ingredients</h1>
-                <h5>23 Powerful Natural Herbs</h5>
-            </div>
-            <div class="text-center">
-                <span class="ingredient-tag">🌿 Methi Dana</span>
-                <span class="ingredient-tag">🌿 Karela</span>
-                <span class="ingredient-tag">🌿 Neem</span>
-                <span class="ingredient-tag">🌿 Jamun</span>
-                <span class="ingredient-tag">🌿 Gudmar</span>
-                <span class="ingredient-tag">🌿 Harad</span>
-                <span class="ingredient-tag">🌿 Aavla</span>
-                <span class="ingredient-tag">🌿 Ashwagandha</span>
-                <span class="ingredient-tag">🌿 Kutki</span>
-                <span class="ingredient-tag">🌿 Giloy</span>
-                <span class="ingredient-tag">🌿 Dal Chini</span>
-                <span class="ingredient-tag">🌿 Paneer Doda</span>
-                <span class="ingredient-tag">🌿 Kala Jeera</span>
-                <span class="ingredient-tag">🌿 Sudh Shilajeet</span>
-                <span class="ingredient-tag">🌿 & 9 More Herbs</span>
-            </div>
-        </div>
+    <div class="herbs-grid reveal">
+      <div class="herb-chip"><span class="h-dot"></span>Methi Dana</div>
+      <div class="herb-chip"><span class="h-dot"></span>Karela</div>
+      <div class="herb-chip"><span class="h-dot"></span>Neem</div>
+      <div class="herb-chip"><span class="h-dot"></span>Jamun</div>
+      <div class="herb-chip"><span class="h-dot"></span>Gudmar</div>
+      <div class="herb-chip"><span class="h-dot"></span>Harad</div>
+      <div class="herb-chip"><span class="h-dot"></span>Aavla (Amla)</div>
+      <div class="herb-chip"><span class="h-dot"></span>Ashwagandha</div>
+      <div class="herb-chip"><span class="h-dot"></span>Kutki</div>
+      <div class="herb-chip"><span class="h-dot"></span>Giloy</div>
+      <div class="herb-chip"><span class="h-dot"></span>Dal Chini</div>
+      <div class="herb-chip"><span class="h-dot"></span>Paneer Doda</div>
+      <div class="herb-chip"><span class="h-dot"></span>Kala Jeera</div>
+      <div class="herb-chip"><span class="h-dot"></span>Sudh Shilajeet</div>
+      <div class="herb-chip" style="background:rgba(201,168,76,0.14);border-color:var(--border-bright);color:var(--gold);font-weight:700;"><span class="h-dot"></span>+9 More Herbs</div>
     </div>
-    <!-- ingredients end -->
+  </div>
+</section>
 
-    <!-- mission start -->
-    <div class="mission-section">
-        <div class="container">
-            <div class="pa-heading">
-                <h1>Hamara Mission</h1>
-                <h5>Why Choose Us</h5>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="about-card">
-                        <div class="icon">🌿</div>
-                        <h4>100% Natural</h4>
-                        <p>Hamare saare products pure natural jadi butiyon se bane hain, koi chemical nahi.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="about-card">
-                        <div class="icon">✅</div>
-                        <h4>No Side Effects</h4>
-                        <p>Hamare Ayurvedic products bilkul safe hain aur koi side effects nahi hain.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="about-card">
-                        <div class="icon">🚚</div>
-                        <h4>Pan India Delivery</h4>
-                        <p>Hum poore India mein fast aur safe delivery provide karte hain.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="about-card">
-                        <div class="icon">💊</div>
-                        <h4>Expert Guidance</h4>
-                        <p>Hamare Ayurvedic experts aapko sahi treatment ke liye guide karenge.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- MISSION -->
+<section class="mission-section">
+  <div class="mission-inner">
+    <div class="center reveal">
+      <span class="section-label" style="padding-left:0;">Why Choose Us</span>
+      <h2 class="section-title">Our <em>Mission</em></h2>
+      <div class="section-line" style="margin-left:auto;margin-right:auto;"></div>
     </div>
-    <!-- mission end -->
-
-    <!-- copyright start -->
-    <div class="pa-copyright">
-        <div class="container">
-            <p>Copyright &copy; 2026 All right reserved. <a href="index.html">Pure Ayurveda</a></p>
-        </div>
+    <div class="mission-grid">
+      <div class="mission-card reveal">
+        <div class="mc-icon">🌿</div>
+        <h3 class="mc-title">100% Natural</h3>
+        <p class="mc-text">Hamare saare products pure natural jadi butiyon se bane hain. Koi chemical, koi artificial ingredient nahi.</p>
+      </div>
+      <div class="mission-card reveal">
+        <div class="mc-icon">✅</div>
+        <h3 class="mc-title">No Side Effects</h3>
+        <p class="mc-text">Hamare Ayurvedic products bilkul safe hain. Hazaaron patients ne use kiya aur koi side effect report nahi hua.</p>
+      </div>
+      <div class="mission-card reveal">
+        <div class="mc-icon">🚚</div>
+        <h3 class="mc-title">Pan India Delivery</h3>
+        <p class="mc-text">Hum poore India mein fast aur safe delivery provide karte hain. COD bhi available hai.</p>
+      </div>
+      <div class="mission-card reveal">
+        <div class="mc-icon">💊</div>
+        <h3 class="mc-title">Expert Guidance</h3>
+        <p class="mc-text">Hamare Ayurvedic experts aapko sahi treatment aur diet ke liye personally guide karte hain.</p>
+      </div>
     </div>
-    <!-- copyright end -->
+  </div>
+</section>
 
-    <!-- mobile fixed order button -->
-    <div class="mobile-order-btn">
-        <a href="order.html" class="btn-call">
-    🛒 Order Now
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner reveal">
+    <span class="section-label" style="padding-left:0;">Start Your Journey</span>
+    <h2 class="section-title" style="font-size:clamp(32px,5vw,58px);">Order <em>SugarMukt</em> Today</h2>
+    <div class="section-line" style="margin-left:auto;margin-right:auto;"></div>
+    <div class="cta-price">
+      <span class="price-old">MRP ₹2,199</span>
+      <span class="price-main">₹1,799</span>
+    </div>
+    <div class="cta-upi">
+      <i class="fas fa-tag" style="color:var(--gold);"></i>
+      Pay via <strong>UPI</strong> and save ₹200 — pay only <strong>₹1,599</strong>
+    </div>
+    <div class="cta-btns">
+      <a href="order.html" class="btn-gold"><i class="fas fa-shopping-cart"></i> Order Now</a>
+      <a href="contact.html" class="btn-outline"><i class="fas fa-phone"></i> Talk to Expert</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">🌿 SugarMukt by Vayur</div>
+        <p class="footer-desc">100% Natural Ayurvedic Diabetes Care. Made with 23+ powerful herbs. Trusted by 2500+ customers across India.</p>
+        <div class="footer-contact-item"><i class="fas fa-phone"></i><a href="tel:+917419074650" style="color:inherit;">+91 74190 74650</a></div>
+        <div class="footer-contact-item"><i class="fas fa-envelope"></i><a href="mailto:Aushadhimantra99@gmail.com" style="color:inherit;">Aushadhimantra99@gmail.com</a></div>
+        <div class="footer-contact-item"><i class="fas fa-truck"></i>Pan India Delivery Available</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="order.html">Order Now</a></li>
+          <li><a href="mailto:Aushadhimantra99@gmail.com?subject=Query">Query</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Our Promise</div>
+        <ul class="footer-links">
+          <li><a href="#">100% Natural Ingredients</a></li>
+          <li><a href="#">No Side Effects</a></li>
+          <li><a href="#">COD Available</a></li>
+          <li><a href="#">Fast Delivery</a></li>
+          <li><a href="#">Expert Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 SugarMukt by Vayur. All rights reserved.</span>
+      <span class="footer-disclaimer">Disclaimer: Results may vary. This product is not intended to diagnose, treat, cure, or prevent any disease. Consult a qualified physician before use.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/917419074650" target="_blank" rel="noopener noreferrer" class="wa-btn" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
 </a>
-    </div>
-    <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/bootstrap.min.js" type="text/javascript"></script>
 
+<!-- MOBILE ORDER BAR -->
+<div class="mob-order-bar">
+  <a href="order.html">🛒 Order Now</a>
+</div>
+
+<script>
+// Navbar scroll
+const nb = document.getElementById('navbar');
+window.addEventListener('scroll', () => { nb.classList.toggle('scrolled', window.scrollY > 60); });
+
+// Burger
+document.getElementById('burger').addEventListener('click', () => { document.getElementById('mobileMenu').classList.add('open'); });
+document.getElementById('mobClose').addEventListener('click', () => { document.getElementById('mobileMenu').classList.remove('open'); });
+
+// Scroll reveal
+const revEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+revEls.forEach(el => obs.observe(el));
+
+// Sound toggle
+function toggleSound(n) {
+  const vid = document.getElementById('vid' + n);
+  const other = document.getElementById('vid' + (n === 1 ? 2 : 1));
+  const btn = document.getElementById('soundBtn' + n);
+  const icon = document.getElementById('soundIcon' + n);
+  const otherIcon = document.getElementById('soundIcon' + (n === 1 ? 2 : 1));
+  const otherBtn = document.getElementById('soundBtn' + (n === 1 ? 2 : 1));
+
+  if (vid.muted) {
+    vid.muted = false;
+    icon.className = 'fas fa-volume-up';
+    btn.innerHTML = '<i class="fas fa-volume-up" id="soundIcon' + n + '"></i> Sound On';
+    // mute other
+    other.muted = true;
+    otherIcon.className = 'fas fa-volume-mute';
+    otherBtn.innerHTML = '<i class="fas fa-volume-mute" id="soundIcon' + (n===1?2:1) + '"></i> Enable Sound';
+  } else {
+    vid.muted = true;
+    icon.className = 'fas fa-volume-mute';
+    btn.innerHTML = '<i class="fas fa-volume-mute" id="soundIcon' + n + '"></i> Enable Sound';
+  }
+}
+</script>
 </body>
-
-</html> 
+</html>
