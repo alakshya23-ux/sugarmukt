@@ -1,750 +1,1606 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice | Sugarmukt</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        :root {
-            --primary: #004836;
-            --primary-light: #028665;
-            --accent: #b6e154;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice | SugarMukt by Vayur</title>
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            padding: 48px 16px 80px;
-            position: relative;
-            overflow-x: hidden;
-            background: #3d1f08;
-        }
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYLKNNGJBG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KYLKNNGJBG');
+</script>
 
-        #woodCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            display: block;
-        }
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(0,0,0,0.55) 100%);
-            pointer-events: none;
-            z-index: 1;
-        }
+<style>
+/* ═══════════════════════════════════════════
+   SUGARMUKT DESIGN SYSTEM
+═══════════════════════════════════════════ */
+:root {
+  --forest:      #0a1f14;
+  --forest-mid:  #0d2818;
+  --forest-card: #111f17;
+  --gold:        #c9a84c;
+  --gold-light:  #e8c96d;
+  --gold-pale:   #f5ecd4;
+  --green-glow:  #1a7a4a;
+  --green-soft:  #2d9e63;
+  --text-main:   #f0ede6;
+  --text-muted:  #8a9e92;
+  --text-dim:    #556b60;
+  --border:      rgba(201,168,76,0.18);
+  --card-bg:     rgba(13,40,24,0.85);
+  --glass:       rgba(255,255,255,0.03);
+}
 
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-        .toast {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 18px 36px;
-            border-radius: 50px;
-            box-shadow: 0 10px 40px rgba(0,72,54,0.5);
-            z-index: 9999;            
-            font-weight: 600;
-            font-size: 15px;
-            opacity: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        .toast i { font-size: 22px; }
+html { scroll-behavior: smooth; }
 
-        .scene {
-            position: relative;
-            max-width: 720px;
-            margin: 0 auto;
-            z-index: 2;
-        }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--forest);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-        .paper-shadow {
-            position: absolute;
-            inset: 0;
-            border-radius: 3px;
-            box-shadow:
-                0 6px 12px rgba(0,0,0,0.25),
-                0 20px 40px rgba(0,0,0,0.35),
-                0 40px 80px rgba(0,0,0,0.2);
-            pointer-events: none;
-            z-index: 0;
-        }
+h1,h2,h3,h4,h5 {
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.3px;
+}
 
-        .invoice-container {
-            position: relative;
-            z-index: 1;
-            border-radius: 3px;
-            padding: 52px 52px 52px;
-            background-color: #fdf8ef;
-            background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
-                linear-gradient(180deg, #fdf8ef 0%, #faf3e5 100%);
-            box-shadow:
-                inset 0 0 40px rgba(180,140,80,0.08),
-                inset 2px 0 6px rgba(180,140,80,0.06),
-                inset -2px 0 6px rgba(180,140,80,0.06);
-        }
+/* ═══════════════════════════════════════════
+   BACKGROUND LAYERS
+═══════════════════════════════════════════ */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 
-        .invoice-container::before {
-            content: '';
-            position: absolute;
-            inset: 52px 52px 0 52px;
-            background-image: repeating-linear-gradient(
-                180deg,
-                transparent 0px,
-                transparent 27px,
-                rgba(180,160,100,0.12) 27px,
-                rgba(180,160,100,0.12) 28px
-            );
-            pointer-events: none;
-            z-index: 0;
-        }
+.bg-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(26,122,74,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 80%, rgba(201,168,76,0.06) 0%, transparent 55%),
+    linear-gradient(160deg, #0a1f14 0%, #050e09 50%, #0a1a10 100%);
+}
 
-        .pin {
-            position: absolute;
-            top: -14px;
-            right: 40px;
-            width: 30px;
-            height: 30px;
-            z-index: 10;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
-        }
-        .pin-head {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #e8352a, #9b1a15);
-            border: 1.5px solid rgba(0,0,0,0.2);
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.4),
-                inset 0 1px 2px rgba(255,255,255,0.35);
-        }
-        .pin-head::before {
-            content: '';
-            position: absolute;
-            top: 4px;
-            left: 5px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.45);
-        }
-        .pin-needle {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 12px;
-            background: linear-gradient(180deg, #b8b8b8, #888);
-            border-radius: 0 0 2px 2px;
-            box-shadow: 1px 0 2px rgba(0,0,0,0.3);
-        }
+.bg-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
 
-        .paper-curl {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 0 28px 28px;
-            border-color: transparent transparent #c8b990 transparent;
-            filter: drop-shadow(-2px -2px 3px rgba(0,0,0,0.15));
-            z-index: 2;
-        }
-        .paper-curl::after {
-            content: '';
-            position: absolute;
-            bottom: -28px;
-            right: -28px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 28px 28px 0 0;
-            border-color: rgba(0,0,0,0.12) transparent transparent transparent;
-        }
+/* ═══════════════════════════════════════════
+   ANNOUNCEMENT BAR
+═══════════════════════════════════════════ */
+.announce-bar {
+  background: linear-gradient(90deg, var(--forest-mid), #0f2d1a, var(--forest-mid));
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 100;
+}
 
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 110px;
-            color: rgba(0,72,54,0.04);
-            font-weight: 900;
-            pointer-events: none;
-            z-index: 0;
-            user-select: none;
-            letter-spacing: 6px;
-        }
+.announce-track {
+  display: flex;
+  gap: 80px;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
+}
 
-        .invoice-container > *:not(.watermark):not(.paper-curl) {
-            position: relative;
-            z-index: 1;
-        }
+.announce-track span {
+  font-size: 12px;
+  color: var(--gold-light);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
 
-        .invoice-header {
-            text-align: center;
-            border-bottom: 3px solid var(--accent);
-            padding-bottom: 16px;
-            margin-bottom: 22px;
-        }
-        .invoice-header h1 { color: var(--primary); font-size: 30px; margin-bottom: 5px; }
-        .invoice-header p { color: #52796f; font-size: 13px; }
+.announce-track span i {
+  margin-right: 6px;
+  color: var(--gold);
+}
 
-        .success-badge {
-            background: #d4edda;
-            color: #155724;
-            padding: 11px 20px;
-            border-radius: 50px;
-            text-align: center;
-            margin-bottom: 22px;
-            font-weight: 700;
-            font-size: 13px;
-            border: 2px solid #c3e6cb;
-        }
-        .success-badge i { margin-right: 8px; }
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 
-        .error-banner {
-            background: #fff3f3;
-            border: 2px solid #f5c6c6;
-            border-radius: 12px;
-            padding: 18px 24px;
-            margin-bottom: 20px;
-            color: #c0392b;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-            display: none;
-        }
-        .error-banner.show { display: block; }
+/* ═══════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: rgba(10,31,20,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.3s;
+}
 
-        .section { margin-bottom: 20px; position: relative; z-index: 1; page-break-inside: avoid; }
-        .section h3 {
-            color: var(--primary);
-            font-size: 16px;
-            margin-bottom: 10px;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .section h3 i { color: var(--primary-light); font-size: 14px; }
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-main);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .info-item {
-            font-size: 12px;
-            background: rgba(255,255,255,0.6);
-            padding: 9px 13px;
-            border-radius: 6px;
-            border-left: 3px solid var(--accent);
-            backdrop-filter: blur(2px);
-        }
-        .info-item strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 2px;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .info-item span {
-            color: #354f52;
-            font-weight: 500;
-            word-break: break-word;
-        }
-        .txn-id {
-            font-family: 'Courier New', monospace;
-            color: var(--primary) !important;
-            font-weight: 700 !important;
-            font-size: 11px !important;
-            background: #fff;
-            padding: 2px 5px;
-            border-radius: 4px;
-            display: inline-block !important;
-            border: 1px solid #d0d0d0;
-        }
+.nav-brand span {
+  color: var(--gold);
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background: rgba(255,255,255,0.5);
-        }
-        table th, table td {
-            padding: 10px 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(180,200,180,0.4);
-            font-size: 12px;
-        }
-        table th {
-            background: var(--primary);
-            color: #fff;
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .total-row {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary);
-            background: rgba(182,225,84,0.15);
-        }
+.nav-brand .brand-pill {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--forest);
+  background: var(--gold);
+  padding: 3px 8px;
+  border-radius: 20px;
+}
 
-        .download-section {
-            background: rgba(255,248,225,0.8);
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            padding: 18px;
-            margin: 22px 0 14px;
-            text-align: center;
-            backdrop-filter: blur(4px);
-        }
-        .download-section h3 { color: var(--primary); font-size: 16px; margin-bottom: 6px; }
-        .download-section p { color: #52796f; font-size: 12px; margin-bottom: 14px; font-weight: 500; }
-        .download-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
-            font-family: 'Poppins', sans-serif;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 4px;
-        }
-        .download-btn:hover { background: var(--primary-light); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+}
 
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 14px;
-            border-top: 2px solid rgba(200,220,200,0.5);
-            color: #6c757d;
-            font-size: 11px;
-            line-height: 1.6;
-        }
-        .confirm-btn {
-            background: #ccc;
-            color: #666;
-            border: none;
-            padding: 14px 44px;
-            border-radius: 50px;
-            cursor: not-allowed;
-            margin: 14px 5px 0;
-            font-weight: 700;
-            font-size: 14px;
-            font-family: 'Poppins', sans-serif;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .confirm-btn.enabled {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,72,54,0.3);
-        }
-        .confirm-btn.enabled:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0,72,54,0.4);
-        }
-        .confirm-hint {
-            color: #dc3545;
-            font-size: 11px;
-            margin-top: 8px;
-            font-weight: 600;
-        }
-        .confirm-hint.hidden { display: none; }
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 6px;
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+}
 
-        @media print {
-            @page { size: A4; margin: 0; }
-            body {
-                background: white !important;
-                padding: 0 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .scene { max-width: 100%; }
-            .pin, .paper-shadow, .paper-curl { display: none !important; }
-            .invoice-container {
-                border-radius: 0;
-                box-shadow: none !important;
-                background: white !important;
-                padding: 32px 40px;
-                background-image: none !important;
-            }
-            .invoice-container::before { display: none; }
-            .download-section, .confirm-btn, .confirm-hint, .toast, .error-banner { display: none !important; }
-            table th { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
-        }
+.nav-links a:hover {
+  color: var(--text-main);
+  background: var(--glass);
+}
 
-        @media (max-width: 600px) {
-            body { padding: 32px 12px 60px; }
-            .invoice-container { padding: 40px 22px 36px; }
-            .info-grid { grid-template-columns: 1fr; }
-            .invoice-header h1 { font-size: 24px; }
-            .pin { right: 24px; }
-        }
-    </style>
+.nav-links a.active {
+  color: var(--forest);
+  background: var(--gold);
+  font-weight: 600;
+}
+
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5,14,9,0.98);
+  z-index: 9999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.mobile-menu a:hover { color: var(--gold); }
+.mobile-close {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  font-size: 28px;
+  color: var(--gold);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS STEPS
+═══════════════════════════════════════════ */
+.steps-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 44px auto 0;
+  padding: 0 20px;
+}
+
+.steps-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid var(--text-dim);
+  color: var(--text-dim);
+  background: var(--forest-mid);
+  transition: all 0.3s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.step.done .step-circle {
+  background: var(--green-glow);
+  border-color: var(--green-soft);
+  color: #fff;
+}
+
+.step.active .step-circle {
+  background: linear-gradient(135deg, #b8930f, var(--gold));
+  border-color: var(--gold-light);
+  color: var(--forest);
+  box-shadow: 0 0 24px rgba(201,168,76,0.45);
+}
+
+.step-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.step.done .step-label,
+.step.active .step-label { color: var(--text-main); }
+
+.step-line {
+  height: 2px;
+  width: 80px;
+  background: var(--text-dim);
+  margin: 0;
+  margin-bottom: 26px;
+}
+.step-line.done { background: var(--green-soft); }
+
+/* ═══════════════════════════════════════════
+   MAIN WRAPPER
+═══════════════════════════════════════════ */
+.page-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 40px auto 100px;
+  padding: 0 20px;
+}
+
+/* ═══════════════════════════════════════════
+   SUCCESS HERO
+═══════════════════════════════════════════ */
+.success-hero {
+  text-align: center;
+  margin-bottom: 44px;
+  animation: fadeUp 0.7s ease both;
+}
+
+.success-icon-wrap {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(26,122,74,0.2), rgba(45,158,99,0.15));
+  border: 2px solid rgba(45,158,99,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 38px;
+  color: var(--green-soft);
+  box-shadow:
+    0 0 0 12px rgba(26,122,74,0.06),
+    0 0 40px rgba(26,122,74,0.2);
+  animation: pulse-ring 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 12px rgba(26,122,74,0.06), 0 0 40px rgba(26,122,74,0.2); }
+  50%       { box-shadow: 0 0 0 20px rgba(26,122,74,0.02), 0 0 60px rgba(26,122,74,0.3); }
+}
+
+.success-hero h1 {
+  font-size: 42px;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+
+.success-hero h1 span { color: var(--gold); }
+
+.success-hero p {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.cod-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid var(--border);
+  color: var(--gold-light);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+
+/* ═══════════════════════════════════════════
+   ERROR BANNER
+═══════════════════════════════════════════ */
+.error-banner {
+  display: none;
+  background: rgba(220,53,69,0.12);
+  border: 1px solid rgba(220,53,69,0.35);
+  border-radius: 12px;
+  padding: 18px 24px;
+  color: #ff8a8a;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s ease;
+}
+.error-banner.show { display: block; }
+
+/* ═══════════════════════════════════════════
+   INVOICE CARD
+═══════════════════════════════════════════ */
+.invoice-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(201,168,76,0.05);
+  animation: fadeUp 0.7s ease 0.1s both;
+  backdrop-filter: blur(16px);
+}
+
+/* Invoice Header */
+.invoice-head {
+  background: linear-gradient(135deg, #0d2818 0%, #0a1f10 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 36px 44px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.inv-brand h2 {
+  font-size: 32px;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.inv-brand h2 span { color: var(--gold); }
+
+.inv-brand p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.inv-meta {
+  text-align: right;
+}
+
+.inv-meta .inv-number {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.inv-meta .inv-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 18px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.inv-status.paid {
+  background: rgba(26,122,74,0.2);
+  border: 1px solid rgba(45,158,99,0.4);
+  color: #6ee09a;
+}
+
+.inv-status.cod {
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.35);
+  color: var(--gold-light);
+}
+
+.inv-status .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: blink 1.8s ease-in-out infinite;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+/* Invoice Body */
+.invoice-body {
+  padding: 44px;
+}
+
+/* Gold Divider */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 32px 0;
+  opacity: 0.35;
+}
+
+/* Section Title */
+.inv-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.inv-section-title i {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.inv-section-title h3 {
+  font-size: 20px;
+  color: var(--text-main);
+}
+
+/* Info Grid */
+.info-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.info-chip {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 14px 18px;
+  transition: border-color 0.25s;
+}
+
+.info-chip:hover { border-color: rgba(201,168,76,0.25); }
+
+.info-chip .chip-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 5px;
+}
+
+.info-chip .chip-value {
+  font-size: 13px;
+  color: var(--text-main);
+  font-weight: 500;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.chip-value.txn-mono {
+  font-family: 'Courier New', monospace;
+  color: var(--gold-light);
+  font-size: 12px;
+  background: rgba(201,168,76,0.06);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(201,168,76,0.12);
+  display: inline-block;
+}
+
+.chip-value.status-paid {
+  color: #6ee09a;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip-value.status-cod {
+  color: var(--gold-light);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Address full width */
+.info-chip.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Product Table */
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+}
+
+.product-table thead tr {
+  background: linear-gradient(90deg, rgba(201,168,76,0.12), rgba(201,168,76,0.06));
+  border-bottom: 1px solid rgba(201,168,76,0.25);
+}
+
+.product-table th {
+  padding: 13px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: left;
+}
+
+.product-table td {
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text-main);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.product-table tbody tr:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.product-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(26,122,74,0.2);
+  border: 1px solid rgba(45,158,99,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.subtotal-rows td {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.subtotal-rows td:last-child { text-align: right; }
+
+.discount-row td { color: #6ee09a !important; }
+
+.grand-total-row {
+  background: linear-gradient(90deg, rgba(201,168,76,0.10), rgba(201,168,76,0.05));
+  border-top: 1px solid rgba(201,168,76,0.3) !important;
+  border-bottom: 1px solid rgba(201,168,76,0.3) !important;
+}
+
+.grand-total-row td {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--gold-light) !important;
+  padding: 16px 18px !important;
+  border: none !important;
+}
+
+.grand-total-row td:last-child { text-align: right; }
+
+/* Free Badge */
+.free-badge {
+  background: rgba(26,122,74,0.2);
+  border: 1px solid rgba(45,158,99,0.35);
+  color: #6ee09a;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════
+   DOWNLOAD SECTION
+═══════════════════════════════════════════ */
+.download-wrap {
+  background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(201,168,76,0.03));
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 16px;
+  padding: 32px 36px;
+  text-align: center;
+  margin-top: 32px;
+  animation: fadeUp 0.7s ease 0.3s both;
+}
+
+.download-wrap h3 {
+  font-size: 24px;
+  color: var(--gold-light);
+  margin-bottom: 6px;
+}
+
+.download-wrap p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+
+.dl-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+  letter-spacing: 0.3px;
+}
+
+.dl-btn-primary {
+  background: linear-gradient(135deg, #b8930f, var(--gold));
+  color: var(--forest);
+}
+.dl-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(201,168,76,0.35);
+}
+
+.dl-btn-secondary {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-main);
+}
+.dl-btn-secondary:hover {
+  background: rgba(255,255,255,0.10);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════
+   CONFIRM SECTION
+═══════════════════════════════════════════ */
+.confirm-wrap {
+  text-align: center;
+  margin-top: 28px;
+  animation: fadeUp 0.7s ease 0.4s both;
+}
+
+.confirm-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 8px 18px;
+  border-radius: 50px;
+}
+.confirm-note.hidden { display: none; }
+
+.confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 48px;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: not-allowed;
+  border: none;
+  letter-spacing: 0.3px;
+  transition: all 0.3s;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-dim);
+  box-shadow: none;
+}
+
+.confirm-btn.enabled {
+  background: linear-gradient(135deg, #1a7a4a, var(--green-soft));
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(26,122,74,0.4);
+}
+.confirm-btn.enabled:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(26,122,74,0.5);
+}
+.confirm-btn.enabled:active { transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  background: #050d08;
+  border-top: 1px solid var(--border);
+  padding: 56px 48px 24px;
+  margin-top: 80px;
+}
+
+.footer-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+
+.footer-brand h3 {
+  font-size: 26px;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+.footer-brand h3 span { color: var(--gold); }
+.footer-brand p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-top: 8px;
+  max-width: 280px;
+}
+
+.footer-col h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col ul li a:hover { color: var(--text-main); }
+
+.footer-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.footer-contact-item i { color: var(--gold); margin-top: 2px; font-size: 12px; }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.footer-bottom p {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.footer-disclaimer {
+  max-width: 1100px;
+  margin: 20px auto 0;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+.toast-wrap {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--forest-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 280px;
+  max-width: 360px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  transform: translateX(120px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: auto;
+}
+.toast.show { transform: translateX(0); opacity: 1; }
+
+.toast-icon { font-size: 20px; flex-shrink: 0; }
+.toast-success .toast-icon { color: #6ee09a; }
+.toast-error   .toast-icon { color: #ff8a8a; }
+.toast-info    .toast-icon { color: var(--gold-light); }
+
+.toast-msg { font-size: 13px; color: var(--text-main); font-weight: 500; line-height: 1.4; }
+
+/* ═══════════════════════════════════════════
+   MOBILE BOTTOM BAR
+═══════════════════════════════════════════ */
+.mobile-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background: rgba(5,14,9,0.97);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+}
+
+.mobile-bar a {
+  display: block;
+  text-align: center;
+  background: linear-gradient(135deg, #1a7a4a, var(--green-soft));
+  color: #fff;
+  text-decoration: none;
+  padding: 14px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* ═══════════════════════════════════════════
+   WHATSAPP BUTTON
+═══════════════════════════════════════════ */
+.wa-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 800;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(37,211,102,0.35);
+  transition: all 0.25s;
+}
+.wa-btn:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(37,211,102,0.45); }
+
+/* ═══════════════════════════════════════════
+   SCROLL TOP
+═══════════════════════════════════════════ */
+.scroll-top {
+  position: fixed;
+  bottom: 88px;
+  right: 28px;
+  z-index: 800;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--forest-card);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover { background: rgba(201,168,76,0.12); }
+
+/* ═══════════════════════════════════════════
+   PRINT STYLES
+═══════════════════════════════════════════ */
+@media print {
+  @page { size: A4; margin: 15mm; }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .bg-layer, .navbar, .announce-bar, .steps-wrap,
+  .download-wrap, .confirm-wrap, .site-footer,
+  .mobile-bar, .wa-btn, .scroll-top,
+  .toast-wrap { display: none !important; }
+  .page-wrap {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+  .invoice-card {
+    border: 1px solid #ccc;
+    border-radius: 0;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+  .invoice-head {
+    background: #0d2818 !important;
+    -webkit-print-color-adjust: exact;
+  }
+  .info-chip { background: #f9f9f9 !important; border-color: #ddd !important; }
+  .info-chip .chip-label { color: #555 !important; }
+  .info-chip .chip-value { color: #111 !important; }
+  .product-table th { background: #0d2818 !important; -webkit-print-color-adjust: exact; }
+  .product-table td { color: #111 !important; }
+  .grand-total-row td { color: #b8930f !important; }
+  .success-hero { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:768px){
+  .navbar { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+  .invoice-head { padding: 28px 24px; flex-direction: column; gap: 16px; }
+  .inv-meta { text-align: left; }
+  .invoice-body { padding: 28px 22px; }
+  .info-grid-2 { grid-template-columns: 1fr; }
+  .info-chip.full-width { grid-column: 1; }
+  .product-table th, .product-table td { padding: 10px 12px; font-size: 12px; }
+  .download-wrap { padding: 24px 20px; }
+  .site-footer { padding: 40px 20px 20px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .mobile-bar { display: block; }
+  .wa-btn { bottom: 76px; right: 16px; }
+  .scroll-top { bottom: 130px; right: 16px; }
+  .steps-wrap { padding: 0 16px; }
+  .step-line { width: 44px; }
+  .dl-btns { flex-direction: column; align-items: stretch; }
+  .confirm-btn { width: 100%; justify-content: center; }
+  .success-hero h1 { font-size: 30px; }
+}
+</style>
 </head>
 <body>
 
-    <div class="toast" id="successToast">
-        <i class="fas fa-check-circle"></i>
-        <span>Your order has been placed successfully. Thank you!</span>
+<!-- ─── BG ─── -->
+<div class="bg-layer"></div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ─── MOBILE MENU ─── -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+  <a href="index.html" onclick="toggleMenu()">Home</a>
+  <a href="about.html" onclick="toggleMenu()">About</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+  <a href="order.html" onclick="toggleMenu()">Order Now</a>
+</div>
+
+<!-- ─── ANNOUNCE BAR ─── -->
+<div class="announce-bar">
+  <div class="announce-track" id="ticker">
+    <span><i class="fas fa-truck"></i> Pan India Delivery Available</span>
+    <span><i class="fas fa-leaf"></i> 100% Natural · 23+ Ayurvedic Herbs</span>
+    <span><i class="fas fa-phone"></i> +91 74190 74650</span>
+    <span><i class="fas fa-users"></i> 2500+ Satisfied Customers</span>
+    <span><i class="fas fa-shield-alt"></i> Secure & Trusted Since 2020</span>
+    <span><i class="fas fa-truck"></i> Pan India Delivery Available</span>
+    <span><i class="fas fa-leaf"></i> 100% Natural · 23+ Ayurvedic Herbs</span>
+    <span><i class="fas fa-phone"></i> +91 74190 74650</span>
+    <span><i class="fas fa-users"></i> 2500+ Satisfied Customers</span>
+    <span><i class="fas fa-shield-alt"></i> Secure & Trusted Since 2020</span>
+  </div>
+</div>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">
+    SugarMukt <span>&nbsp;by Vayur</span>
+    <span class="brand-pill">Ayurveda</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="order.html" class="active">Order Now</a></li>
+  </ul>
+  <div class="nav-burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ─── PROGRESS STEPS ─── -->
+<div class="steps-wrap">
+  <div class="steps-bar">
+    <div class="step done">
+      <div class="step-circle"><i class="fas fa-check"></i></div>
+      <div class="step-label">Order</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step done">
+      <div class="step-circle"><i class="fas fa-check"></i></div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step active">
+      <div class="step-circle"><i class="fas fa-file-invoice"></i></div>
+      <div class="step-label">Invoice</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MAIN CONTENT ─── -->
+<div class="page-wrap">
+
+  <!-- Success Hero -->
+  <div class="success-hero" id="successHero">
+    <div class="success-icon-wrap">
+      <i class="fas fa-check"></i>
+    </div>
+    <h1>Order <span>Confirmed!</span></h1>
+    <p>Thank you for choosing SugarMukt by Vayur.<br>Your Ayurvedic journey begins now.</p>
+    <div class="cod-badge" id="codBadge" style="display:none;">
+      <i class="fas fa-truck"></i> Cash on Delivery — Pay when you receive
+    </div>
+  </div>
+
+  <!-- Error Banner -->
+  <div class="error-banner" id="errorBanner">
+    <i class="fas fa-exclamation-triangle"></i>
+    &nbsp;Order not found or payment not completed. Redirecting…
+  </div>
+
+  <!-- ─── INVOICE CARD ─── -->
+  <div class="invoice-card" id="invoice">
+
+    <!-- Invoice Head -->
+    <div class="invoice-head">
+      <div class="inv-brand">
+        <h2>SugarMukt <span>by Vayur</span></h2>
+        <p>Natural Diabetes Care &nbsp;·&nbsp; 100% Ayurvedic</p>
+      </div>
+      <div class="inv-meta">
+        <div class="inv-number" id="invNumber">Invoice #&nbsp;—</div>
+        <div class="inv-status paid" id="invStatus">
+          <span class="dot"></span>
+          <span id="invStatusText">Payment Successful</span>
+        </div>
+      </div>
     </div>
 
-    <div class="scene">
-        <div class="paper-shadow"></div>
-        <div class="pin" id="pin" aria-hidden="true">
-            <div class="pin-head"></div>
-            <div class="pin-needle"></div>
+    <!-- Invoice Body -->
+    <div class="invoice-body">
+
+      <!-- Order Details -->
+      <div class="inv-section-title">
+        <i class="fas fa-file-invoice"></i>
+        <h3>Invoice Details</h3>
+      </div>
+      <div class="info-grid-2">
+        <div class="info-chip">
+          <div class="chip-label">Order ID</div>
+          <div class="chip-value" id="orderId">—</div>
         </div>
-
-        <div class="invoice-container" id="invoice">
-            <div class="paper-curl"></div>
-            <div class="watermark" id="watermark">PAID</div>
-
-            <div class="error-banner" id="errorBanner">
-                ⚠ Order not found or payment not completed. Redirecting...
-            </div>
-
-            <div class="invoice-header">
-                <h1>🌿 Sugarmukt</h1>
-                <p>Natural Diabetes Care &nbsp;|&nbsp; 100% Ayurvedic</p>
-            </div>
-
-            <div class="success-badge" id="statusBadge">
-                <i class="fas fa-check-circle"></i> Payment Successful — Order Confirmed
-            </div>
-
-            <div class="section">
-                <h3><i class="fas fa-file-invoice"></i> Invoice Details</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <strong>Order ID</strong>
-                        <span id="orderId">-</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Payment Date &amp; Time</strong>
-                        <span id="paymentDate">-</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Payment Method</strong>
-                        <span id="paymentMethod">-</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Transaction ID</strong>
-                        <span id="transactionId" class="txn-id">-</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Payment Status</strong>
-                        <span id="paymentStatus" style="color:#155724; font-weight:700;">
-                            <i class="fas fa-check-circle"></i> Paid
-                        </span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Customer Name</strong>
-                        <span id="custName">-</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3><i class="fas fa-map-marker-alt"></i> Delivery Details</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <strong>Mobile</strong>
-                        <span id="custPhone">-</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Address</strong>
-                        <span id="fullAddress">-</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3><i class="fas fa-shopping-bag"></i> Order Summary</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td id="productName">-</td>
-                            <td id="productQty">-</td>
-                            <td id="productPrice">-</td>
-                            <td id="productTotal">-</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Shipping Charges</td>
-                            <td id="shipping">-</td>
-                        </tr>
-                        <tr class="total-row">
-                            <td colspan="3"><strong>Grand Total</strong></td>
-                            <td id="grandTotal">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="download-section" id="downloadSection">
-                <h3><i class="fas fa-download"></i> Download Your Invoice</h3>
-                <p><strong>Please save your invoice before confirming.</strong><br>Choose an option below to proceed.</p>
-                <button class="download-btn" onclick="downloadPDF()">
-                    <i class="fas fa-file-pdf"></i> Download Invoice
-                </button>
-                <button class="download-btn" onclick="downloadScreenshot()">
-                    <i class="fas fa-camera"></i> Take Screenshot
-                </button>
-            </div>
-
-            <div class="footer">
-                <p><strong>Thank you for choosing Sugarmukt!</strong></p>
-                <p>
-                    <i class="fas fa-envelope"></i> Aushadhimantra99@gmail.com &nbsp;|&nbsp;
-                    <i class="fas fa-phone"></i> +91-74190 74650
-                </p>
-                <p style="margin-top:4px; font-size:10px; color:#aaa;">
-                    This is a computer-generated invoice. No signature required.
-                </p>
-                <div>
-                    <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmOrder()">
-                        <i class="fas fa-check-circle"></i> Click to Confirm Order
-                    </button>
-                    <p class="confirm-hint" id="confirmHint">
-                        <i class="fas fa-lock"></i> Please download or screenshot your invoice first
-                    </p>
-                </div>
-            </div>
-
+        <div class="info-chip">
+          <div class="chip-label">Date &amp; Time</div>
+          <div class="chip-value" id="paymentDate">—</div>
         </div>
+        <div class="info-chip">
+          <div class="chip-label">Payment Method</div>
+          <div class="chip-value" id="paymentMethod">—</div>
+        </div>
+        <div class="info-chip">
+          <div class="chip-label">Transaction ID</div>
+          <div class="chip-value txn-mono" id="transactionId">—</div>
+        </div>
+        <div class="info-chip">
+          <div class="chip-label">Payment Status</div>
+          <div class="chip-value status-paid" id="paymentStatus">
+            <i class="fas fa-check-circle"></i> Paid
+          </div>
+        </div>
+        <div class="info-chip">
+          <div class="chip-label">Customer Name</div>
+          <div class="chip-value" id="custName">—</div>
+        </div>
+      </div>
+
+      <div class="gold-divider"></div>
+
+      <!-- Delivery Details -->
+      <div class="inv-section-title">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>Delivery Details</h3>
+      </div>
+      <div class="info-grid-2">
+        <div class="info-chip">
+          <div class="chip-label">Mobile</div>
+          <div class="chip-value" id="custPhone">—</div>
+        </div>
+        <div class="info-chip full-width">
+          <div class="chip-label">Delivery Address</div>
+          <div class="chip-value" id="fullAddress">—</div>
+        </div>
+      </div>
+
+      <div class="gold-divider"></div>
+
+      <!-- Order Summary -->
+      <div class="inv-section-title">
+        <i class="fas fa-shopping-bag"></i>
+        <h3>Order Summary</h3>
+      </div>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="product-name-cell">
+                <div class="product-icon">🌿</div>
+                <span id="productName">—</span>
+              </div>
+            </td>
+            <td id="productQty">—</td>
+            <td id="productPrice">—</td>
+            <td id="productSubtotal">—</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="subtotal-rows">
+            <td colspan="3">Shipping Charges</td>
+            <td id="shippingCost">—</td>
+          </tr>
+          <tr class="subtotal-rows discount-row" id="discountRow" style="display:none;">
+            <td colspan="3"><i class="fas fa-tag"></i>&nbsp; UPI Discount Applied</td>
+            <td id="discountAmt">—</td>
+          </tr>
+          <tr class="grand-total-row">
+            <td colspan="3"><strong>Grand Total</strong></td>
+            <td id="grandTotal">—</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- Invoice Footer -->
+      <div style="margin-top:32px; text-align:center;">
+        <p style="font-size:12px; color:var(--text-dim); line-height:1.8;">
+          <strong style="color:var(--text-muted);">Thank you for choosing SugarMukt by Vayur!</strong><br>
+          <i class="fas fa-envelope" style="color:var(--gold); margin-right:5px;"></i>Aushadhimantra99@gmail.com
+          &nbsp;·&nbsp;
+          <i class="fas fa-phone" style="color:var(--gold); margin-right:5px;"></i>+91 74190 74650
+        </p>
+        <p style="font-size:10px; color:var(--text-dim); margin-top:8px;">
+          This is a computer-generated invoice. No physical signature required.
+        </p>
+      </div>
+
+    </div><!-- /invoice-body -->
+  </div><!-- /invoice-card -->
+
+  <!-- ─── DOWNLOAD ─── -->
+  <div class="download-wrap" id="downloadSection">
+    <h3><i class="fas fa-download"></i>&nbsp; Save Your Invoice</h3>
+    <p>
+      Please download or take a screenshot of your invoice before confirming.<br>
+      This is your proof of purchase.
+    </p>
+    <div class="dl-btns">
+      <button class="dl-btn dl-btn-primary" onclick="downloadPDF()">
+        <i class="fas fa-file-pdf"></i> Download as PDF
+      </button>
+      <button class="dl-btn dl-btn-secondary" onclick="downloadScreenshot()">
+        <i class="fas fa-camera"></i> Take Screenshot
+      </button>
     </div>
+  </div>
 
-    <canvas id="woodCanvas"></canvas>
+  <!-- ─── CONFIRM ─── -->
+  <div class="confirm-wrap">
+    <div class="confirm-note" id="confirmNote">
+      <i class="fas fa-lock"></i>
+      Please download or screenshot your invoice first to unlock confirmation
+    </div>
+    <br>
+    <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmOrder()">
+      <i class="fas fa-check-circle"></i> Confirm &amp; Complete Order
+    </button>
+  </div>
 
-    <script>
-    (function drawWood() {
-        const canvas = document.getElementById('woodCanvas');
-        const ctx = canvas.getContext('2d');
-        function render() {
-            const W = window.innerWidth;
-            const H = window.innerHeight;
-            canvas.width = W;
-            canvas.height = H;
-            const base = ctx.createLinearGradient(0, 0, W, H * 0.6);
-            base.addColorStop(0.00, '#5a2d0c');
-            base.addColorStop(0.18, '#7a3e16');
-            base.addColorStop(0.35, '#5c2e0e');
-            base.addColorStop(0.52, '#7e421a');
-            base.addColorStop(0.68, '#623210');
-            base.addColorStop(0.84, '#7a3c18');
-            base.addColorStop(1.00, '#4e2608');
-            ctx.fillStyle = base;
-            ctx.fillRect(0, 0, W, H);
-            const grainCount = 120;
-            for (let i = 0; i < grainCount; i++) {
-                const x = (W / grainCount) * i + Math.sin(i * 0.7) * 18;
-                const width = 1 + Math.random() * 3.5;
-                const alpha = 0.018 + Math.random() * 0.055;
-                const dark = Math.random() > 0.5;
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                let cx = x;
-                const segments = 12;
-                for (let s = 1; s <= segments; s++) {
-                    const ny = (H / segments) * s;
-                    cx += (Math.random() - 0.5) * 14;
-                    ctx.lineTo(cx, ny);
-                }
-                ctx.strokeStyle = dark ? `rgba(0,0,0,${alpha})` : `rgba(255,200,120,${alpha * 0.6})`;
-                ctx.lineWidth = width;
-                ctx.stroke();
-            }
-        }
-        render();
-        window.addEventListener('resize', render);
-    })();
-    </script>
+</div><!-- /page-wrap -->
 
-    <script>
-        let invoiceDownloaded = false;
-        let orderData = null;
+<!-- ─── FOOTER ─── -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>SugarMukt <span>by Vayur</span></h3>
+      <p>India's trusted Ayurvedic diabetes care formula — 23+ herbs, zero side effects, clinically tested.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="order.html">Order Now</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+91 74190 74650</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>Aushadhimantra99@gmail.com</span></div>
+      <div class="footer-contact-item"><i class="fas fa-truck"></i><span>Pan India Delivery</span></div>
+      <div class="footer-contact-item"><i class="fas fa-clock"></i><span>Mon – Sat, 9AM – 7PM</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SugarMukt by Vayur. All rights reserved.</p>
+    <p>Crafted with 🌿 for a healthier India.</p>
+  </div>
+  <div class="footer-disclaimer">
+    <strong>Disclaimer:</strong> SugarMukt by Vayur is an Ayurvedic formulation intended to support healthy blood sugar levels as part of an overall wellness routine. It is not a substitute for prescribed medical treatment. Results may vary. Please consult your physician before use if you are on medication or have a medical condition. This product has not been evaluated by the Food and Drug Administration (FSSAI claims pending).
+  </div>
+</footer>
 
-        window.onload = function () {
-            let stored = null;
-            try {
-                stored = localStorage.getItem('sugarmukt_order');
-                if (stored) orderData = JSON.parse(stored);
-            } catch (e) {
-                orderData = null;
-            }
+<!-- ─── WhatsApp ─── -->
+<a href="https://wa.me/917419074650" class="wa-btn" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
 
-            if (!orderData) {
-                showError('No order found! Redirecting to order page...');
-                setTimeout(() => { window.location.href = 'order.html'; }, 3000);
-                return;
-            }
+<!-- ─── Scroll Top ─── -->
+<a href="#" class="scroll-top" id="scrollTop" aria-label="Back to top">
+  <i class="fas fa-chevron-up"></i>
+</a>
 
-            // ✅ FIXED: Allow COD with pending status
-            const isOnlinePaid = orderData.paymentStatus === 'success' 
-                              || orderData.paymentStatus === 'paid' 
-                              || !!orderData.transactionId;
+<!-- ─── Mobile Bar ─── -->
+<div class="mobile-bar">
+  <a href="index.html">🏠 Back to Home</a>
+</div>
 
-            const isCOD = orderData.paymentMethod === 'COD' 
-                       && orderData.paymentStatus === 'pending';
+<!-- ══════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════ -->
+<script>
+/* ─── Mobile Menu ─── */
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
 
-            const statusOk = !orderData.paymentStatus || isOnlinePaid || isCOD;
+/* ─── Scroll Top ─── */
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+});
 
-            if (!statusOk) {
-                showError('Payment not completed. Redirecting to payment...');
-                setTimeout(() => { window.location.href = 'payment.html'; }, 3000);
-                return;
-            }
+/* ─── Toast ─── */
+function showToast(msg, type = 'info') {
+  const wrap = document.getElementById('toastWrap');
+  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.innerHTML = `<span class="toast-icon"><i class="fas ${icons[type]}"></i></span><span class="toast-msg">${msg}</span>`;
+  wrap.appendChild(t);
+  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 500);
+  }, 4000);
+}
 
-            // Update UI for COD
-            if (orderData.paymentMethod === 'COD') {
-                document.getElementById('statusBadge').innerHTML = '<i class="fas fa-truck"></i> Order Confirmed — Cash on Delivery';
-                document.getElementById('watermark').textContent = 'COD';
-                document.getElementById('paymentStatus').innerHTML = '<i class="fas fa-clock"></i> Pending (COD)';
-                document.getElementById('paymentStatus').style.color = '#ff9800';
-            }
+/* ─── State ─── */
+let invoiceDownloaded = false;
+let orderData = null;
 
-            const paidAt = orderData.paidAt || orderData.paymentDate || new Date().toISOString();
-            let formattedDate = '-';
-            try {
-                formattedDate = new Date(paidAt).toLocaleString('en-IN', {
-                    dateStyle: 'medium', timeStyle: 'short'
-                });
-            } catch (e) { formattedDate = paidAt; }
+/* ─── Load Order ─── */
+window.onload = function () {
+  let stored = null;
+  try {
+    stored = localStorage.getItem('sugarmukt_order');
+    if (stored) orderData = JSON.parse(stored);
+  } catch (e) { orderData = null; }
 
-            document.getElementById('orderId').textContent = orderData.orderId || 'N/A';
-            document.getElementById('paymentDate').textContent = formattedDate;
-            document.getElementById('paymentMethod').textContent = orderData.paymentMethod || 'UPI';
-            document.getElementById('transactionId').textContent = orderData.transactionId || 'N/A';
-            document.getElementById('custName').textContent = orderData.name || '-';
-            document.getElementById('custPhone').textContent = orderData.phone || '-';
+  if (!orderData) {
+    showError('No order found! Redirecting to order page…');
+    setTimeout(() => { window.location.href = 'order.html'; }, 3000);
+    return;
+  }
 
-            const addrParts = [
-                orderData.house, orderData.area, orderData.city,
-                orderData.district, orderData.state
-            ].filter(Boolean);
-            const pincode = orderData.pincode ? ' - ' + orderData.pincode : '';
-            document.getElementById('fullAddress').textContent = addrParts.join(', ') + pincode || '-';
+  const isOnlinePaid = ['success','paid'].includes(orderData.paymentStatus) || !!orderData.transactionId || !!orderData.paymentId;
+  const isCOD       = orderData.paymentMethod === 'COD' && orderData.paymentStatus === 'pending';
 
-            document.getElementById('productName').textContent = orderData.product || '-';
-            document.getElementById('productQty').textContent = orderData.quantity || '-';
-            document.getElementById('productPrice').textContent = orderData.price ? '₹' + orderData.price : '-';
-            document.getElementById('productTotal').textContent = orderData.subtotal ? '₹' + orderData.subtotal : '-';
-            document.getElementById('shipping').textContent = orderData.shipping != null ? '₹' + orderData.shipping : '-';
-            document.getElementById('grandTotal').textContent = orderData.total ? '₹' + orderData.total : '-';
-        };
+  if (!isOnlinePaid && !isCOD) {
+    showError('Payment not completed. Redirecting to payment…');
+    setTimeout(() => { window.location.href = 'payment.html'; }, 3000);
+    return;
+  }
 
-        function showError(msg) {
-            document.getElementById('errorBanner').textContent = '⚠ ' + msg;
-            document.getElementById('errorBanner').classList.add('show');
-            document.getElementById('downloadSection').style.display = 'none';
-            document.getElementById('confirmBtn').style.display = 'none';
-            document.getElementById('confirmHint').style.display = 'none';
-        }
+  /* ── COD tweaks ── */
+  if (isCOD) {
+    document.getElementById('codBadge').style.display = 'inline-flex';
+    document.getElementById('invStatus').className    = 'inv-status cod';
+    document.getElementById('invStatusText').textContent = 'Cash on Delivery';
+    document.getElementById('paymentStatus').className  = 'chip-value status-cod';
+    document.getElementById('paymentStatus').innerHTML  = '<i class="fas fa-clock"></i>&nbsp; Pending (COD)';
+  }
 
-        function enableConfirmButton() {
-            if (invoiceDownloaded) return;
-            invoiceDownloaded = true;
-            document.getElementById('confirmBtn').disabled = false;
-            document.getElementById('confirmBtn').classList.add('enabled');
-            document.getElementById('confirmHint').classList.add('hidden');
-        }
+  /* ── Populate ── */
+  const paidAt = orderData.paidAt || orderData.orderDate || new Date().toISOString();
+  let formattedDate = '—';
+  try {
+    formattedDate = new Date(paidAt).toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' });
+  } catch(e) { formattedDate = paidAt; }
 
-        function downloadPDF() {
-            window.print();
-            setTimeout(enableConfirmButton, 2000);
-        }
+  document.getElementById('invNumber').textContent  = 'Invoice #\u00A0' + (orderData.orderId || 'N/A');
+  document.getElementById('orderId').textContent    = orderData.orderId    || 'N/A';
+  document.getElementById('paymentDate').textContent = formattedDate;
+  document.getElementById('paymentMethod').textContent = orderData.paymentMethod || 'UPI';
+  document.getElementById('transactionId').textContent = orderData.paymentId || orderData.transactionId || 'N/A';
+  document.getElementById('custName').textContent   = orderData.name  || '—';
+  document.getElementById('custPhone').textContent  = orderData.phone || '—';
 
-        function downloadScreenshot() {
-            if (!orderData) return;
-            const element = document.getElementById('invoice');
-            const downloadSec = document.getElementById('downloadSection');
-            const pinEl = document.getElementById('pin');
-            const filename = 'Sugarmukt-Invoice-' + (orderData.orderId || 'order') + '.png';
+  const addrParts = [orderData.house, orderData.area, orderData.city, orderData.district, orderData.state].filter(Boolean);
+  const pin = orderData.pincode ? ' – ' + orderData.pincode : '';
+  document.getElementById('fullAddress').textContent = addrParts.join(', ') + pin || '—';
 
-            downloadSec.style.display = 'none';
-            pinEl.style.display = 'none';
+  document.getElementById('productName').textContent    = orderData.product  || '—';
+  document.getElementById('productQty').textContent     = orderData.quantity || '—';
+  document.getElementById('productPrice').textContent   = orderData.price    ? '₹' + orderData.price    : '—';
+  document.getElementById('productSubtotal').textContent = orderData.subtotal ? '₹' + orderData.subtotal : '—';
 
-            html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: false,
-                logging: false,
-                backgroundColor: '#fdf8ef',
-                windowWidth: element.scrollWidth,
-                windowHeight: element.scrollHeight
-            }).then(canvas => {
-                downloadSec.style.display = 'block';
-                pinEl.style.display = 'block';
-                const link = document.createElement('a');
-                link.download = filename;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                enableConfirmButton();
-            }).catch(err => {
-                downloadSec.style.display = 'block';
-                pinEl.style.display = 'block';
-                console.error('Screenshot error:', err);
-                alert('Screenshot failed. Please use "Download Invoice" instead.');
-            });
-        }
+  /* ── Shipping ── */
+  const ship = orderData.shipping;
+  document.getElementById('shippingCost').innerHTML =
+    (!ship || ship == 0)
+      ? '<span class="free-badge">FREE</span>'
+      : '₹' + ship;
 
-        function confirmOrder() {
-            if (!invoiceDownloaded) {
-                alert('Please download or screenshot your invoice first!');
-                return;
-            }
-            document.getElementById('successToast').classList.add('show');
-            setTimeout(() => {
-                localStorage.removeItem('sugarmukt_order');
-                window.location.href = 'index.html';
-            }, 2500);
-        }
-    </script>
+  /* ── Discount ── */
+  if (orderData.discount && orderData.discount > 0) {
+    document.getElementById('discountRow').style.display = '';
+    document.getElementById('discountAmt').textContent   = '− ₹' + orderData.discount;
+  }
+
+  /* ── Grand Total ── */
+  document.getElementById('grandTotal').textContent = orderData.finalAmount
+    ? '₹' + orderData.finalAmount
+    : (orderData.total ? '₹' + orderData.total : '—');
+
+  /* ── Show success toast ── */
+  setTimeout(() => {
+    showToast(
+      isCOD
+        ? 'Order confirmed! Pay ₹' + (orderData.total || '') + ' on delivery.'
+        : 'Payment successful! Your order is confirmed. 🎉',
+      'success'
+    );
+  }, 600);
+};
+
+/* ─── Error Banner ─── */
+function showError(msg) {
+  const eb = document.getElementById('errorBanner');
+  eb.innerHTML = '<i class="fas fa-exclamation-triangle"></i>&nbsp;' + msg;
+  eb.classList.add('show');
+  document.getElementById('downloadSection').style.display = 'none';
+  document.getElementById('confirmBtn').style.display      = 'none';
+  document.getElementById('confirmNote').style.display     = 'none';
+  document.getElementById('successHero').style.display     = 'none';
+  showToast(msg, 'error');
+}
+
+/* ─── Enable Confirm ─── */
+function enableConfirmButton() {
+  if (invoiceDownloaded) return;
+  invoiceDownloaded = true;
+  const btn = document.getElementById('confirmBtn');
+  btn.disabled = false;
+  btn.classList.add('enabled');
+  document.getElementById('confirmNote').classList.add('hidden');
+  showToast('Invoice saved! You can now confirm your order.', 'success');
+}
+
+/* ─── Download PDF (Print) ─── */
+function downloadPDF() {
+  window.print();
+  setTimeout(enableConfirmButton, 2000);
+}
+
+/* ─── Download Screenshot ─── */
+function downloadScreenshot() {
+  if (!orderData) return;
+  const el   = document.getElementById('invoice');
+  const dlSec = document.getElementById('downloadSection');
+  const fname = 'SugarMukt-Invoice-' + (orderData.orderId || 'order') + '.png';
+
+  dlSec.style.display = 'none';
+
+  html2canvas(el, {
+    scale: 2,
+    useCORS: true,
+    allowTaint: false,
+    logging: false,
+    backgroundColor: '#0d2818',
+    windowWidth: el.scrollWidth,
+    windowHeight: el.scrollHeight
+  }).then(canvas => {
+    dlSec.style.display = 'block';
+    const link = document.createElement('a');
+    link.download = fname;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    enableConfirmButton();
+  }).catch(err => {
+    dlSec.style.display = 'block';
+    console.error('Screenshot error:', err);
+    showToast('Screenshot failed. Please use "Download as PDF" instead.', 'error');
+  });
+}
+
+/* ─── Confirm Order ─── */
+function confirmOrder() {
+  if (!invoiceDownloaded) {
+    showToast('Please download or screenshot your invoice first!', 'error');
+    return;
+  }
+  showToast('Thank you! Your order is confirmed. Redirecting…', 'success');
+  setTimeout(() => {
+    localStorage.removeItem('sugarmukt_order');
+    window.location.href = 'index.html';
+  }, 2500);
+}
+</script>
+
 </body>
 </html>
