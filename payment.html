@@ -339,7 +339,7 @@ function payWithRazorpay(method) {
     }
     
     let discount = 200;
-    let amount = 100; // ₹3 test
+    let amount = (orderData.total - discount) * 100;
     
     let options = {
         key: "rzp_live_T52kjDzypSMLLC",
@@ -352,7 +352,7 @@ function payWithRazorpay(method) {
            orderData.paymentMethod = method === 'upi' ? 'UPI' : 'Net Banking';
             orderData.paymentId = response.razorpay_payment_id;
             orderData.discount = discount;
-           orderData.finalAmount = 1;
+            orderData.finalAmount = amount / 100;
             orderData.orderDate = new Date().toISOString();
             
             localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
