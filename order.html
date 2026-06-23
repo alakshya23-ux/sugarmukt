@@ -13,21 +13,97 @@
         --accent: #b6e154;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body { 
         font-family: 'Poppins', sans-serif; 
-        background: linear-gradient(135deg, #f8fffa 0%, #e8f5e9 100%);
         min-height: 100vh;
         padding: 40px 20px;
+        position: relative;
+        background: #0f1a14;
     }
+    
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        opacity: 0.35;
+        z-index: 0;
+    }
+    
     h1,h2 { font-family: 'Playfair Display', serif; }
     
-    .order-section { max-width: 600px; margin: 0 auto; }
+    .order-section { 
+        max-width: 600px; 
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .leaf-float {
+        position: absolute;
+        opacity: 0.06;
+        pointer-events: none;
+        animation: float 20s ease-in-out infinite;
+    }
+    .leaf-1 {
+        top: 15%;
+        left: -30px;
+        font-size: 60px;
+        animation-delay: 0s;
+    }
+    .leaf-2 {
+        top: 45%;
+        right: -25px;
+        font-size: 45px;
+        animation-delay: 3s;
+        animation-duration: 25s;
+    }
+    .leaf-3 {
+        bottom: 20%;
+        left: -20px;
+        font-size: 50px;
+        animation-delay: 6s;
+        animation-duration: 22s;
+    }
+    .leaf-4 {
+        top: 70%;
+        right: -35px;
+        font-size: 55px;
+        animation-delay: 9s;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-15px) rotate(5deg); }
+        50% { transform: translateY(-8px) rotate(-3deg); }
+        75% { transform: translateY(-20px) rotate(7deg); }
+    }
+    
     .order-card { 
-        background: #fff; 
+        background: rgba(255, 255, 255, 0.96); 
         padding: 50px 40px; 
-        border-radius: 30px; 
-        box-shadow: 0 20px 80px rgba(0,72,54,0.12);
-        border: 1px solid rgba(182,225,84,0.2);
+        border-radius: 24px; 
+        box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.4);
+        animation: fadeUp 0.8s ease;
+        transition: 0.4s ease;
+        backdrop-filter: blur(12px);
+        position: relative;
+        overflow: visible;
+    }
+
+    .order-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 35px 90px rgba(0,0,0,0.35);
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     .order-card h2 { 
         margin-bottom: 30px; 
@@ -48,16 +124,28 @@
     .order-card input, .order-card select { 
         width: 100%; 
         padding: 15px 20px; 
-        border: 2px solid #e0e0e0; 
+        border: 2px solid #e0e5e0; 
         border-radius: 12px;
         font-family: 'Poppins';
         transition: 0.3s;
         font-size: 15px;
+        background: white;
     }
-    .order-card input:focus, .order-card select:focus {
+    .order-card input:focus, 
+    .order-card select:focus {
         border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(182,225,84,0.1);
+        box-shadow: 0 0 0 4px rgba(182,225,84,0.15);
+        transform: scale(1.01);
         outline: none;
+    }
+    .order-card select:disabled {
+        color: #000000;
+        font-weight: 700;
+        opacity: 1;
+        -webkit-text-fill-color: #000000;
+        background: #f0f8f4;
+        cursor: not-allowed;
+        border-color: #c5d6c9;
     }
     .qty-box { 
         display: flex; 
@@ -106,6 +194,13 @@
         transform: translateY(-3px);
         box-shadow: 0 15px 40px rgba(0,72,54,0.4);
     }
+    .order-btn:active {
+        transform: scale(0.97);
+    }
+    .order-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
     .back-link {
         text-align: center;
         margin-top: 20px;
@@ -116,13 +211,20 @@
         font-weight: 500;
     }
     .badge-trust {
-        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        background: linear-gradient(135deg, #e8f5e9, #d4edda);
         color: #155724;
         padding: 12px 20px;
         border-radius: 50px;
         text-align: center;
         margin-bottom: 30px;
         font-weight: 600;
+        border: 1px solid rgba(182,225,84,0.4);
+    }
+    
+    @media (max-width: 600px) {
+        .order-card { padding: 40px 28px; }
+        .order-card h2 { font-size: 28px; }
+        .leaf-float { display: none; }
     }
 </style>
 </head>
@@ -130,6 +232,11 @@
 
 <div class="order-section">
     <div class="order-card">
+        <div class="leaf-float leaf-1">🍃</div>
+        <div class="leaf-float leaf-2">🌿</div>
+        <div class="leaf-float leaf-3">🍃</div>
+        <div class="leaf-float leaf-4">🌿</div>
+        
         <div class="badge-trust">
             <i class="fas fa-shield-alt"></i> 100% Secure | COD Available
         </div>
@@ -146,11 +253,9 @@
         </div>
 
         <div class="form-group">
-            <label><i class="fas fa-leaf"></i> Select Product *</label>
-            <select id="product" required>
-                <option value="">Choose your medicine</option>
-                <option value="Sugarmukt Powder" data-price="599">Sugarmukt Powder - ₹599</option>
-                <option value="Sugarmukt Capsules" data-price="699">Sugarmukt Capsules - ₹699</option>
+            <label><i class="fas fa-leaf"></i> Product</label>
+            <select id="product" required disabled>
+                <option value="Madhumehast Churna" data-price="1800" selected>Madhumehast Churna - ₹1800</option>
             </select>
         </div>
 
@@ -158,9 +263,9 @@
             <label><i class="fas fa-box"></i> Quantity *</label>
             <div class="qty-box">
                 <button type="button" onclick="decreaseQty()"><i class="fas fa-minus"></i></button>
-                <input type="number" id="quantity" value="1" min="1" max="3" readonly>
+                <input type="number" id="quantity" value="1" min="1" max="9" readonly>
                 <button type="button" onclick="increaseQty()"><i class="fas fa-plus"></i></button>
-                <span style="margin-left:auto; color:var(--primary); font-weight:600;">Max: 3</span>
+                <span style="margin-left:auto; color:var(--primary); font-weight:600;">Max: 9</span>
             </div>
         </div>
 
@@ -194,7 +299,7 @@
             <input type="text" id="pincode" placeholder="6-digit pincode" required>
         </div>
 
-        <button class="order-btn" onclick="placeOrder()">
+        <button class="order-btn" onclick="placeOrder(this)">
             <i class="fas fa-arrow-right"></i> Proceed to Payment
         </button>
         
@@ -207,7 +312,7 @@
 <script>
 function increaseQty() {
     let qty = document.getElementById("quantity");
-    if (parseInt(qty.value) < 3) qty.value = parseInt(qty.value) + 1;
+    if (parseInt(qty.value) < 9) qty.value = parseInt(qty.value) + 1;
 }
 
 function decreaseQty() {
@@ -215,14 +320,14 @@ function decreaseQty() {
     if(qty.value > 1) qty.value = parseInt(qty.value) - 1;
 }
 
-function placeOrder() {
+function placeOrder(btn) {
     let name = document.getElementById("name").value.trim();
     let phone = document.getElementById("phone").value.trim();
     let productSelect = document.getElementById("product");
     let product = productSelect.value;
     let price = productSelect.options[productSelect.selectedIndex].getAttribute('data-price');
     let quantity = parseInt(document.getElementById("quantity").value);
-    
+
     let house = document.getElementById("house").value.trim();
     let area = document.getElementById("area").value.trim();
     let city = document.getElementById("city").value.trim();
@@ -231,41 +336,47 @@ function placeOrder() {
     let pincode = document.getElementById("pincode").value.trim();
 
     if(!name || !phone || !product || !house || !area || !city || !district || !state || !pincode){
-        alert("⚠️ Please fill all required fields!");
+        alert("⚠ Please fill all required fields!");
         return;
     }
-    
-    if(quantity > 3){
-        alert("⚠️ Maximum 3 items allowed!");
+
+    if(quantity > 9){
+        alert("⚠ Maximum 9 items allowed!");
         return;
     }
-    
+
     if(!/^\d{10}$/.test(phone)){
-        alert("⚠️ Please enter valid 10-digit mobile number!");
+        alert("⚠ Please enter valid 10-digit mobile number!");
         return;
     }
-    
+
     if(!/^\d{6}$/.test(pincode)){
-        alert("⚠️ Please enter valid 6-digit pincode!");
+        alert("⚠ Please enter valid 6-digit pincode!");
         return;
     }
+
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    btn.disabled = true;
 
     let subtotal = parseInt(price) * quantity;
     let shipping = 49;
     let total = subtotal + shipping;
 
     const orderData = {
-        orderId: 'SUGAR' + Date.now(),
+        orderId: 'MADHU' + Date.now(),
         name, phone, product, price, quantity,
         house, area, city, district, state, pincode,
         subtotal, shipping, total,
         paymentStatus: 'pending'
     };
-    
+
     localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
-    window.location.href = "payment.html";  
+
+    setTimeout(() => {
+        window.location.href = "payment.html";
+    }, 1500);
 }
 </script>
 
 </body>
-</html>  
+</html>
