@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice | Sugarmukt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #004836;
+            --primary-light: #028665;
+            --accent: #b6e154;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            padding: 48px 16px 80px;
+            position: relative;
+            overflow-x: hidden;
+            background: #3d1f08;
+        }
+
+        #woodCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            display: block;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(0,0,0,0.55) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        .toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 18px 36px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,72,54,0.5);
+            z-index: 9999;            
+            font-weight: 600;
+            font-size: 15px;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast i { font-size: 22px; }
+
+        .scene {
+            position: relative;
+            max-width: 720px;
+            margin: 0 auto;
+            z-index: 2;
+        }
+
+        .paper-shadow {
+            position: absolute;
+            inset: 0;
+            border-radius: 3px;
+            box-shadow:
+                0 6px 12px rgba(0,0,0,0.25),
+                0 20px 40px rgba(0,0,0,0.35),
+                0 40px 80px rgba(0,0,0,0.2);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .invoice-container {
+            position: relative;
+            z-index: 1;
+            border-radius: 3px;
+            padding: 52px 52px 52px;
+            background-color: #fdf8ef;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+                linear-gradient(180deg, #fdf8ef 0%, #faf3e5 100%);
+            box-shadow:
+                inset 0 0 40px rgba(180,140,80,0.08),
+                inset 2px 0 6px rgba(180,140,80,0.06),
+                inset -2px 0 6px rgba(180,140,80,0.06);
+        }
+
+        .invoice-container::before {
+            content: '';
+            position: absolute;
+            inset: 52px 52px 0 52px;
+            background-image: repeating-linear-gradient(
+                180deg,
+                transparent 0px,
+                transparent 27px,
+                rgba(180,160,100,0.12) 27px,
+                rgba(180,160,100,0.12) 28px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .pin {
+            position: absolute;
+            top: -14px;
+            right: 40px;
+            width: 30px;
+            height: 30px;
+            z-index: 10;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+        }
+        .pin-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #e8352a, #9b1a15);
+            border: 1.5px solid rgba(0,0,0,0.2);
+            box-shadow:
+                0 2px 6px rgba(0,0,0,0.4),
+                inset 0 1px 2px rgba(255,255,255,0.35);
+        }
+        .pin-head::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.45);
+        }
+        .pin-needle {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 12px;
+            background: linear-gradient(180deg, #b8b8b8, #888);
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 0 2px rgba(0,0,0,0.3);
+        }
+
+        .paper-curl {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 28px 28px;
+            border-color: transparent transparent #c8b990 transparent;
+            filter: drop-shadow(-2px -2px 3px rgba(0,0,0,0.15));
+            z-index: 2;
+        }
+        .paper-curl::after {
+            content: '';
+            position: absolute;
+            bottom: -28px;
+            right: -28px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 28px 28px 0 0;
+            border-color: rgba(0,0,0,0.12) transparent transparent transparent;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 110px;
+            color: rgba(0,72,54,0.04);
+            font-weight: 900;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+            letter-spacing: 6px;
+        }
+
+        .invoice-container > *:not(.watermark):not(.paper-curl) {
+            position: relative;
+            z-index: 1;
+        }
+
+        .invoice-header {
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 16px;
+            margin-bottom: 22px;
+        }
+        .invoice-header h1 { color: var(--primary); font-size: 30px; margin-bottom: 5px; }
+        .invoice-header p { color: #52796f; font-size: 13px; }
+
+        .success-badge {
+            background: #d4edda;
+            color: #155724;
+            padding: 11px 20px;
+            border-radius: 50px;
+            text-align: center;
+            margin-bottom: 22px;
+            font-weight: 700;
+            font-size: 13px;
+            border: 2px solid #c3e6cb;
+        }
+        .success-badge i { margin-right: 8px; }
+
+        .error-banner {
+            background: #fff3f3;
+            border: 2px solid #f5c6c6;
+            border-radius: 12px;
+            padding: 18px 24px;
+            margin-bottom: 20px;
+            color: #c0392b;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        .error-banner.show { display: block; }
+
+        .section { margin-bottom: 20px; position: relative; z-index: 1; page-break-inside: avoid; }
+        .section h3 {
+            color: var(--primary);
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section h3 i { color: var(--primary-light); font-size: 14px; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .info-item {
+            font-size: 12px;
+            background: rgba(255,255,255,0.6);
+            padding: 9px 13px;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+            backdrop-filter: blur(2px);
+        }
+        .info-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 2px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-item span {
+            color: #354f52;
+            font-weight: 500;
+            word-break: break-word;
+        }
+        .txn-id {
+            font-family: 'Courier New', monospace;
+            color: var(--primary) !important;
+            font-weight: 700 !important;
+            font-size: 11px !important;
+            background: #fff;
+            padding: 2px 5px;
+            border-radius: 4px;
+            display: inline-block !important;
+            border: 1px solid #d0d0d0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: rgba(255,255,255,0.5);
+        }
+        table th, table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(180,200,180,0.4);
+            font-size: 12px;
+        }
+        table th {
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .total-row {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(182,225,84,0.15);
+        }
+
+        .download-section {
+            background: rgba(255,248,225,0.8);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 22px 0 14px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+        .download-section h3 { color: var(--primary); font-size: 16px; margin-bottom: 6px; }
+        .download-section p { color: #52796f; font-size: 12px; margin-bottom: 14px; font-weight: 500; }
+        .download-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 4px;
+        }
+        .download-btn:hover { background: var(--primary-light); }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 2px solid rgba(200,220,200,0.5);
+            color: #6c757d;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        .confirm-btn {
+            background: #ccc;
+            color: #666;
+            border: none;
+            padding: 14px 44px;
+            border-radius: 50px;
+            cursor: not-allowed;
+            margin: 14px 5px 0;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .confirm-btn.enabled {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,72,54,0.3);
+        }
+        .confirm-btn.enabled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0,72,54,0.4);
+        }
+        .confirm-hint {
+            color: #dc3545;
+            font-size: 11px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        .confirm-hint.hidden { display: none; }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            body {
+                background: white !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .scene { max-width: 100%; }
+            .pin, .paper-shadow, .paper-curl { display: none !important; }
+            .invoice-container {
+                border-radius: 0;
+                box-shadow: none !important;
+                background: white !important;
+                padding: 32px 40px;
+                background-image: none !important;
+            }
+            .invoice-container::before { display: none; }
+            .download-section, .confirm-btn, .confirm-hint, .toast, .error-banner { display: none !important; }
+            table th { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 32px 12px 60px; }
+            .invoice-container { padding: 40px 22px 36px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .invoice-header h1 { font-size: 24px; }
+            .pin { right: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toast" id="successToast">
+        <i class="fas fa-check-circle"></i>
+        <span>Your order has been placed successfully. Thank you!</span>
+    </div>
+
+    <div class="scene">
+        <div class="paper-shadow"></div>
+        <div class="pin" id="pin" aria-hidden="true">
+            <div class="pin-head"></div>
+            <div class="pin-needle"></div>
+        </div>
+
+        <div class="invoice-container" id="invoice">
+            <div class="paper-curl"></div>
+            <div class="watermark" id="watermark">PAID</div>
+
+            <div class="error-banner" id="errorBanner">
+                ⚠ Order not found or payment not completed. Redirecting...
+            </div>
+
+            <div class="invoice-header">
+                <h1>🌿 Sugarmukt</h1>
+                <p>Natural Diabetes Care &nbsp;|&nbsp; 100% Ayurvedic</p>
+            </div>
+
+            <div class="success-badge" id="statusBadge">
+                <i class="fas fa-check-circle"></i> Payment Successful — Order Confirmed
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-file-invoice"></i> Invoice Details</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Order ID</strong>
+                        <span id="orderId">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Payment Date &amp; Time</strong>
+                        <span id="paymentDate">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Payment Method</strong>
+                        <span id="paymentMethod">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Transaction ID</strong>
+                        <span id="transactionId" class="txn-id">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Payment Status</strong>
+                        <span id="paymentStatus" style="color:#155724; font-weight:700;">
+                            <i class="fas fa-check-circle"></i> Paid
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Customer Name</strong>
+                        <span id="custName">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-map-marker-alt"></i> Delivery Details</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Mobile</strong>
+                        <span id="custPhone">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Address</strong>
+                        <span id="fullAddress">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><i class="fas fa-shopping-bag"></i> Order Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="productName">-</td>
+                            <td id="productQty">-</td>
+                            <td id="productPrice">-</td>
+                            <td id="productTotal">-</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Shipping Charges</td>
+                            <td id="shipping">-</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="3"><strong>Grand Total</strong></td>
+                            <td id="grandTotal">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="download-section" id="downloadSection">
+                <h3><i class="fas fa-download"></i> Download Your Invoice</h3>
+                <p><strong>Please save your invoice before confirming.</strong><br>Choose an option below to proceed.</p>
+                <button class="download-btn" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> Download Invoice
+                </button>
+                <button class="download-btn" onclick="downloadScreenshot()">
+                    <i class="fas fa-camera"></i> Take Screenshot
+                </button>
+            </div>
+
+            <div class="footer">
+                <p><strong>Thank you for choosing Sugarmukt!</strong></p>
+                <p>
+                    <i class="fas fa-envelope"></i> Aushadhimantra99@gmail.com &nbsp;|&nbsp;
+                    <i class="fas fa-phone"></i> +91-74190 74650
+                </p>
+                <p style="margin-top:4px; font-size:10px; color:#aaa;">
+                    This is a computer-generated invoice. No signature required.
+                </p>
+                <div>
+                    <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmOrder()">
+                        <i class="fas fa-check-circle"></i> Click to Confirm Order
+                    </button>
+                    <p class="confirm-hint" id="confirmHint">
+                        <i class="fas fa-lock"></i> Please download or screenshot your invoice first
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <canvas id="woodCanvas"></canvas>
+
+    <script>
+    (function drawWood() {
+        const canvas = document.getElementById('woodCanvas');
+        const ctx = canvas.getContext('2d');
+        function render() {
+            const W = window.innerWidth;
+            const H = window.innerHeight;
+            canvas.width = W;
+            canvas.height = H;
+            const base = ctx.createLinearGradient(0, 0, W, H * 0.6);
+            base.addColorStop(0.00, '#5a2d0c');
+            base.addColorStop(0.18, '#7a3e16');
+            base.addColorStop(0.35, '#5c2e0e');
+            base.addColorStop(0.52, '#7e421a');
+            base.addColorStop(0.68, '#623210');
+            base.addColorStop(0.84, '#7a3c18');
+            base.addColorStop(1.00, '#4e2608');
+            ctx.fillStyle = base;
+            ctx.fillRect(0, 0, W, H);
+            const grainCount = 120;
+            for (let i = 0; i < grainCount; i++) {
+                const x = (W / grainCount) * i + Math.sin(i * 0.7) * 18;
+                const width = 1 + Math.random() * 3.5;
+                const alpha = 0.018 + Math.random() * 0.055;
+                const dark = Math.random() > 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                let cx = x;
+                const segments = 12;
+                for (let s = 1; s <= segments; s++) {
+                    const ny = (H / segments) * s;
+                    cx += (Math.random() - 0.5) * 14;
+                    ctx.lineTo(cx, ny);
+                }
+                ctx.strokeStyle = dark ? `rgba(0,0,0,${alpha})` : `rgba(255,200,120,${alpha * 0.6})`;
+                ctx.lineWidth = width;
+                ctx.stroke();
+            }
+        }
+        render();
+        window.addEventListener('resize', render);
+    })();
+    </script>
+
+    <script>
+        let invoiceDownloaded = false;
+        let orderData = null;
+
+        window.onload = function () {
+            let stored = null;
+            try {
+                stored = localStorage.getItem('sugarmukt_order');
+                if (stored) orderData = JSON.parse(stored);
+            } catch (e) {
+                orderData = null;
+            }
+
+            if (!orderData) {
+                showError('No order found! Redirecting to order page...');
+                setTimeout(() => { window.location.href = 'order.html'; }, 3000);
+                return;
+            }
+
+            // ✅ FIXED: Allow COD with pending status
+            const isOnlinePaid = orderData.paymentStatus === 'success' 
+                              || orderData.paymentStatus === 'paid' 
+                              || !!orderData.transactionId;
+
+            const isCOD = orderData.paymentMethod === 'COD' 
+                       && orderData.paymentStatus === 'pending';
+
+            const statusOk = !orderData.paymentStatus || isOnlinePaid || isCOD;
+
+            if (!statusOk) {
+                showError('Payment not completed. Redirecting to payment...');
+                setTimeout(() => { window.location.href = 'payment.html'; }, 3000);
+                return;
+            }
+
+            // Update UI for COD
+            if (orderData.paymentMethod === 'COD') {
+                document.getElementById('statusBadge').innerHTML = '<i class="fas fa-truck"></i> Order Confirmed — Cash on Delivery';
+                document.getElementById('watermark').textContent = 'COD';
+                document.getElementById('paymentStatus').innerHTML = '<i class="fas fa-clock"></i> Pending (COD)';
+                document.getElementById('paymentStatus').style.color = '#ff9800';
+            }
+
+            const paidAt = orderData.paidAt || orderData.paymentDate || new Date().toISOString();
+            let formattedDate = '-';
+            try {
+                formattedDate = new Date(paidAt).toLocaleString('en-IN', {
+                    dateStyle: 'medium', timeStyle: 'short'
+                });
+            } catch (e) { formattedDate = paidAt; }
+
+            document.getElementById('orderId').textContent = orderData.orderId || 'N/A';
+            document.getElementById('paymentDate').textContent = formattedDate;
+            document.getElementById('paymentMethod').textContent = orderData.paymentMethod || 'UPI';
+            document.getElementById('transactionId').textContent = orderData.transactionId || 'N/A';
+            document.getElementById('custName').textContent = orderData.name || '-';
+            document.getElementById('custPhone').textContent = orderData.phone || '-';
+
+            const addrParts = [
+                orderData.house, orderData.area, orderData.city,
+                orderData.district, orderData.state
+            ].filter(Boolean);
+            const pincode = orderData.pincode ? ' - ' + orderData.pincode : '';
+            document.getElementById('fullAddress').textContent = addrParts.join(', ') + pincode || '-';
+
+            document.getElementById('productName').textContent = orderData.product || '-';
+            document.getElementById('productQty').textContent = orderData.quantity || '-';
+            document.getElementById('productPrice').textContent = orderData.price ? '₹' + orderData.price : '-';
+            document.getElementById('productTotal').textContent = orderData.subtotal ? '₹' + orderData.subtotal : '-';
+            document.getElementById('shipping').textContent = orderData.shipping != null ? '₹' + orderData.shipping : '-';
+            document.getElementById('grandTotal').textContent = orderData.total ? '₹' + orderData.total : '-';
+        };
+
+        function showError(msg) {
+            document.getElementById('errorBanner').textContent = '⚠ ' + msg;
+            document.getElementById('errorBanner').classList.add('show');
+            document.getElementById('downloadSection').style.display = 'none';
+            document.getElementById('confirmBtn').style.display = 'none';
+            document.getElementById('confirmHint').style.display = 'none';
+        }
+
+        function enableConfirmButton() {
+            if (invoiceDownloaded) return;
+            invoiceDownloaded = true;
+            document.getElementById('confirmBtn').disabled = false;
+            document.getElementById('confirmBtn').classList.add('enabled');
+            document.getElementById('confirmHint').classList.add('hidden');
+        }
+
+        function downloadPDF() {
+            window.print();
+            setTimeout(enableConfirmButton, 2000);
+        }
+
+        function downloadScreenshot() {
+            if (!orderData) return;
+            const element = document.getElementById('invoice');
+            const downloadSec = document.getElementById('downloadSection');
+            const pinEl = document.getElementById('pin');
+            const filename = 'Sugarmukt-Invoice-' + (orderData.orderId || 'order') + '.png';
+
+            downloadSec.style.display = 'none';
+            pinEl.style.display = 'none';
+
+            html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: false,
+                logging: false,
+                backgroundColor: '#fdf8ef',
+                windowWidth: element.scrollWidth,
+                windowHeight: element.scrollHeight
+            }).then(canvas => {
+                downloadSec.style.display = 'block';
+                pinEl.style.display = 'block';
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                enableConfirmButton();
+            }).catch(err => {
+                downloadSec.style.display = 'block';
+                pinEl.style.display = 'block';
+                console.error('Screenshot error:', err);
+                alert('Screenshot failed. Please use "Download Invoice" instead.');
+            });
+        }
+
+        function confirmOrder() {
+            if (!invoiceDownloaded) {
+                alert('Please download or screenshot your invoice first!');
+                return;
+            }
+            document.getElementById('successToast').classList.add('show');
+            setTimeout(() => {
+                localStorage.removeItem('sugarmukt_order');
+                window.location.href = 'index.html';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

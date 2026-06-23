@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment | Sugarmukt</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+    :root {
+        --primary: #004836;
+        --primary-light: #028665;
+        --accent: #b6e154;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        min-height: 100vh;
+        padding: 40px 20px;
+        position: relative;
+        background: #0f1a14;
+    }
+    
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        opacity: 0.35;
+        z-index: 0;
+    }
+    
+    h1,h2 { font-family: 'Playfair Display', serif; }
+    
+    .payment-section { 
+        max-width: 600px; 
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .payment-card { 
+        background: rgba(255, 255, 255, 0.96); 
+        padding: 40px; 
+        border-radius: 24px; 
+        box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.4);
+        animation: fadeUp 0.8s ease;
+        backdrop-filter: blur(12px);
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .payment-card h2 { 
+        margin-bottom: 20px; 
+        color: var(--primary); 
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .offer-banner {
+        background: linear-gradient(135deg, #fff3cd, #ffe69c);
+        color: #664d03;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-weight: 600;
+        border: 2px dashed #ffc107;
+        animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+        50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+    }
+
+    .order-summary {
+        background: #f8fffa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        border: 1px solid #e0e5e0;
+    }
+    
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 15px;
+    }
+    
+    .summary-row.total {
+        border-top: 2px solid var(--primary);
+        padding-top: 12px;
+        margin-top: 12px;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--primary);
+    }
+    
+    .discount-row {
+        color: #155724;
+        font-weight: 600;
+    }
+
+    .payment-option {
+        background: white;
+        border: 2px solid #e0e5e0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .payment-option:hover {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(182,225,84,0.15);
+        transform: translateY(-2px);
+    }
+    
+    .payment-option i {
+        font-size: 28px;
+        color: var(--primary);
+    }
+    
+    .payment-option .details {
+        flex: 1;
+    }
+    
+    .payment-option .title {
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+    
+    .payment-option .desc {
+        font-size: 13px;
+        color: #666;
+    }
+    
+    .badge-offer {
+        background: var(--accent);
+        color: var(--primary);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .loading-overlay.active {
+        display: flex;
+    }
+    
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid rgba(255,255,255,0.3);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    @media (max-width: 600px) {
+        .payment-card { padding: 30px 24px; }
+        .payment-card h2 { font-size: 26px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="payment-section">
+    <div class="payment-card">
+        <h2><i class="fas fa-credit-card"></i> Choose Payment Method</h2>
+        
+        <div class="offer-banner">
+            <i class="fas fa-gift"></i> Get ₹200 OFF instantly on UPI & Net Banking payments!
+        </div>
+
+        <div class="order-summary" id="orderSummary">
+            <div class="summary-row">
+                <span>Loading...</span>
+            </div>
+        </div>
+
+        <div class="payment-option" onclick="payWithRazorpay('upi')">
+            <i class="fa-brands fa-google-pay"></i>
+            <div class="details">
+                <div class="title">UPI / Google Pay / PhonePe</div>
+                <div class="desc">Pay instantly & securely</div>
+            </div>
+            <span class="badge-offer">₹200 OFF</span>
+        </div>
+
+        <div class="payment-option" onclick="payWithRazorpay('netbanking')">
+            <i class="fas fa-university"></i>
+            <div class="details">
+                <div class="title">Net Banking</div>
+                <div class="desc">All major banks supported</div>
+            </div>
+            <span class="badge-offer">₹200 OFF</span>
+        </div>
+
+        <div class="payment-option" onclick="payWithCOD()">
+            <i class="fas fa-money-bill-wave"></i>
+            <div class="details">
+                <div class="title">Cash on Delivery</div>
+                <div class="desc">Pay when you receive</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Processing your order...</div>
+</div>
+
+<script>
+let orderData = null;
+
+window.onload = function() {
+    try {
+        const stored = localStorage.getItem('sugarmukt_order');
+        if (!stored) {
+            alert('No order found! Redirecting to order page...');
+            window.location.href = 'order.html';
+            return;
+        }
+        orderData = JSON.parse(stored);
+        
+        if (!orderData.product || !orderData.total) {
+            alert('Invalid order data! Redirecting...');
+            window.location.href = 'order.html';
+            return;
+        }
+        
+        renderSummary();
+    } catch (e) {
+        console.error('Error loading order:', e);
+        alert('Error loading order! Redirecting...');
+        window.location.href = 'order.html';
+    }
+};
+
+function renderSummary(discount = 0) {
+    if (!orderData) return;
+    
+    let total = orderData.total - discount;
+    
+    document.getElementById('orderSummary').innerHTML = `
+        <div class="summary-row">
+            <span>${orderData.product} x ${orderData.quantity || 1}</span>
+            <span>₹${orderData.subtotal || orderData.total}</span>
+        </div>
+        <div class="summary-row">
+            <span>Shipping</span>
+            <span>₹${orderData.shipping || 0}</span>
+        </div>
+        ${discount > 0 ? `
+        <div class="summary-row discount-row">
+            <span><i class="fas fa-tag"></i> UPI Discount</span>
+            <span>-₹${discount}</span>
+        </div>` : ''}
+        <div class="summary-row total">
+            <span>Total Amount</span>
+            <span>₹${total}</span>
+        </div>
+    `;
+}
+
+// Send data to Google Sheets
+function sendToGoogleSheet(data) {
+    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScwHHaxVWT0gpayY3oj-UJ_hmbm52l3MDCWqQ4JvMlt-zkuKg/formResponse";
+    
+    const formData = `entry.1886079877=${encodeURIComponent(data.name || '')}
+    &entry.195772572=${encodeURIComponent(data.phone || '')}
+    &entry.1899048928=${encodeURIComponent(data.product || '')}
+    &entry.416801311=${encodeURIComponent(data.quantity || 1)}
+    &entry.1523414728=${encodeURIComponent(data.house || '')}
+    &entry.550657772=${encodeURIComponent(data.area || '')}
+    &entry.1778626407=${encodeURIComponent(data.city || '')}
+    &entry.1107035690=${encodeURIComponent(data.district || '')}
+    &entry.1741415098=${encodeURIComponent(data.state || '')}
+    &entry.1762899945=${encodeURIComponent(data.pincode || '')}
+    &entry.684444688=${encodeURIComponent(data.finalAmount || data.total)}
+    &entry.1058699500=${encodeURIComponent(data.paymentMethod || '')}
+    &entry.2027999746=${encodeURIComponent(data.orderId || '')}`;
+    
+    fetch(formURL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData
+    }).catch(err => console.log('Sheet submission:', err));
+}
+
+function payWithRazorpay(method) {
+    if (!orderData || !orderData.total) {
+        alert('Order data missing! Please go back and try again.');
+        return;
+    }
+    
+    let discount = 200;
+    let amount = 100; // ₹3 test
+    
+    let options = {
+        key: "rzp_live_T4zPi4pr3skVBG",
+        amount: amount,
+        currency: "INR",
+        name: "Sugarmukt",
+        description: orderData.product,
+        handler: function (response){
+            orderData.paymentStatus = 'paid';
+           orderData.paymentMethod = method === 'upi' ? 'UPI' : 'Net Banking';
+            orderData.paymentId = response.razorpay_payment_id;
+            orderData.discount = discount;
+           orderData.finalAmount = 1;
+            orderData.orderDate = new Date().toISOString();
+            
+            localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
+            sendToGoogleSheet(orderData);
+            
+            window.location.href = "billing.html";
+        },
+        prefill: {
+            name: orderData.name || '',
+            contact: orderData.phone || ''
+        },
+        notes: {
+            address: `${orderData.house || ''}, ${orderData.area || ''}, ${orderData.city || ''}`
+        },
+        theme: {
+            color: "#004836"
+        },
+        method: {
+            upi: method === 'upi',
+            netbanking: method === 'netbanking',
+            card: false,
+            wallet: false
+        }
+    };
+    
+    let rzp = new Razorpay(options);
+    rzp.open();
+}
+
+function payWithCOD() {
+    if (!orderData || !orderData.total) {
+        alert('Order data missing! Please go back and place order again.');
+        window.location.href = 'order.html';
+        return;
+    }
+    
+    let overlay = document.getElementById('loadingOverlay');
+    overlay.classList.add('active');
+    
+    orderData.paymentStatus = 'pending';
+    orderData.paymentMethod = 'COD';
+    orderData.discount = 0;
+    orderData.finalAmount = orderData.total;
+    orderData.orderDate = new Date().toISOString();
+    
+    localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
+    
+    // ✅ NOW SEND COD DATA TO GOOGLE SHEET
+    sendToGoogleSheet(orderData);
+    
+    setTimeout(() => {
+        window.location.href = "billing.html";
+    }, 3000);
+}
+</script>
+
+</body>
+</html>
