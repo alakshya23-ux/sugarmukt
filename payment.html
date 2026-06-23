@@ -3,411 +3,1195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment | Sugarmukt</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Payment | SugarMukt by Vayur</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYLKNNGJBG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KYLKNNGJBG');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
-    :root {
-        --primary: #004836;
-        --primary-light: #028665;
-        --accent: #b6e154;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body { 
-        font-family: 'Poppins', sans-serif; 
-        min-height: 100vh;
-        padding: 40px 20px;
-        position: relative;
-        background: #0f1a14;
-    }
-    
-    body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        opacity: 0.35;
-        z-index: 0;
-    }
-    
-    h1,h2 { font-family: 'Playfair Display', serif; }
-    
-    .payment-section { 
-        max-width: 600px; 
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .payment-card { 
-        background: rgba(255, 255, 255, 0.96); 
-        padding: 40px; 
-        border-radius: 24px; 
-        box-shadow: 0 25px 80px rgba(0,0,0,0.3);
-        border: 1px solid rgba(255,255,255,0.4);
-        animation: fadeUp 0.8s ease;
-        backdrop-filter: blur(12px);
-    }
+/* ─── RESET & BASE ─────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --forest:  #0a1f14;
+  --deep:    #0d2818;
+  --mid:     #1a3a24;
+  --card:    #122010;
+  --gold:    #c9a84c;
+  --gold-lt: #e2c97e;
+  --gold-dk: #a07830;
+  --green:   #2d6a4f;
+  --green-lt:#028665;
+  --accent:  #b6e154;
+  --text:    #f0ede6;
+  --muted:   #a09880;
+  --border:  rgba(201,168,76,0.18);
+  --glass:   rgba(10,31,20,0.85);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--forest);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+h1,h2,h3,h4,h5 { font-family: 'Cormorant Garamond', serif; }
 
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(40px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .payment-card h2 { 
-        margin-bottom: 20px; 
-        color: var(--primary); 
-        font-size: 32px;
-        text-align: center;
-    }
+/* ─── ANNOUNCEMENT BAR ─────────────────────────────────── */
+.ann-bar {
+  background: linear-gradient(90deg, var(--deep), var(--mid), var(--deep));
+  border-bottom: 1px solid var(--border);
+  padding: 9px 0;
+  overflow: hidden;
+  position: relative;
+}
+.ann-track {
+  display: flex;
+  gap: 60px;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
+}
+.ann-track span {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.ann-track span i { margin-right: 6px; color: var(--accent); }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    .offer-banner {
-        background: linear-gradient(135deg, #fff3cd, #ffe69c);
-        color: #664d03;
-        padding: 16px 20px;
-        border-radius: 12px;
-        margin-bottom: 25px;
-        text-align: center;
-        font-weight: 600;
-        border: 2px dashed #ffc107;
-        animation: pulse 2s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
-        50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
-    }
+/* ─── NAVBAR ────────────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  transition: all 0.3s ease;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-logo span { color: var(--text); font-weight: 400; font-size: 13px; letter-spacing: 2px; display: block; }
+.nav-logo .brand-sub { font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
+.nav-links { display: flex; gap: 6px; align-items: center; }
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.nav-links a:hover { color: var(--gold); background: rgba(201,168,76,0.08); }
+.nav-links a.active {
+  background: linear-gradient(135deg, var(--gold-dk), var(--gold));
+  color: var(--deep);
+  font-weight: 700;
+}
+.nav-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
+.nav-burger span { width: 24px; height: 2px; background: var(--gold); border-radius: 2px; transition: 0.3s; }
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--deep);
+  z-index: 1000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--gold); }
+.mobile-nav-close {
+  position: absolute;
+  top: 24px; right: 28px;
+  font-size: 28px;
+  color: var(--muted);
+  cursor: pointer;
+  background: none; border: none;
+}
 
-    .order-summary {
-        background: #f8fffa;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 25px;
-        border: 1px solid #e0e5e0;
-    }
-    
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        font-size: 15px;
-    }
-    
-    .summary-row.total {
-        border-top: 2px solid var(--primary);
-        padding-top: 12px;
-        margin-top: 12px;
-        font-weight: 700;
-        font-size: 18px;
-        color: var(--primary);
-    }
-    
-    .discount-row {
-        color: #155724;
-        font-weight: 600;
-    }
+/* ─── HERO STRIP ────────────────────────────────────────── */
+.pay-hero {
+  background: linear-gradient(135deg, var(--deep) 0%, var(--mid) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 24px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.pay-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.pay-hero-inner { position: relative; z-index: 1; }
+.pay-hero .step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.pay-hero h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.pay-hero h1 span { color: var(--gold); }
+.pay-hero p { font-size: 14px; color: var(--muted); letter-spacing: 0.5px; }
 
-    .payment-option {
-        background: white;
-        border: 2px solid #e0e5e0;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 15px;
-        cursor: pointer;
-        transition: 0.3s;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .payment-option:hover {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(182,225,84,0.15);
-        transform: translateY(-2px);
-    }
-    
-    .payment-option i {
-        font-size: 28px;
-        color: var(--primary);
-    }
-    
-    .payment-option .details {
-        flex: 1;
-    }
-    
-    .payment-option .title {
-        font-weight: 600;
-        color: var(--primary);
-        font-size: 16px;
-        margin-bottom: 4px;
-    }
-    
-    .payment-option .desc {
-        font-size: 13px;
-        color: #666;
-    }
-    
-    .badge-offer {
-        background: var(--accent);
-        color: var(--primary);
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-    }
+/* ─── PROGRESS STEPS ──────────────────────────────────────*/
+.steps-bar {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 24px;
+}
+.steps-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  position: relative;
+}
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 55%;
+  right: -55%;
+  height: 2px;
+  background: rgba(201,168,76,0.15);
+}
+.step-item.done:not(:last-child)::after { background: var(--gold); }
+.step-circle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid rgba(201,168,76,0.2);
+  color: var(--muted);
+  background: var(--deep);
+  position: relative;
+  z-index: 1;
+}
+.step-item.done .step-circle {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--deep);
+}
+.step-item.active .step-circle {
+  background: var(--deep);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(201,168,76,0.12);
+}
+.step-label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.step-item.active .step-label,
+.step-item.done .step-label { color: var(--gold); }
 
-    .loading-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.7);
-        z-index: 9999;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .loading-overlay.active {
-        display: flex;
-    }
-    
-    .spinner {
-        width: 60px;
-        height: 60px;
-        border: 5px solid rgba(255,255,255,0.3);
-        border-top-color: var(--accent);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-        color: white;
-        font-size: 18px;
-        font-weight: 600;
-    }
-    
-    @media (max-width: 600px) {
-        .payment-card { padding: 30px 24px; }
-        .payment-card h2 { font-size: 26px; }
-    }
+/* ─── MAIN LAYOUT ───────────────────────────────────────── */
+.pay-wrapper {
+  max-width: 1080px;
+  margin: 48px auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ─── SECTION HEADING ───────────────────────────────────── */
+.sec-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.sec-title {
+  font-size: 28px;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* ─── OFFER BANNER ──────────────────────────────────────── */
+.offer-banner {
+  background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.06));
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+  50% { box-shadow: 0 0 20px rgba(201,168,76,0.12); }
+}
+.offer-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--gold-dk), var(--gold));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  color: var(--deep);
+  flex-shrink: 0;
+}
+.offer-text { flex: 1; }
+.offer-text strong { display: block; font-size: 15px; color: var(--gold); margin-bottom: 2px; }
+.offer-text span { font-size: 13px; color: var(--muted); }
+.offer-pill {
+  background: var(--gold);
+  color: var(--deep);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ─── PAYMENT OPTIONS ───────────────────────────────────── */
+.pay-options { display: flex; flex-direction: column; gap: 14px; margin-bottom: 12px; }
+
+.pay-option {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
+}
+.pay-option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201,168,76,0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.pay-option:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.pay-option:hover::before { opacity: 1; }
+.pay-option.featured { border-color: rgba(201,168,76,0.5); }
+.pay-option.featured::after {
+  content: 'RECOMMENDED';
+  position: absolute;
+  top: 0; right: 0;
+  background: linear-gradient(135deg, var(--gold-dk), var(--gold));
+  color: var(--deep);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 0 16px 0 12px;
+}
+
+.pay-option-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.icon-upi { background: linear-gradient(135deg, #6c3; #4a9); background: linear-gradient(135deg, #003580, #0047ab); }
+.icon-net { background: linear-gradient(135deg, #1a5276, #2471a3); }
+.icon-cod { background: linear-gradient(135deg, #1d4e1a, #2d7a27); }
+
+.pay-option-body { flex: 1; position: relative; z-index: 1; }
+.pay-option-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.pay-option-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.pay-option-desc .upi-icons { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.upi-pill {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.pay-option-badge { position: relative; z-index: 1; }
+.save-badge {
+  background: linear-gradient(135deg, #1a4a25, #2d6a4f);
+  border: 1px solid rgba(45,106,79,0.5);
+  color: var(--accent);
+  padding: 8px 14px;
+  border-radius: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+.save-badge .save-amount { font-size: 18px; font-weight: 800; display: block; font-family: 'Cormorant Garamond', serif; }
+.save-badge .save-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8; }
+
+.cod-badge {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+.cod-badge .cod-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+.cod-badge .cod-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ─── SECURITY STRIP ────────────────────────────────────── */
+.security-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.sec-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.sec-item i { color: var(--accent); font-size: 13px; }
+
+/* ─── SIDEBAR ───────────────────────────────────────────── */
+.sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 88px; }
+
+/* ─── CARD BASE ─────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.card-head {
+  background: linear-gradient(135deg, var(--deep), var(--mid));
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-body { padding: 24px; }
+
+/* ─── ORDER SUMMARY CARD ────────────────────────────────── */
+.product-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.product-img {
+  width: 72px; height: 72px;
+  border-radius: 12px;
+  background: var(--deep);
+  border: 1px solid var(--border);
+  object-fit: cover;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.product-img img { width: 100%; height: 100%; object-fit: cover; }
+.product-name { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; font-family: 'Cormorant Garamond', serif; }
+.product-sub { font-size: 12px; color: var(--muted); }
+.product-qty {
+  background: rgba(201,168,76,0.1);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.summary-rows { display: flex; flex-direction: column; gap: 12px; }
+.sum-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.sum-row .label { color: var(--muted); }
+.sum-row .val { color: var(--text); font-weight: 500; }
+.sum-row .val.free { color: var(--accent); font-weight: 700; }
+.sum-row .val.discount { color: #6dde9b; font-weight: 700; }
+.sum-divider { height: 1px; background: var(--border); margin: 8px 0; }
+.sum-row.total .label { color: var(--text); font-weight: 700; font-size: 16px; font-family: 'Cormorant Garamond', serif; }
+.sum-row.total .val { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: var(--gold); }
+.sum-row.total-upi .val { color: var(--accent); }
+
+.upi-discount-note {
+  margin-top: 14px;
+  background: linear-gradient(135deg, rgba(109,222,155,0.08), rgba(109,222,155,0.04));
+  border: 1px solid rgba(109,222,155,0.2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #6dde9b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── ADDRESS CARD ──────────────────────────────────────── */
+.addr-field { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; font-size: 14px; }
+.addr-field i { color: var(--gold); width: 16px; margin-top: 2px; flex-shrink: 0; }
+.addr-field span { color: var(--muted); line-height: 1.6; }
+.addr-field strong { color: var(--text); }
+
+/* ─── TRUST CARD ────────────────────────────────────────── */
+.trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.trust-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+.trust-item i { font-size: 18px; color: var(--gold); display: block; margin-bottom: 6px; }
+.trust-item span { font-size: 11px; color: var(--muted); letter-spacing: 0.3px; }
+
+/* ─── LOADING OVERLAY ───────────────────────────────────── */
+.loading-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(10,15,10,0.9);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.loading-overlay.active { display: flex; }
+.spinner-ring {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  border: 3px solid rgba(201,168,76,0.15);
+  border-top: 3px solid var(--gold);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  color: var(--text);
+  font-weight: 600;
+}
+.loading-sub { font-size: 13px; color: var(--muted); letter-spacing: 0.5px; }
+.loading-dots span {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin: 0 3px;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%,80%,100% { transform: scale(0); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ─── TOAST ─────────────────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  top: 90px; right: 24px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.toast {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px 20px;
+  min-width: 280px;
+  max-width: 360px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  animation: toastIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.toast.error { border-left-color: #e74c3c; }
+.toast.success { border-left-color: var(--accent); }
+.toast-icon { font-size: 18px; margin-top: 2px; flex-shrink: 0; }
+.toast.error .toast-icon { color: #e74c3c; }
+.toast.success .toast-icon { color: var(--accent); }
+.toast-body strong { font-size: 14px; color: var(--text); display: block; margin-bottom: 2px; }
+.toast-body span { font-size: 12px; color: var(--muted); }
+
+/* ─── FOOTER ────────────────────────────────────────────── */
+.footer {
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  margin-top: 60px;
+  padding: 40px 40px 24px;
+}
+.footer-top {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.footer-brand .brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 280px; }
+.footer-col h5 { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-family: 'DM Sans', sans-serif; }
+.footer-col a { display: block; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--gold); }
+.footer-bottom {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.footer-bottom p { font-size: 12px; color: var(--muted); }
+.footer-bottom p a { color: var(--gold); text-decoration: none; }
+.footer-disclaimer {
+  max-width: 1080px;
+  margin: 16px auto 0;
+  font-size: 11px;
+  color: rgba(160,152,128,0.5);
+  line-height: 1.7;
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+
+/* ─── MOBILE ORDER BAR ──────────────────────────────────── */
+.mob-bar {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 12px 20px;
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  z-index: 990;
+  gap: 12px;
+}
+.mob-bar .mob-order {
+  flex: 1;
+  background: linear-gradient(135deg, var(--gold-dk), var(--gold));
+  color: var(--deep);
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+
+/* ─── WHATSAPP BTN ──────────────────────────────────────── */
+.wa-btn {
+  position: fixed;
+  bottom: 28px; right: 24px;
+  width: 50px; height: 50px;
+  background: #25d366;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 22px;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+  z-index: 980;
+  transition: transform 0.2s;
+}
+.wa-btn:hover { transform: scale(1.08); }
+
+/* ─── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .pay-wrapper { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+  .mob-bar { display: flex; }
+  .wa-btn { bottom: 76px; }
+}
+@media (max-width: 640px) {
+  .navbar { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+  .steps-inner { gap: 4px; }
+  .step-label { font-size: 9px; }
+  .step-circle { width: 30px; height: 30px; font-size: 12px; }
+  .footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .offer-banner { flex-wrap: wrap; }
+  .pay-option { flex-wrap: wrap; gap: 12px; }
+  .pay-option-badge { width: 100%; display: flex; justify-content: flex-start; }
+}
+
+/* ─── SCROLL REVEAL ─────────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="payment-section">
-    <div class="payment-card">
-        <h2><i class="fas fa-credit-card"></i> Choose Payment Method</h2>
-        
-        <div class="offer-banner">
-            <i class="fas fa-gift"></i> Get ₹200 OFF instantly on UPI & Net Banking payments!
-        </div>
+<!-- ─── ANNOUNCEMENT BAR ─────────────────────────────── -->
+<div class="ann-bar">
+  <div class="ann-track" id="annTrack">
+    <span><i class="fas fa-truck"></i> Free Pan India Delivery</span>
+    <span><i class="fas fa-shield-alt"></i> 100% Secure Payment</span>
+    <span><i class="fas fa-leaf"></i> 100% Natural Ayurvedic</span>
+    <span><i class="fas fa-users"></i> 2500+ Happy Customers</span>
+    <span><i class="fas fa-phone"></i> +91 74190 74650</span>
+    <span><i class="fas fa-tag"></i> Pay via UPI — Save ₹200 Instantly</span>
+    <span><i class="fas fa-truck"></i> Free Pan India Delivery</span>
+    <span><i class="fas fa-shield-alt"></i> 100% Secure Payment</span>
+    <span><i class="fas fa-leaf"></i> 100% Natural Ayurvedic</span>
+    <span><i class="fas fa-users"></i> 2500+ Happy Customers</span>
+    <span><i class="fas fa-phone"></i> +91 74190 74650</span>
+    <span><i class="fas fa-tag"></i> Pay via UPI — Save ₹200 Instantly</span>
+  </div>
+</div>
 
-        <div class="order-summary" id="orderSummary">
-            <div class="summary-row">
-                <span>Loading...</span>
-            </div>
-        </div>
-
-        <div class="payment-option" onclick="payWithRazorpay('upi')">
-            <i class="fa-brands fa-google-pay"></i>
-            <div class="details">
-                <div class="title">UPI / Google Pay / PhonePe</div>
-                <div class="desc">Pay instantly & securely</div>
-            </div>
-            <span class="badge-offer">₹200 OFF</span>
-        </div>
-
-        <div class="payment-option" onclick="payWithRazorpay('netbanking')">
-            <i class="fas fa-university"></i>
-            <div class="details">
-                <div class="title">Net Banking</div>
-                <div class="desc">All major banks supported</div>
-            </div>
-            <span class="badge-offer">₹200 OFF</span>
-        </div>
-
-        <div class="payment-option" onclick="payWithCOD()">
-            <i class="fas fa-money-bill-wave"></i>
-            <div class="details">
-                <div class="title">Cash on Delivery</div>
-                <div class="desc">Pay when you receive</div>
-            </div>
-        </div>
+<!-- ─── NAVBAR ───────────────────────────────────────── -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <div>
+      SugarMukt
+      <span class="brand-sub">by Vayur</span>
     </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="order.html">Order</a>
+    <a href="order.html" class="active">Pay Now</a>
+  </div>
+  <div class="nav-burger" onclick="document.getElementById('mobileNav').classList.add('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ─── MOBILE NAV ───────────────────────────────────── -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="document.getElementById('mobileNav').classList.remove('open')">
+    <i class="fas fa-times"></i>
+  </button>
+  <a href="index.html" onclick="document.getElementById('mobileNav').classList.remove('open')">Home</a>
+  <a href="about.html" onclick="document.getElementById('mobileNav').classList.remove('open')">About</a>
+  <a href="contact.html" onclick="document.getElementById('mobileNav').classList.remove('open')">Contact</a>
+  <a href="order.html" onclick="document.getElementById('mobileNav').classList.remove('open')">Order Now</a>
 </div>
 
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-    <div class="loading-text">Processing your order...</div>
+<!-- ─── HERO ─────────────────────────────────────────── -->
+<div class="pay-hero">
+  <div class="pay-hero-inner">
+    <div class="step-badge"><i class="fas fa-lock"></i> Secure Checkout</div>
+    <h1>Complete Your <span>Payment</span></h1>
+    <p>Choose your preferred payment method below</p>
+  </div>
 </div>
+
+<!-- ─── PROGRESS BAR ──────────────────────────────────── -->
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step-item done">
+      <div class="step-circle"><i class="fas fa-check"></i></div>
+      <div class="step-label">Order</div>
+    </div>
+    <div class="step-item active">
+      <div class="step-circle"><i class="fas fa-credit-card"></i></div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="step-item">
+      <div class="step-circle">3</div>
+      <div class="step-label">Confirm</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MAIN ──────────────────────────────────────────── -->
+<div class="pay-wrapper">
+
+  <!-- LEFT: PAYMENT PANEL -->
+  <div class="left-panel reveal">
+
+    <div class="sec-label">Step 2 of 3</div>
+    <div class="sec-title">Select Payment Method</div>
+
+    <!-- Offer Banner -->
+    <div class="offer-banner">
+      <div class="offer-icon"><i class="fas fa-bolt"></i></div>
+      <div class="offer-text">
+        <strong>Exclusive UPI Offer — Save ₹200 Instantly</strong>
+        <span>Pay via UPI, Google Pay, PhonePe or Net Banking and get ₹200 off. Pay only ₹1,599 instead of ₹1,799.</span>
+      </div>
+      <div class="offer-pill">SAVE ₹200</div>
+    </div>
+
+    <!-- Payment Options -->
+    <div class="pay-options">
+
+      <!-- UPI -->
+      <div class="pay-option featured" onclick="payWithRazorpay('upi')">
+        <div class="pay-option-icon icon-upi">
+          <i class="fas fa-mobile-alt" style="color:#fff;"></i>
+        </div>
+        <div class="pay-option-body">
+          <div class="pay-option-title">UPI Payment</div>
+          <div class="pay-option-desc">
+            Google Pay, PhonePe, Paytm, BHIM &amp; any UPI app
+            <div class="upi-icons">
+              <span class="upi-pill">Google Pay</span>
+              <span class="upi-pill">PhonePe</span>
+              <span class="upi-pill">Paytm</span>
+              <span class="upi-pill">BHIM</span>
+            </div>
+          </div>
+        </div>
+        <div class="pay-option-badge">
+          <div class="save-badge">
+            <span class="save-amount">₹200</span>
+            <span class="save-label">You Save</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Net Banking -->
+      <div class="pay-option" onclick="payWithRazorpay('netbanking')">
+        <div class="pay-option-icon icon-net">
+          <i class="fas fa-university" style="color:#fff;"></i>
+        </div>
+        <div class="pay-option-body">
+          <div class="pay-option-title">Net Banking</div>
+          <div class="pay-option-desc">
+            SBI, HDFC, ICICI, Axis, PNB &amp; all major banks
+            <div class="upi-icons">
+              <span class="upi-pill">SBI</span>
+              <span class="upi-pill">HDFC</span>
+              <span class="upi-pill">ICICI</span>
+              <span class="upi-pill">Axis</span>
+            </div>
+          </div>
+        </div>
+        <div class="pay-option-badge">
+          <div class="save-badge">
+            <span class="save-amount">₹200</span>
+            <span class="save-label">You Save</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- COD -->
+      <div class="pay-option" onclick="payWithCOD()">
+        <div class="pay-option-icon icon-cod">
+          <i class="fas fa-money-bill-wave" style="color:#fff;"></i>
+        </div>
+        <div class="pay-option-body">
+          <div class="pay-option-title">Cash on Delivery</div>
+          <div class="pay-option-desc">Pay in cash when your order arrives at your door. No extra charge.</div>
+        </div>
+        <div class="pay-option-badge">
+          <div class="cod-badge">
+            <span class="cod-icon">🏠</span>
+            <span class="cod-label">Pay Later</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Security Strip -->
+    <div class="security-strip">
+      <div class="sec-item"><i class="fas fa-lock"></i> 256-bit SSL Encrypted</div>
+      <div class="sec-item"><i class="fas fa-shield-alt"></i> RBI Compliant</div>
+      <div class="sec-item"><i class="fas fa-check-circle"></i> Razorpay Secured</div>
+      <div class="sec-item"><i class="fas fa-headset"></i> 24/7 Support</div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: SIDEBAR -->
+  <div class="sidebar reveal" style="transition-delay:0.15s;">
+
+    <!-- Order Summary -->
+    <div class="card">
+      <div class="card-head"><i class="fas fa-receipt"></i> Order Summary</div>
+      <div class="card-body">
+        <div class="product-row">
+          <div class="product-img">
+            <img src="images/a2.jpeg" alt="SugarMukt" onerror="this.parentElement.innerHTML='🌿'">
+          </div>
+          <div style="flex:1;">
+            <div class="product-name" id="sideProductName">Madhumehast Churna</div>
+            <div class="product-sub">SugarMukt by Vayur · 23 Herbs</div>
+          </div>
+          <div class="product-qty" id="sideQty">x1</div>
+        </div>
+
+        <div class="summary-rows" id="summaryRows">
+          <div class="sum-row">
+            <span class="label">MRP</span>
+            <span class="val" id="sumMRP">₹1,799</span>
+          </div>
+          <div class="sum-row">
+            <span class="label">Shipping</span>
+            <span class="val free">FREE</span>
+          </div>
+          <div class="sum-divider"></div>
+          <div class="sum-row total">
+            <span class="label">Total (COD)</span>
+            <span class="val" id="sumTotal">₹1,799</span>
+          </div>
+        </div>
+
+        <div class="upi-discount-note" id="upiNote">
+          <i class="fas fa-bolt"></i>
+          <span>Pay via UPI / Net Banking — Total becomes <strong>₹1,599</strong> (Save ₹200)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Address -->
+    <div class="card" id="addrCard">
+      <div class="card-head"><i class="fas fa-map-marker-alt"></i> Delivery Address</div>
+      <div class="card-body" id="addrBody">
+        <div class="addr-field"><i class="fas fa-user"></i><span id="adrName">Loading...</span></div>
+        <div class="addr-field"><i class="fas fa-phone"></i><span id="adrPhone">—</span></div>
+        <div class="addr-field"><i class="fas fa-home"></i><span id="adrLine1">—</span></div>
+        <div class="addr-field"><i class="fas fa-city"></i><span id="adrLine2">—</span></div>
+        <div class="addr-field"><i class="fas fa-map"></i><span id="adrPin">—</span></div>
+      </div>
+    </div>
+
+    <!-- Trust Card -->
+    <div class="card">
+      <div class="card-head"><i class="fas fa-star"></i> Why Trust Us</div>
+      <div class="card-body">
+        <div class="trust-grid">
+          <div class="trust-item"><i class="fas fa-leaf"></i><span>100% Natural</span></div>
+          <div class="trust-item"><i class="fas fa-users"></i><span>2500+ Customers</span></div>
+          <div class="trust-item"><i class="fas fa-truck"></i><span>Pan India Delivery</span></div>
+          <div class="trust-item"><i class="fas fa-undo"></i><span>COD Available</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Link -->
+    <a href="order.html" style="text-align:center; display:block; font-size:13px; color:var(--muted); text-decoration:none; padding:4px;">
+      <i class="fas fa-arrow-left"></i> &nbsp;Edit Order Details
+    </a>
+
+  </div>
+</div>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="brand-name">SugarMukt <span style="color:var(--muted);font-size:16px;font-weight:400;">by Vayur</span></div>
+      <p>100% natural Ayurvedic medicine for diabetes management. Crafted with 23 potent herbs following ancient Ayurvedic wisdom.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="order.html">Order Now</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="tel:+917419074650"><i class="fas fa-phone" style="margin-right:6px;"></i>+91 74190 74650</a>
+      <a href="mailto:Aushadhimantra99@gmail.com"><i class="fas fa-envelope" style="margin-right:6px;"></i>Email Us</a>
+      <a href="https://wa.me/917419074650" target="_blank"><i class="fab fa-whatsapp" style="margin-right:6px;"></i>WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SugarMukt by Vayur. All rights reserved. <a href="index.html">Home</a></p>
+    <p style="font-size:11px; color:rgba(160,152,128,0.5);">Powered by Razorpay · Secured by SSL</p>
+  </div>
+  <div class="footer-disclaimer">
+    Disclaimer: These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Results may vary. Consult your physician before use if you are pregnant, nursing, or on medication.
+  </div>
+</footer>
+
+<!-- ─── MOBILE BAR ────────────────────────────────────── -->
+<div class="mob-bar">
+  <button class="mob-order" onclick="document.querySelector('.pay-options').scrollIntoView({behavior:'smooth'})">
+    <i class="fas fa-lock"></i> &nbsp;Secure Checkout
+  </button>
+</div>
+
+<!-- ─── WHATSAPP ──────────────────────────────────────── -->
+<a href="https://wa.me/917419074650" target="_blank" class="wa-btn" rel="noopener noreferrer">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- ─── LOADING OVERLAY ───────────────────────────────── -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner-ring"></div>
+  <div class="loading-title">Processing Your Order</div>
+  <div class="loading-sub">Please do not close this window…</div>
+  <div class="loading-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- ─── TOAST CONTAINER ───────────────────────────────── -->
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
+/* ── Data ─────────────────────────────────────────────── */
 let orderData = null;
 
-window.onload = function() {
-    try {
-        const stored = localStorage.getItem('sugarmukt_order');
-        if (!stored) {
-            alert('No order found! Redirecting to order page...');
-            window.location.href = 'order.html';
-            return;
-        }
-        orderData = JSON.parse(stored);
-        
-        if (!orderData.product || !orderData.total) {
-            alert('Invalid order data! Redirecting...');
-            window.location.href = 'order.html';
-            return;
-        }
-        
-        renderSummary();
-    } catch (e) {
-        console.error('Error loading order:', e);
-        alert('Error loading order! Redirecting...');
-        window.location.href = 'order.html';
+window.onload = function () {
+  try {
+    const stored = localStorage.getItem('sugarmukt_order');
+    if (!stored) {
+      showToast('error', 'No Order Found', 'Redirecting to order page…');
+      setTimeout(() => window.location.href = 'order.html', 2000);
+      return;
     }
+    orderData = JSON.parse(stored);
+    if (!orderData.product || !orderData.total) {
+      showToast('error', 'Invalid Order', 'Please place your order again.');
+      setTimeout(() => window.location.href = 'order.html', 2000);
+      return;
+    }
+    renderSidebar();
+  } catch (e) {
+    showToast('error', 'Error', 'Could not load order. Redirecting…');
+    setTimeout(() => window.location.href = 'order.html', 2000);
+  }
 };
 
-function renderSummary(discount = 0) {
-    if (!orderData) return;
-    
-    let total = orderData.total - discount;
-    
-    document.getElementById('orderSummary').innerHTML = `
-        <div class="summary-row">
-            <span>${orderData.product} x ${orderData.quantity || 1}</span>
-            <span>₹${orderData.subtotal || orderData.total}</span>
-        </div>
-        <div class="summary-row">
-            <span>Shipping</span>
-            <span>₹${orderData.shipping || 0}</span>
-        </div>
-        ${discount > 0 ? `
-        <div class="summary-row discount-row">
-            <span><i class="fas fa-tag"></i> UPI Discount</span>
-            <span>-₹${discount}</span>
-        </div>` : ''}
-        <div class="summary-row total">
-            <span>Total Amount</span>
-            <span>₹${total}</span>
-        </div>
-    `;
+function renderSidebar() {
+  if (!orderData) return;
+  // Product row
+  document.getElementById('sideProductName').textContent = orderData.product || 'Madhumehast Churna';
+  document.getElementById('sideQty').textContent = 'x' + (orderData.quantity || 1);
+  document.getElementById('sumMRP').textContent = '₹' + numberWithCommas(orderData.subtotal || orderData.total);
+  document.getElementById('sumTotal').textContent = '₹' + numberWithCommas(orderData.total);
+  // Address
+  document.getElementById('adrName').innerHTML = '<strong>' + (orderData.name || '—') + '</strong>';
+  document.getElementById('adrPhone').textContent = orderData.phone || '—';
+  document.getElementById('adrLine1').textContent = (orderData.house || '') + (orderData.area ? ', ' + orderData.area : '');
+  document.getElementById('adrLine2').textContent = (orderData.city || '') + (orderData.district ? ', ' + orderData.district : '') + (orderData.state ? ', ' + orderData.state : '');
+  document.getElementById('adrPin').textContent = 'PIN: ' + (orderData.pincode || '—');
 }
 
-// Send data to Google Sheets
+function numberWithCommas(n) {
+  return parseInt(n).toLocaleString('en-IN');
+}
+
+/* ── Google Sheet ─────────────────────────────────────── */
 function sendToGoogleSheet(data) {
-    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScwHHaxVWT0gpayY3oj-UJ_hmbm52l3MDCWqQ4JvMlt-zkuKg/formResponse";
-    
-    const formData = `entry.1886079877=${encodeURIComponent(data.name || '')}
-    &entry.195772572=${encodeURIComponent(data.phone || '')}
-    &entry.1899048928=${encodeURIComponent(data.product || '')}
-    &entry.416801311=${encodeURIComponent(data.quantity || 1)}
-    &entry.1523414728=${encodeURIComponent(data.house || '')}
-    &entry.550657772=${encodeURIComponent(data.area || '')}
-    &entry.1778626407=${encodeURIComponent(data.city || '')}
-    &entry.1107035690=${encodeURIComponent(data.district || '')}
-    &entry.1741415098=${encodeURIComponent(data.state || '')}
-    &entry.1762899945=${encodeURIComponent(data.pincode || '')}
-    &entry.684444688=${encodeURIComponent(data.finalAmount || data.total)}
-    &entry.1058699500=${encodeURIComponent(data.paymentMethod || '')}
-    &entry.2027999746=${encodeURIComponent(data.orderId || '')}`;
-    
-    fetch(formURL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: formData
-    }).catch(err => console.log('Sheet submission:', err));
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScwHHaxVWT0gpayY3oj-UJ_hmbm52l3MDCWqQ4JvMlt-zkuKg/formResponse";
+  const body = [
+    'entry.1886079877=' + encodeURIComponent(data.name || ''),
+    'entry.195772572='  + encodeURIComponent(data.phone || ''),
+    'entry.1899048928=' + encodeURIComponent(data.product || ''),
+    'entry.416801311='  + encodeURIComponent(data.quantity || 1),
+    'entry.1523414728=' + encodeURIComponent(data.house || ''),
+    'entry.550657772='  + encodeURIComponent(data.area || ''),
+    'entry.1778626407=' + encodeURIComponent(data.city || ''),
+    'entry.1107035690=' + encodeURIComponent(data.district || ''),
+    'entry.1741415098=' + encodeURIComponent(data.state || ''),
+    'entry.1762899945=' + encodeURIComponent(data.pincode || ''),
+    'entry.684444688='  + encodeURIComponent(data.finalAmount || data.total),
+    'entry.1058699500=' + encodeURIComponent(data.paymentMethod || ''),
+    'entry.2027999746=' + encodeURIComponent(data.orderId || '')
+  ].join('&');
+
+  fetch(formURL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body
+  }).catch(err => console.log('Sheet:', err));
 }
 
+/* ── Razorpay ─────────────────────────────────────────── */
 function payWithRazorpay(method) {
-    if (!orderData || !orderData.total) {
-        alert('Order data missing! Please go back and try again.');
-        return;
+  if (!orderData || !orderData.total) {
+    showToast('error', 'Order Missing', 'Please go back and place your order again.');
+    return;
+  }
+  const discount = 200;
+  const finalAmt = orderData.total - discount;
+  const amountPaise = finalAmt * 100;
+
+  const options = {
+    key: "rzp_live_T52kjDzypSMLLC",
+    amount: amountPaise,
+    currency: "INR",
+    name: "SugarMukt by Vayur",
+    description: orderData.product,
+    image: "images/logo.png",
+    handler: function (response) {
+      orderData.paymentStatus  = 'paid';
+      orderData.paymentMethod  = method === 'upi' ? 'UPI' : 'Net Banking';
+      orderData.paymentId      = response.razorpay_payment_id;
+      orderData.discount       = discount;
+      orderData.finalAmount    = finalAmt;
+      orderData.orderDate      = new Date().toISOString();
+      localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
+      sendToGoogleSheet(orderData);
+      showToast('success', 'Payment Successful!', 'Redirecting to your invoice…');
+      setTimeout(() => window.location.href = 'billing.html', 1500);
+    },
+    prefill: {
+      name:    orderData.name  || '',
+      contact: orderData.phone || ''
+    },
+    notes: {
+      address: [orderData.house, orderData.area, orderData.city].filter(Boolean).join(', ')
+    },
+    theme: { color: "#c9a84c" },
+    method: {
+      upi:        method === 'upi',
+      netbanking: method === 'netbanking',
+      card: false,
+      wallet: false,
+      emi: false
     }
-    
-    let discount = 200;
-    let amount = (orderData.total - discount) * 100;
-    
-    let options = {
-        key: "rzp_live_T52kjDzypSMLLC",
-        amount: amount,
-        currency: "INR",
-        name: "Sugarmukt",
-        description: orderData.product,
-        handler: function (response){
-            orderData.paymentStatus = 'paid';
-           orderData.paymentMethod = method === 'upi' ? 'UPI' : 'Net Banking';
-            orderData.paymentId = response.razorpay_payment_id;
-            orderData.discount = discount;
-            orderData.finalAmount = amount / 100;
-            orderData.orderDate = new Date().toISOString();
-            
-            localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
-            sendToGoogleSheet(orderData);
-            
-            window.location.href = "billing.html";
-        },
-        prefill: {
-            name: orderData.name || '',
-            contact: orderData.phone || ''
-        },
-        notes: {
-            address: `${orderData.house || ''}, ${orderData.area || ''}, ${orderData.city || ''}`
-        },
-        theme: {
-            color: "#004836"
-        },
-        method: {
-            upi: method === 'upi',
-            netbanking: method === 'netbanking',
-            card: false,
-            wallet: false
-        }
-    };
-    
-    let rzp = new Razorpay(options);
-    rzp.open();
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.on('payment.failed', function(r) {
+    showToast('error', 'Payment Failed', r.error.description || 'Please try again.');
+  });
+  rzp.open();
 }
 
+/* ── COD ──────────────────────────────────────────────── */
 function payWithCOD() {
-    if (!orderData || !orderData.total) {
-        alert('Order data missing! Please go back and place order again.');
-        window.location.href = 'order.html';
-        return;
-    }
-    
-    let overlay = document.getElementById('loadingOverlay');
-    overlay.classList.add('active');
-    
-    orderData.paymentStatus = 'pending';
-    orderData.paymentMethod = 'COD';
-    orderData.discount = 0;
-    orderData.finalAmount = orderData.total;
-    orderData.orderDate = new Date().toISOString();
-    
-    localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
-    
-    // ✅ NOW SEND COD DATA TO GOOGLE SHEET
-    sendToGoogleSheet(orderData);
-    
-    setTimeout(() => {
-        window.location.href = "billing.html";
-    }, 3000);
+  if (!orderData || !orderData.total) {
+    showToast('error', 'Order Missing', 'Please go back and place your order again.');
+    setTimeout(() => window.location.href = 'order.html', 2000);
+    return;
+  }
+  document.getElementById('loadingOverlay').classList.add('active');
+  orderData.paymentStatus = 'pending';
+  orderData.paymentMethod = 'COD';
+  orderData.discount      = 0;
+  orderData.finalAmount   = orderData.total;
+  orderData.orderDate     = new Date().toISOString();
+  localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
+  sendToGoogleSheet(orderData);
+  setTimeout(() => window.location.href = 'billing.html', 3000);
 }
-</script>
 
+/* ── Toast ────────────────────────────────────────────── */
+function showToast(type, title, msg) {
+  const icon = type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<i class="fas ${icon} toast-icon"></i><div class="toast-body"><strong>${title}</strong><span>${msg}</span></div>`;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 4000);
+}
+
+/* ── Scroll Reveal ────────────────────────────────────── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
