@@ -305,13 +305,9 @@ nav {
 
 /* ── LAYOUT ──────────────────────────────────────── */
 .order-layout {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 28px;
-  max-width: 1060px;
+  display: block;
+  max-width: 700px;
   margin: 0 auto;
-  align-items: start;
-  animation: fadeUp 0.9s 0.15s ease both;
 }
 
 /* ── FORM CARD ───────────────────────────────────── */
@@ -966,7 +962,7 @@ footer a { color: var(--gold); text-decoration: none; }
   .form-card { padding: 28px 20px; }
   .form-row { grid-template-columns: 1fr; }
   .product-card { grid-template-columns: 1fr; }
-  .mobile-order-bar { display: block; }
+ .mobile-order-bar { display: none !important; }
   footer { padding: 20px 20px 80px; }
 }
 @media (min-width: 641px) {
@@ -1154,22 +1150,7 @@ footer a { color: var(--gold); text-decoration: none; }
     <!-- / FORM CARD -->
 
     <!-- ── SIDEBAR ────────────────────────────────── -->
-    <div class="sidebar">
-
-      <!-- Product Card -->
-      <div class="product-card reveal">
-        <div class="product-img-wrap">
-          <div class="product-badge">Best Seller</div>
-          <img src="images/a2.jpeg" alt="Madhumehast Churna">
-        </div>
-        <div class="product-info">
-          <h3>Madhumehast Churna</h3>
-          <p class="product-sub">23 Powerful Ayurvedic Herbs · 100% Natural</p>
-
-          <div class="price-row">
-            <span class="price-main">₹1,799</span>
-            <span class="price-was">₹2,199</span>
-          </div>
+   
 
           <!-- UPI Offer -->
           <div class="upi-strip">
@@ -1188,60 +1169,8 @@ footer a { color: var(--gold); text-decoration: none; }
         </div>
       </div>
 
-      <!-- Delivery & Info -->
-      <div class="info-card reveal">
-        <div class="info-card-title">🚚 Delivery & Trust</div>
-        <div class="info-row">
-          <div class="info-icon">📦</div>
-          <div class="info-text">
-            <p>Pan India Delivery</p>
-            <span>All states covered · Fast dispatch</span>
-          </div>
-        </div>
-        <div class="info-row">
-          <div class="info-icon">🔒</div>
-          <div class="info-text">
-            <p>Secure & Safe Packaging</p>
-            <span>Tamper-proof sealed packaging</span>
-          </div>
-        </div>
-        <div class="info-row">
-          <div class="info-icon">✅</div>
-          <div class="info-text">
-            <p>2500+ Satisfied Customers</p>
-            <span>Verified reviews · Real results</span>
-          </div>
-        </div>
-        <div class="info-row">
-          <div class="info-icon">🌿</div>
-          <div class="info-text">
-            <p>No Side Effects</p>
-            <span>100% natural · Clinically tested herbs</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Herbs -->
-      <div class="info-card reveal">
-        <div class="info-card-title">🌱 Key Ingredients</div>
-        <div class="herb-pills">
-          <span class="herb-pill">Methi Dana</span>
-          <span class="herb-pill">Karela</span>
-          <span class="herb-pill">Neem</span>
-          <span class="herb-pill">Jamun</span>
-          <span class="herb-pill">Gudmar</span>
-          <span class="herb-pill">Harad</span>
-          <span class="herb-pill">Aavla</span>
-          <span class="herb-pill">Ashwagandha</span>
-          <span class="herb-pill">Giloy</span>
-          <span class="herb-pill">Dal Chini</span>
-          <span class="herb-pill">Shilajeet</span>
-          <span class="herb-pill">+12 More</span>
-        </div>
-      </div>
-
-    </div>
-    <!-- / SIDEBAR -->
+     
 
   </div>
   <!-- / LAYOUT -->
