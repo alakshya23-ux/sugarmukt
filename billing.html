@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invoice | SugarMukt by Vayur</title>
 
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KYLKNNGJBG"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -14,40 +13,20 @@
   gtag('config', 'G-KYLKNNGJBG');
 </script>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-/* ═══════════════════════════════════════════
-   SUGARMUKT DESIGN SYSTEM
-═══════════════════════════════════════════ */
-:root {
-  --forest:      #0a1f14;
-  --forest-mid:  #0d2818;
-  --forest-card: #111f17;
-  --gold:        #c9a84c;
-  --gold-light:  #e8c96d;
-  --gold-pale:   #f5ecd4;
-  --green-glow:  #1a7a4a;
-  --green-soft:  #2d9e63;
-  --text-main:   #f0ede6;
-  --text-muted:  #8a9e92;
-  --text-dim:    #556b60;
-  --border:      rgba(201,168,76,0.18);
-  --card-bg:     rgba(13,40,24,0.85);
-  --glass:       rgba(255,255,255,0.03);
-}
+/* ── NO CSS VARIABLES (html2canvas can't resolve them) ── */
+/* All colors are hardcoded hex/rgba */
 
 * { margin:0; padding:0; box-sizing:border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--forest);
-  color: var(--text-main);
+  background: #0a1f14;
+  color: #f0ede6;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -57,16 +36,12 @@ h1,h2,h3,h4,h5 {
   letter-spacing: 0.3px;
 }
 
-/* ═══════════════════════════════════════════
-   BACKGROUND LAYERS
-═══════════════════════════════════════════ */
 .bg-layer {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
 }
-
 .bg-layer::before {
   content: '';
   position: absolute;
@@ -76,7 +51,6 @@ h1,h2,h3,h4,h5 {
     radial-gradient(ellipse 60% 40% at 85% 80%, rgba(201,168,76,0.06) 0%, transparent 55%),
     linear-gradient(160deg, #0a1f14 0%, #050e09 50%, #0a1a10 100%);
 }
-
 .bg-layer::after {
   content: '';
   position: absolute;
@@ -87,1033 +61,306 @@ h1,h2,h3,h4,h5 {
   background-size: 60px 60px;
 }
 
-/* ═══════════════════════════════════════════
-   ANNOUNCEMENT BAR
-═══════════════════════════════════════════ */
 .announce-bar {
-  background: linear-gradient(90deg, var(--forest-mid), #0f2d1a, var(--forest-mid));
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, #0d2818, #0f2d1a, #0d2818);
+  border-bottom: 1px solid rgba(201,168,76,0.18);
   padding: 10px 0;
   overflow: hidden;
   position: relative;
   z-index: 100;
 }
-
 .announce-track {
   display: flex;
   gap: 80px;
   animation: ticker 28s linear infinite;
   white-space: nowrap;
 }
-
 .announce-track span {
   font-size: 12px;
-  color: var(--gold-light);
+  color: #e8c96d;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   font-weight: 500;
 }
-
-.announce-track span i {
-  margin-right: 6px;
-  color: var(--gold);
-}
-
+.announce-track span i { margin-right: 6px; color: #c9a84c; }
 @keyframes ticker {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-/* ═══════════════════════════════════════════
-   NAVBAR
-═══════════════════════════════════════════ */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 999;
-  background: rgba(10,31,20,0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  background: rgba(10,31,20,0.95);
+  border-bottom: 1px solid rgba(201,168,76,0.18);
   padding: 0 48px;
   height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: background 0.3s;
 }
-
 .nav-brand {
   font-family: 'Cormorant Garamond', serif;
   font-size: 22px;
   font-weight: 700;
-  color: var(--text-main);
+  color: #f0ede6;
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
-.nav-brand span {
-  color: var(--gold);
-}
-
+.nav-brand span { color: #c9a84c; }
 .nav-brand .brand-pill {
   font-family: 'DM Sans', sans-serif;
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--forest);
-  background: var(--gold);
+  color: #0a1f14;
+  background: #c9a84c;
   padding: 3px 8px;
   border-radius: 20px;
 }
-
 .nav-links {
   display: flex;
   align-items: center;
   gap: 6px;
   list-style: none;
 }
-
 .nav-links a {
-  color: var(--text-muted);
+  color: #8a9e92;
   text-decoration: none;
   font-size: 13px;
   font-weight: 500;
   padding: 7px 16px;
   border-radius: 6px;
   transition: all 0.25s;
-  letter-spacing: 0.3px;
 }
-
-.nav-links a:hover {
-  color: var(--text-main);
-  background: var(--glass);
-}
-
-.nav-links a.active {
-  color: var(--forest);
-  background: var(--gold);
-  font-weight: 600;
-}
-
-.nav-burger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 4px;
-}
-.nav-burger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--gold);
-  border-radius: 2px;
-  transition: 0.3s;
-}
+.nav-links a:hover { color: #f0ede6; }
+.nav-links a.active { color: #0a1f14; background: #c9a84c; font-weight: 600; }
+.nav-burger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+.nav-burger span { display:block; width:24px; height:2px; background:#c9a84c; border-radius:2px; }
 
 .mobile-menu {
   display: none;
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: rgba(5,14,9,0.98);
   z-index: 9999;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
+  flex-direction: column; align-items: center; justify-content: center; gap: 20px;
 }
 .mobile-menu.open { display: flex; }
-.mobile-menu a {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
-  color: var(--text-main);
-  text-decoration: none;
-  transition: color 0.25s;
-}
-.mobile-menu a:hover { color: var(--gold); }
-.mobile-close {
-  position: absolute;
-  top: 24px;
-  right: 28px;
-  font-size: 28px;
-  color: var(--gold);
-  cursor: pointer;
-  background: none;
-  border: none;
-}
+.mobile-menu a { font-family:'Cormorant Garamond',serif; font-size:28px; color:#f0ede6; text-decoration:none; }
+.mobile-menu a:hover { color: #c9a84c; }
+.mobile-close { position:absolute; top:24px; right:28px; font-size:28px; color:#c9a84c; cursor:pointer; background:none; border:none; }
 
-/* ═══════════════════════════════════════════
-   PROGRESS STEPS
-═══════════════════════════════════════════ */
-.steps-wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 600px;
-  margin: 44px auto 0;
-  padding: 0 20px;
-}
+.steps-wrap { position:relative; z-index:1; max-width:600px; margin:44px auto 0; padding:0 20px; }
+.steps-bar { display:flex; align-items:center; justify-content:center; }
+.step { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.step-circle { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; border:2px solid #556b60; color:#556b60; background:#0d2818; font-family:'DM Sans',sans-serif; }
+.step.done .step-circle { background:#1a7a4a; border-color:#2d9e63; color:#fff; }
+.step.active .step-circle { background:linear-gradient(135deg,#b8930f,#c9a84c); border-color:#e8c96d; color:#0a1f14; box-shadow:0 0 24px rgba(201,168,76,0.45); }
+.step-label { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:#556b60; }
+.step.done .step-label, .step.active .step-label { color:#f0ede6; }
+.step-line { height:2px; width:80px; background:#556b60; margin-bottom:26px; }
+.step-line.done { background:#2d9e63; }
 
-.steps-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-}
+.page-wrap { position:relative; z-index:1; max-width:860px; margin:40px auto 100px; padding:0 20px; }
 
-.step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.step-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 700;
-  border: 2px solid var(--text-dim);
-  color: var(--text-dim);
-  background: var(--forest-mid);
-  transition: all 0.3s;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.step.done .step-circle {
-  background: var(--green-glow);
-  border-color: var(--green-soft);
-  color: #fff;
-}
-
-.step.active .step-circle {
-  background: linear-gradient(135deg, #b8930f, var(--gold));
-  border-color: var(--gold-light);
-  color: var(--forest);
-  box-shadow: 0 0 24px rgba(201,168,76,0.45);
-}
-
-.step-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-
-.step.done .step-label,
-.step.active .step-label { color: var(--text-main); }
-
-.step-line {
-  height: 2px;
-  width: 80px;
-  background: var(--text-dim);
-  margin: 0;
-  margin-bottom: 26px;
-}
-.step-line.done { background: var(--green-soft); }
-
-/* ═══════════════════════════════════════════
-   MAIN WRAPPER
-═══════════════════════════════════════════ */
-.page-wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 860px;
-  margin: 40px auto 100px;
-  padding: 0 20px;
-}
-
-/* ═══════════════════════════════════════════
-   SUCCESS HERO
-═══════════════════════════════════════════ */
-.success-hero {
-  text-align: center;
-  margin-bottom: 44px;
-  animation: fadeUp 0.7s ease both;
-}
-
+.success-hero { text-align:center; margin-bottom:44px; animation:fadeUp 0.7s ease both; }
 .success-icon-wrap {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(26,122,74,0.2), rgba(45,158,99,0.15));
-  border: 2px solid rgba(45,158,99,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  font-size: 38px;
-  color: var(--green-soft);
-  box-shadow:
-    0 0 0 12px rgba(26,122,74,0.06),
-    0 0 40px rgba(26,122,74,0.2);
-  animation: pulse-ring 2.5s ease-in-out infinite;
+  width:88px; height:88px; border-radius:50%;
+  background:linear-gradient(135deg,rgba(26,122,74,0.2),rgba(45,158,99,0.15));
+  border:2px solid rgba(45,158,99,0.4);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 20px; font-size:38px; color:#2d9e63;
+  animation:pulse-ring 2.5s ease-in-out infinite;
 }
-
 @keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 0 12px rgba(26,122,74,0.06), 0 0 40px rgba(26,122,74,0.2); }
-  50%       { box-shadow: 0 0 0 20px rgba(26,122,74,0.02), 0 0 60px rgba(26,122,74,0.3); }
+  0%,100% { box-shadow:0 0 0 12px rgba(26,122,74,0.06), 0 0 40px rgba(26,122,74,0.2); }
+  50%      { box-shadow:0 0 0 20px rgba(26,122,74,0.02), 0 0 60px rgba(26,122,74,0.3); }
 }
-
-.success-hero h1 {
-  font-size: 42px;
-  color: var(--text-main);
-  margin-bottom: 8px;
-  line-height: 1.15;
-}
-
-.success-hero h1 span { color: var(--gold); }
-
-.success-hero p {
-  font-size: 15px;
-  color: var(--text-muted);
-  line-height: 1.7;
-}
-
+.success-hero h1 { font-size:42px; color:#f0ede6; margin-bottom:8px; line-height:1.15; }
+.success-hero h1 span { color:#c9a84c; }
+.success-hero p { font-size:15px; color:#8a9e92; line-height:1.7; }
 .cod-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(201,168,76,0.12);
-  border: 1px solid var(--border);
-  color: var(--gold-light);
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-top: 14px;
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.18);
+  color:#e8c96d; padding:8px 20px; border-radius:50px;
+  font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-top:14px;
 }
 
-/* ═══════════════════════════════════════════
-   ERROR BANNER
-═══════════════════════════════════════════ */
 .error-banner {
-  display: none;
-  background: rgba(220,53,69,0.12);
-  border: 1px solid rgba(220,53,69,0.35);
-  border-radius: 12px;
-  padding: 18px 24px;
-  color: #ff8a8a;
-  font-size: 14px;
-  font-weight: 500;
-  text-align: center;
-  margin-bottom: 28px;
-  animation: fadeUp 0.5s ease;
+  display:none; background:rgba(220,53,69,0.12); border:1px solid rgba(220,53,69,0.35);
+  border-radius:12px; padding:18px 24px; color:#ff8a8a; font-size:14px; font-weight:500;
+  text-align:center; margin-bottom:28px;
 }
-.error-banner.show { display: block; }
+.error-banner.show { display:block; }
 
-/* ═══════════════════════════════════════════
-   INVOICE CARD
-═══════════════════════════════════════════ */
+/* INVOICE CARD — solid bg, NO backdrop-filter */
 .invoice-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+  background: #0d2818;
+  border: 1px solid rgba(201,168,76,0.25);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow:
-    0 4px 24px rgba(0,0,0,0.4),
-    0 0 0 1px rgba(201,168,76,0.05);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   animation: fadeUp 0.7s ease 0.1s both;
-  backdrop-filter: blur(16px);
 }
 
-/* Invoice Header */
 .invoice-head {
-  background: linear-gradient(135deg, #0d2818 0%, #0a1f10 100%);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg,#0d2818 0%,#0a1f10 100%);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
   padding: 36px 44px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
 }
+.inv-brand h2 { font-size:32px; color:#f0ede6; margin-bottom:4px; }
+.inv-brand h2 span { color:#c9a84c; }
+.inv-brand p { font-family:'DM Sans',sans-serif; font-size:12px; color:#8a9e92; letter-spacing:1.5px; text-transform:uppercase; }
+.inv-meta { text-align:right; }
+.inv-meta .inv-number { font-size:13px; color:#8a9e92; margin-bottom:8px; }
+.inv-status { display:inline-flex; align-items:center; gap:7px; padding:7px 18px; border-radius:50px; font-size:12px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; }
+.inv-status.paid { background:rgba(26,122,74,0.25); border:1px solid rgba(45,158,99,0.5); color:#6ee09a; }
+.inv-status.cod  { background:rgba(201,168,76,0.18); border:1px solid rgba(201,168,76,0.4); color:#e8c96d; }
+.inv-status .dot { width:7px; height:7px; border-radius:50%; background:currentColor; animation:blink 1.8s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-.inv-brand h2 {
-  font-size: 32px;
-  color: var(--text-main);
-  margin-bottom: 4px;
-}
+.invoice-body { padding:44px; background:#0d2818; }
 
-.inv-brand h2 span { color: var(--gold); }
+.gold-divider { height:1px; background:linear-gradient(90deg,transparent,#c9a84c,transparent); margin:32px 0; opacity:0.4; }
 
-.inv-brand p {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  color: var(--text-muted);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
+.inv-section-title { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+.inv-section-title i { width:34px; height:34px; border-radius:8px; background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.25); display:flex; align-items:center; justify-content:center; color:#c9a84c; font-size:13px; flex-shrink:0; }
+.inv-section-title h3 { font-size:20px; color:#f0ede6; }
 
-.inv-meta {
-  text-align: right;
-}
+.info-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 
-.inv-meta .inv-number {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-}
+.info-chip { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.10); border-radius:12px; padding:14px 18px; }
+.info-chip .chip-label { font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:#8a9e92; margin-bottom:5px; }
+.info-chip .chip-value { font-size:13px; color:#f0ede6; font-weight:500; word-break:break-all; line-height:1.4; }
+.chip-value.txn-mono { font-family:'Courier New',monospace; color:#e8c96d; font-size:12px; background:rgba(201,168,76,0.08); padding:3px 8px; border-radius:4px; border:1px solid rgba(201,168,76,0.18); display:inline-block; }
+.chip-value.status-paid { color:#6ee09a; font-weight:700; display:flex; align-items:center; gap:6px; }
+.chip-value.status-cod  { color:#e8c96d; font-weight:700; display:flex; align-items:center; gap:6px; }
+.info-chip.full-width { grid-column:1/-1; }
 
-.inv-meta .inv-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 18px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
+.product-table { width:100%; border-collapse:collapse; margin-top:4px; }
+.product-table thead tr { background:rgba(201,168,76,0.10); border-bottom:1px solid rgba(201,168,76,0.3); }
+.product-table th { padding:13px 18px; font-family:'DM Sans',sans-serif; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#c9a84c; text-align:left; }
+.product-table td { padding:14px 18px; font-size:13px; color:#f0ede6; border-bottom:1px solid rgba(255,255,255,0.06); }
+.product-name-cell { display:flex; align-items:center; gap:10px; }
+.product-icon { width:32px; height:32px; border-radius:8px; background:rgba(26,122,74,0.22); border:1px solid rgba(45,158,99,0.35); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.subtotal-rows td { padding:10px 18px; font-size:13px; color:#8a9e92; border-bottom:1px solid rgba(255,255,255,0.04); }
+.subtotal-rows td:last-child { text-align:right; }
+.discount-row td { color:#6ee09a !important; }
+.grand-total-row { background:rgba(201,168,76,0.10); border-top:1px solid rgba(201,168,76,0.35) !important; }
+.grand-total-row td { font-size:16px !important; font-weight:700 !important; color:#e8c96d !important; padding:16px 18px !important; border:none !important; }
+.grand-total-row td:last-child { text-align:right; }
+.free-badge { background:rgba(26,122,74,0.22); border:1px solid rgba(45,158,99,0.4); color:#6ee09a; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:700; }
 
-.inv-status.paid {
-  background: rgba(26,122,74,0.2);
-  border: 1px solid rgba(45,158,99,0.4);
-  color: #6ee09a;
-}
-
-.inv-status.cod {
-  background: rgba(201,168,76,0.15);
-  border: 1px solid rgba(201,168,76,0.35);
-  color: var(--gold-light);
-}
-
-.inv-status .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  animation: blink 1.8s ease-in-out infinite;
-}
-@keyframes blink {
-  0%,100% { opacity: 1; }
-  50%      { opacity: 0.3; }
-}
-
-/* Invoice Body */
-.invoice-body {
-  padding: 44px;
-}
-
-/* Gold Divider */
-.gold-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin: 32px 0;
-  opacity: 0.35;
-}
-
-/* Section Title */
-.inv-section-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.inv-section-title i {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: rgba(201,168,76,0.1);
-  border: 1px solid rgba(201,168,76,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gold);
-  font-size: 13px;
-  flex-shrink: 0;
-}
-
-.inv-section-title h3 {
-  font-size: 20px;
-  color: var(--text-main);
-}
-
-/* Info Grid */
-.info-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.info-chip {
-  background: rgba(255,255,255,0.025);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px;
-  padding: 14px 18px;
-  transition: border-color 0.25s;
-}
-
-.info-chip:hover { border-color: rgba(201,168,76,0.25); }
-
-.info-chip .chip-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 5px;
-}
-
-.info-chip .chip-value {
-  font-size: 13px;
-  color: var(--text-main);
-  font-weight: 500;
-  word-break: break-all;
-  line-height: 1.4;
-}
-
-.chip-value.txn-mono {
-  font-family: 'Courier New', monospace;
-  color: var(--gold-light);
-  font-size: 12px;
-  background: rgba(201,168,76,0.06);
-  padding: 3px 8px;
-  border-radius: 4px;
-  border: 1px solid rgba(201,168,76,0.12);
-  display: inline-block;
-}
-
-.chip-value.status-paid {
-  color: #6ee09a;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.chip-value.status-cod {
-  color: var(--gold-light);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Address full width */
-.info-chip.full-width {
-  grid-column: 1 / -1;
-}
-
-/* Product Table */
-.product-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 4px;
-}
-
-.product-table thead tr {
-  background: linear-gradient(90deg, rgba(201,168,76,0.12), rgba(201,168,76,0.06));
-  border-bottom: 1px solid rgba(201,168,76,0.25);
-}
-
-.product-table th {
-  padding: 13px 18px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--gold);
-  text-align: left;
-}
-
-.product-table td {
-  padding: 14px 18px;
-  font-size: 13px;
-  color: var(--text-main);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-
-.product-table tbody tr:hover {
-  background: rgba(255,255,255,0.02);
-}
-
-.product-name-cell {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.product-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(26,122,74,0.2);
-  border: 1px solid rgba(45,158,99,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.subtotal-rows td {
-  padding: 10px 18px;
-  font-size: 13px;
-  color: var(--text-muted);
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-
-.subtotal-rows td:last-child { text-align: right; }
-
-.discount-row td { color: #6ee09a !important; }
-
-.grand-total-row {
-  background: linear-gradient(90deg, rgba(201,168,76,0.10), rgba(201,168,76,0.05));
-  border-top: 1px solid rgba(201,168,76,0.3) !important;
-  border-bottom: 1px solid rgba(201,168,76,0.3) !important;
-}
-
-.grand-total-row td {
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  color: var(--gold-light) !important;
-  padding: 16px 18px !important;
-  border: none !important;
-}
-
-.grand-total-row td:last-child { text-align: right; }
-
-/* Free Badge */
-.free-badge {
-  background: rgba(26,122,74,0.2);
-  border: 1px solid rgba(45,158,99,0.35);
-  color: #6ee09a;
-  padding: 2px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-/* ═══════════════════════════════════════════
-   DOWNLOAD SECTION
-═══════════════════════════════════════════ */
 .download-wrap {
-  background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(201,168,76,0.03));
-  border: 1px solid rgba(201,168,76,0.2);
-  border-radius: 16px;
-  padding: 32px 36px;
-  text-align: center;
-  margin-top: 32px;
-  animation: fadeUp 0.7s ease 0.3s both;
+  background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.03));
+  border:1px solid rgba(201,168,76,0.22); border-radius:16px; padding:32px 36px; text-align:center; margin-top:32px;
+  animation:fadeUp 0.7s ease 0.3s both;
 }
+.download-wrap h3 { font-size:24px; color:#e8c96d; margin-bottom:6px; }
+.download-wrap p { font-size:13px; color:#8a9e92; margin-bottom:22px; line-height:1.6; }
+.dl-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.dl-btn { display:inline-flex; align-items:center; gap:8px; padding:12px 26px; border-radius:50px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.25s; border:none; }
+.dl-btn-primary { background:linear-gradient(135deg,#b8930f,#c9a84c); color:#0a1f14; }
+.dl-btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(201,168,76,0.35); }
+.dl-btn-secondary { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); color:#f0ede6; }
+.dl-btn-secondary:hover { background:rgba(255,255,255,0.12); transform:translateY(-2px); }
 
-.download-wrap h3 {
-  font-size: 24px;
-  color: var(--gold-light);
-  margin-bottom: 6px;
-}
+.confirm-wrap { text-align:center; margin-top:28px; animation:fadeUp 0.7s ease 0.4s both; }
+.confirm-note { display:inline-flex; align-items:center; gap:7px; font-size:12px; color:#556b60; margin-bottom:16px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:8px 18px; border-radius:50px; }
+.confirm-note.hidden { display:none; }
+.confirm-btn { display:inline-flex; align-items:center; gap:10px; padding:16px 48px; border-radius:50px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:not-allowed; border:none; transition:all 0.3s; background:rgba(255,255,255,0.06); color:#556b60; }
+.confirm-btn.enabled { background:linear-gradient(135deg,#1a7a4a,#2d9e63); color:#fff; cursor:pointer; box-shadow:0 8px 32px rgba(26,122,74,0.4); }
+.confirm-btn.enabled:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(26,122,74,0.5); }
+.confirm-btn.enabled:active { transform:translateY(-1px); }
 
-.download-wrap p {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 22px;
-  line-height: 1.6;
-}
+.site-footer { position:relative; z-index:1; background:#050d08; border-top:1px solid rgba(201,168,76,0.18); padding:56px 48px 24px; margin-top:80px; }
+.footer-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:48px; padding-bottom:40px; border-bottom:1px solid rgba(201,168,76,0.18); margin-bottom:28px; }
+.footer-brand h3 { font-size:26px; color:#f0ede6; margin-bottom:6px; }
+.footer-brand h3 span { color:#c9a84c; }
+.footer-brand p { font-size:13px; color:#8a9e92; line-height:1.8; margin-top:8px; max-width:280px; }
+.footer-col h4 { font-family:'DM Sans',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#c9a84c; margin-bottom:18px; }
+.footer-col ul { list-style:none; }
+.footer-col ul li { margin-bottom:10px; }
+.footer-col ul li a { font-size:13px; color:#8a9e92; text-decoration:none; transition:color 0.2s; }
+.footer-col ul li a:hover { color:#f0ede6; }
+.footer-contact-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; font-size:13px; color:#8a9e92; }
+.footer-contact-item i { color:#c9a84c; margin-top:2px; font-size:12px; }
+.footer-bottom { max-width:1100px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+.footer-bottom p { font-size:12px; color:#556b60; line-height:1.6; }
+.footer-disclaimer { max-width:1100px; margin:20px auto 0; font-size:11px; color:#556b60; line-height:1.7; padding-top:16px; border-top:1px solid rgba(255,255,255,0.04); }
 
-.dl-btns {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+.toast-wrap { position:fixed; top:24px; right:24px; z-index:99999; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
+.toast { background:#111f17; border:1px solid rgba(201,168,76,0.18); border-radius:12px; padding:14px 20px; display:flex; align-items:center; gap:12px; min-width:280px; max-width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.4); transform:translateX(120px); opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); pointer-events:auto; }
+.toast.show { transform:translateX(0); opacity:1; }
+.toast-icon { font-size:20px; flex-shrink:0; }
+.toast-success .toast-icon { color:#6ee09a; }
+.toast-error   .toast-icon { color:#ff8a8a; }
+.toast-info    .toast-icon { color:#e8c96d; }
+.toast-msg { font-size:13px; color:#f0ede6; font-weight:500; line-height:1.4; }
 
-.dl-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 26px;
-  border-radius: 50px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s;
-  border: none;
-  letter-spacing: 0.3px;
-}
+.mobile-bar { display:none; position:fixed; bottom:0; left:0; right:0; z-index:900; background:rgba(5,14,9,0.97); border-top:1px solid rgba(201,168,76,0.18); padding:12px 16px; }
+.mobile-bar a { display:block; text-align:center; background:linear-gradient(135deg,#1a7a4a,#2d9e63); color:#fff; text-decoration:none; padding:14px; border-radius:50px; font-size:14px; font-weight:700; }
 
-.dl-btn-primary {
-  background: linear-gradient(135deg, #b8930f, var(--gold));
-  color: var(--forest);
-}
-.dl-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(201,168,76,0.35);
-}
+.wa-btn { position:fixed; bottom:28px; right:28px; z-index:800; width:50px; height:50px; border-radius:50%; background:#25d366; color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; text-decoration:none; box-shadow:0 4px 18px rgba(37,211,102,0.35); transition:all 0.25s; }
+.wa-btn:hover { transform:scale(1.08); }
 
-.dl-btn-secondary {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: var(--text-main);
-}
-.dl-btn-secondary:hover {
-  background: rgba(255,255,255,0.10);
-  transform: translateY(-2px);
-}
+.scroll-top { position:fixed; bottom:88px; right:28px; z-index:800; width:42px; height:42px; border-radius:50%; background:#111f17; border:1px solid rgba(201,168,76,0.18); color:#c9a84c; display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; opacity:0; pointer-events:none; transition:all 0.3s; text-decoration:none; }
+.scroll-top.visible { opacity:1; pointer-events:auto; }
 
-/* ═══════════════════════════════════════════
-   CONFIRM SECTION
-═══════════════════════════════════════════ */
-.confirm-wrap {
-  text-align: center;
-  margin-top: 28px;
-  animation: fadeUp 0.7s ease 0.4s both;
-}
-
-.confirm-note {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  color: var(--text-dim);
-  margin-bottom: 16px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  padding: 8px 18px;
-  border-radius: 50px;
-}
-.confirm-note.hidden { display: none; }
-
-.confirm-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 48px;
-  border-radius: 50px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: not-allowed;
-  border: none;
-  letter-spacing: 0.3px;
-  transition: all 0.3s;
-  background: rgba(255,255,255,0.06);
-  color: var(--text-dim);
-  box-shadow: none;
-}
-
-.confirm-btn.enabled {
-  background: linear-gradient(135deg, #1a7a4a, var(--green-soft));
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 8px 32px rgba(26,122,74,0.4);
-}
-.confirm-btn.enabled:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 40px rgba(26,122,74,0.5);
-}
-.confirm-btn.enabled:active { transform: translateY(-1px); }
-
-/* ═══════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════ */
-.site-footer {
-  position: relative;
-  z-index: 1;
-  background: #050d08;
-  border-top: 1px solid var(--border);
-  padding: 56px 48px 24px;
-  margin-top: 80px;
-}
-
-.footer-grid {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
-  gap: 48px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 28px;
-}
-
-.footer-brand h3 {
-  font-size: 26px;
-  color: var(--text-main);
-  margin-bottom: 6px;
-}
-.footer-brand h3 span { color: var(--gold); }
-.footer-brand p {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.8;
-  margin-top: 8px;
-  max-width: 280px;
-}
-
-.footer-col h4 {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 18px;
-}
-
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 10px; }
-.footer-col ul li a {
-  font-size: 13px;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-col ul li a:hover { color: var(--text-main); }
-
-.footer-contact-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-.footer-contact-item i { color: var(--gold); margin-top: 2px; font-size: 12px; }
-
-.footer-bottom {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
-.footer-bottom p {
-  font-size: 12px;
-  color: var(--text-dim);
-  line-height: 1.6;
-}
-
-.footer-disclaimer {
-  max-width: 1100px;
-  margin: 20px auto 0;
-  font-size: 11px;
-  color: var(--text-dim);
-  line-height: 1.7;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.04);
-}
-
-/* ═══════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════ */
-.toast-wrap {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 99999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  pointer-events: none;
-}
-
-.toast {
-  background: var(--forest-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 280px;
-  max-width: 360px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  transform: translateX(120px);
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  pointer-events: auto;
-}
-.toast.show { transform: translateX(0); opacity: 1; }
-
-.toast-icon { font-size: 20px; flex-shrink: 0; }
-.toast-success .toast-icon { color: #6ee09a; }
-.toast-error   .toast-icon { color: #ff8a8a; }
-.toast-info    .toast-icon { color: var(--gold-light); }
-
-.toast-msg { font-size: 13px; color: var(--text-main); font-weight: 500; line-height: 1.4; }
-
-/* ═══════════════════════════════════════════
-   MOBILE BOTTOM BAR
-═══════════════════════════════════════════ */
-.mobile-bar {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 900;
-  background: rgba(5,14,9,0.97);
-  backdrop-filter: blur(16px);
-  border-top: 1px solid var(--border);
-  padding: 12px 16px;
-}
-
-.mobile-bar a {
-  display: block;
-  text-align: center;
-  background: linear-gradient(135deg, #1a7a4a, var(--green-soft));
-  color: #fff;
-  text-decoration: none;
-  padding: 14px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-}
-
-/* ═══════════════════════════════════════════
-   WHATSAPP BUTTON
-═══════════════════════════════════════════ */
-.wa-btn {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 800;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #25d366;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  text-decoration: none;
-  box-shadow: 0 4px 18px rgba(37,211,102,0.35);
-  transition: all 0.25s;
-}
-.wa-btn:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(37,211,102,0.45); }
-
-/* ═══════════════════════════════════════════
-   SCROLL TOP
-═══════════════════════════════════════════ */
-.scroll-top {
-  position: fixed;
-  bottom: 88px;
-  right: 28px;
-  z-index: 800;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--forest-card);
-  border: 1px solid var(--border);
-  color: var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s;
-  text-decoration: none;
-}
-.scroll-top.visible { opacity: 1; pointer-events: auto; }
-.scroll-top:hover { background: rgba(201,168,76,0.12); }
-
-/* ═══════════════════════════════════════════
-   PRINT STYLES
-═══════════════════════════════════════════ */
 @media print {
-  @page { size: A4; margin: 15mm; }
-  body {
-    background: #fff !important;
-    color: #111 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .bg-layer, .navbar, .announce-bar, .steps-wrap,
-  .download-wrap, .confirm-wrap, .site-footer,
-  .mobile-bar, .wa-btn, .scroll-top,
-  .toast-wrap { display: none !important; }
-  .page-wrap {
-    margin: 0;
-    padding: 0;
-    max-width: 100%;
-  }
-  .invoice-card {
-    border: 1px solid #ccc;
-    border-radius: 0;
-    box-shadow: none !important;
-    background: #fff !important;
-  }
-  .invoice-head {
-    background: #0d2818 !important;
-    -webkit-print-color-adjust: exact;
-  }
-  .info-chip { background: #f9f9f9 !important; border-color: #ddd !important; }
-  .info-chip .chip-label { color: #555 !important; }
-  .info-chip .chip-value { color: #111 !important; }
-  .product-table th { background: #0d2818 !important; -webkit-print-color-adjust: exact; }
-  .product-table td { color: #111 !important; }
-  .grand-total-row td { color: #b8930f !important; }
-  .success-hero { display: none !important; }
+  @page { size:A4; margin:15mm; }
+  body { background:#fff !important; color:#111 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .bg-layer,.navbar,.announce-bar,.steps-wrap,.download-wrap,.confirm-wrap,.site-footer,.mobile-bar,.wa-btn,.scroll-top,.toast-wrap { display:none !important; }
+  .page-wrap { margin:0; padding:0; max-width:100%; }
+  .invoice-card { border:1px solid #ccc; border-radius:0; box-shadow:none !important; background:#fff !important; }
+  .invoice-head { background:#0d2818 !important; -webkit-print-color-adjust:exact; }
+  .invoice-body { background:#fff !important; }
+  .info-chip { background:#f9f9f9 !important; border-color:#ddd !important; }
+  .info-chip .chip-label { color:#555 !important; }
+  .info-chip .chip-value { color:#111 !important; }
+  .product-table th { background:#0d2818 !important; -webkit-print-color-adjust:exact; }
+  .product-table td { color:#111 !important; }
+  .grand-total-row td { color:#b8930f !important; background:#fff8e8 !important; }
+  .success-hero { display:none !important; }
 }
 
-/* ═══════════════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════════════ */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(28px); }
-  to   { opacity:1; transform:translateY(0); }
-}
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════ */
 @media(max-width:768px){
-  .navbar { padding: 0 20px; }
-  .nav-links { display: none; }
-  .nav-burger { display: flex; }
-  .invoice-head { padding: 28px 24px; flex-direction: column; gap: 16px; }
-  .inv-meta { text-align: left; }
-  .invoice-body { padding: 28px 22px; }
-  .info-grid-2 { grid-template-columns: 1fr; }
-  .info-chip.full-width { grid-column: 1; }
-  .product-table th, .product-table td { padding: 10px 12px; font-size: 12px; }
-  .download-wrap { padding: 24px 20px; }
-  .site-footer { padding: 40px 20px 20px; }
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; }
-  .mobile-bar { display: block; }
-  .wa-btn { bottom: 76px; right: 16px; }
-  .scroll-top { bottom: 130px; right: 16px; }
-  .steps-wrap { padding: 0 16px; }
-  .step-line { width: 44px; }
-  .dl-btns { flex-direction: column; align-items: stretch; }
-  .confirm-btn { width: 100%; justify-content: center; }
-  .success-hero h1 { font-size: 30px; }
+  .navbar { padding:0 20px; }
+  .nav-links { display:none; }
+  .nav-burger { display:flex; }
+  .invoice-head { padding:28px 24px; flex-direction:column; gap:16px; }
+  .inv-meta { text-align:left; }
+  .invoice-body { padding:28px 22px; }
+  .info-grid-2 { grid-template-columns:1fr; }
+  .info-chip.full-width { grid-column:1; }
+  .product-table th, .product-table td { padding:10px 12px; font-size:12px; }
+  .download-wrap { padding:24px 20px; }
+  .site-footer { padding:40px 20px 20px; }
+  .footer-grid { grid-template-columns:1fr; gap:28px; }
+  .footer-bottom { flex-direction:column; align-items:flex-start; }
+  .mobile-bar { display:block; }
+  .wa-btn { bottom:76px; right:16px; }
+  .scroll-top { bottom:130px; right:16px; }
+  .steps-wrap { padding:0 16px; }
+  .step-line { width:44px; }
+  .dl-btns { flex-direction:column; align-items:stretch; }
+  .confirm-btn { width:100%; justify-content:center; }
+  .success-hero h1 { font-size:30px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ─── BG ─── -->
 <div class="bg-layer"></div>
-
-<!-- ─── TOAST ─── -->
 <div class="toast-wrap" id="toastWrap"></div>
 
-<!-- ─── MOBILE MENU ─── -->
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="index.html" onclick="toggleMenu()">Home</a>
@@ -1122,9 +369,8 @@ h1,h2,h3,h4,h5 {
   <a href="order.html" onclick="toggleMenu()">Order Now</a>
 </div>
 
-<!-- ─── ANNOUNCE BAR ─── -->
 <div class="announce-bar">
-  <div class="announce-track" id="ticker">
+  <div class="announce-track">
     <span><i class="fas fa-truck"></i> Pan India Delivery Available</span>
     <span><i class="fas fa-leaf"></i> 100% Natural · 23+ Ayurvedic Herbs</span>
     <span><i class="fas fa-phone"></i> +91 74190 74650</span>
@@ -1138,7 +384,6 @@ h1,h2,h3,h4,h5 {
   </div>
 </div>
 
-<!-- ─── NAVBAR ─── -->
 <nav class="navbar">
   <a href="index.html" class="nav-brand">
     SugarMukt <span>&nbsp;by Vayur</span>
@@ -1155,34 +400,20 @@ h1,h2,h3,h4,h5 {
   </div>
 </nav>
 
-<!-- ─── PROGRESS STEPS ─── -->
 <div class="steps-wrap">
   <div class="steps-bar">
-    <div class="step done">
-      <div class="step-circle"><i class="fas fa-check"></i></div>
-      <div class="step-label">Order</div>
-    </div>
+    <div class="step done"><div class="step-circle"><i class="fas fa-check"></i></div><div class="step-label">Order</div></div>
     <div class="step-line done"></div>
-    <div class="step done">
-      <div class="step-circle"><i class="fas fa-check"></i></div>
-      <div class="step-label">Payment</div>
-    </div>
+    <div class="step done"><div class="step-circle"><i class="fas fa-check"></i></div><div class="step-label">Payment</div></div>
     <div class="step-line done"></div>
-    <div class="step active">
-      <div class="step-circle"><i class="fas fa-file-invoice"></i></div>
-      <div class="step-label">Invoice</div>
-    </div>
+    <div class="step active"><div class="step-circle"><i class="fas fa-file-invoice"></i></div><div class="step-label">Invoice</div></div>
   </div>
 </div>
 
-<!-- ─── MAIN CONTENT ─── -->
 <div class="page-wrap">
 
-  <!-- Success Hero -->
   <div class="success-hero" id="successHero">
-    <div class="success-icon-wrap">
-      <i class="fas fa-check"></i>
-    </div>
+    <div class="success-icon-wrap"><i class="fas fa-check"></i></div>
     <h1>Order <span>Confirmed!</span></h1>
     <p>Thank you for choosing SugarMukt by Vayur.<br>Your Ayurvedic journey begins now.</p>
     <div class="cod-badge" id="codBadge" style="display:none;">
@@ -1190,16 +421,11 @@ h1,h2,h3,h4,h5 {
     </div>
   </div>
 
-  <!-- Error Banner -->
   <div class="error-banner" id="errorBanner">
-    <i class="fas fa-exclamation-triangle"></i>
-    &nbsp;Order not found or payment not completed. Redirecting…
+    <i class="fas fa-exclamation-triangle"></i>&nbsp;Order not found or payment not completed. Redirecting…
   </div>
 
-  <!-- ─── INVOICE CARD ─── -->
   <div class="invoice-card" id="invoice">
-
-    <!-- Invoice Head -->
     <div class="invoice-head">
       <div class="inv-brand">
         <h2>SugarMukt <span>by Vayur</span></h2>
@@ -1214,144 +440,78 @@ h1,h2,h3,h4,h5 {
       </div>
     </div>
 
-    <!-- Invoice Body -->
     <div class="invoice-body">
-
-      <!-- Order Details -->
-      <div class="inv-section-title">
-        <i class="fas fa-file-invoice"></i>
-        <h3>Invoice Details</h3>
-      </div>
+      <div class="inv-section-title"><i class="fas fa-file-invoice"></i><h3>Invoice Details</h3></div>
       <div class="info-grid-2">
-        <div class="info-chip">
-          <div class="chip-label">Order ID</div>
-          <div class="chip-value" id="orderId">—</div>
-        </div>
-        <div class="info-chip">
-          <div class="chip-label">Date &amp; Time</div>
-          <div class="chip-value" id="paymentDate">—</div>
-        </div>
-        <div class="info-chip">
-          <div class="chip-label">Payment Method</div>
-          <div class="chip-value" id="paymentMethod">—</div>
-        </div>
-        <div class="info-chip">
-          <div class="chip-label">Transaction ID</div>
-          <div class="chip-value txn-mono" id="transactionId">—</div>
-        </div>
-        <div class="info-chip">
-          <div class="chip-label">Payment Status</div>
-          <div class="chip-value status-paid" id="paymentStatus">
-            <i class="fas fa-check-circle"></i> Paid
-          </div>
-        </div>
-        <div class="info-chip">
-          <div class="chip-label">Customer Name</div>
-          <div class="chip-value" id="custName">—</div>
-        </div>
+        <div class="info-chip"><div class="chip-label">Order ID</div><div class="chip-value" id="orderId">—</div></div>
+        <div class="info-chip"><div class="chip-label">Date &amp; Time</div><div class="chip-value" id="paymentDate">—</div></div>
+        <div class="info-chip"><div class="chip-label">Payment Method</div><div class="chip-value" id="paymentMethod">—</div></div>
+        <div class="info-chip"><div class="chip-label">Transaction ID</div><div class="chip-value txn-mono" id="transactionId">—</div></div>
+        <div class="info-chip"><div class="chip-label">Payment Status</div><div class="chip-value status-paid" id="paymentStatus"><i class="fas fa-check-circle"></i> Paid</div></div>
+        <div class="info-chip"><div class="chip-label">Customer Name</div><div class="chip-value" id="custName">—</div></div>
       </div>
 
       <div class="gold-divider"></div>
 
-      <!-- Delivery Details -->
-      <div class="inv-section-title">
-        <i class="fas fa-map-marker-alt"></i>
-        <h3>Delivery Details</h3>
-      </div>
+      <div class="inv-section-title"><i class="fas fa-map-marker-alt"></i><h3>Delivery Details</h3></div>
       <div class="info-grid-2">
-        <div class="info-chip">
-          <div class="chip-label">Mobile</div>
-          <div class="chip-value" id="custPhone">—</div>
-        </div>
-        <div class="info-chip full-width">
-          <div class="chip-label">Delivery Address</div>
-          <div class="chip-value" id="fullAddress">—</div>
-        </div>
+        <div class="info-chip"><div class="chip-label">Mobile</div><div class="chip-value" id="custPhone">—</div></div>
+        <div class="info-chip full-width"><div class="chip-label">Delivery Address</div><div class="chip-value" id="fullAddress">—</div></div>
       </div>
 
       <div class="gold-divider"></div>
 
-      <!-- Order Summary -->
-      <div class="inv-section-title">
-        <i class="fas fa-shopping-bag"></i>
-        <h3>Order Summary</h3>
-      </div>
+      <div class="inv-section-title"><i class="fas fa-shopping-bag"></i><h3>Order Summary</h3></div>
       <table class="product-table">
         <thead>
-          <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Unit Price</th>
-            <th>Subtotal</th>
-          </tr>
+          <tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td>
-              <div class="product-name-cell">
-                <div class="product-icon">🌿</div>
-                <span id="productName">—</span>
-              </div>
-            </td>
+            <td><div class="product-name-cell"><div class="product-icon">🌿</div><span id="productName">—</span></div></td>
             <td id="productQty">—</td>
             <td id="productPrice">—</td>
             <td id="productSubtotal">—</td>
           </tr>
         </tbody>
         <tfoot>
-          <tr class="subtotal-rows">
-            <td colspan="3">Shipping Charges</td>
-            <td id="shippingCost">—</td>
-          </tr>
-          <tr class="subtotal-rows discount-row" id="discountRow" style="display:none;">
-            <td colspan="3"><i class="fas fa-tag"></i>&nbsp; UPI Discount Applied</td>
-            <td id="discountAmt">—</td>
-          </tr>
-          <tr class="grand-total-row">
-            <td colspan="3"><strong>Grand Total</strong></td>
-            <td id="grandTotal">—</td>
-          </tr>
+          <tr class="subtotal-rows"><td colspan="3">Shipping Charges</td><td id="shippingCost">—</td></tr>
+          <tr class="subtotal-rows discount-row" id="discountRow" style="display:none;"><td colspan="3"><i class="fas fa-tag"></i>&nbsp; UPI Discount Applied</td><td id="discountAmt">—</td></tr>
+          <tr class="grand-total-row"><td colspan="3"><strong>Grand Total</strong></td><td id="grandTotal">—</td></tr>
         </tfoot>
       </table>
 
-      <!-- Invoice Footer -->
-      <div style="margin-top:32px; text-align:center;">
-        <p style="font-size:12px; color:var(--text-dim); line-height:1.8;">
-          <strong style="color:var(--text-muted);">Thank you for choosing SugarMukt by Vayur!</strong><br>
-          <i class="fas fa-envelope" style="color:var(--gold); margin-right:5px;"></i>Aushadhimantra99@gmail.com
+      <div style="margin-top:32px;text-align:center;">
+        <p style="font-size:12px;color:#8a9e92;line-height:1.8;">
+          <strong style="color:#f0ede6;">Thank you for choosing SugarMukt by Vayur!</strong><br>
+          <i class="fas fa-envelope" style="color:#c9a84c;margin-right:5px;"></i>Aushadhimantra99@gmail.com
           &nbsp;·&nbsp;
-          <i class="fas fa-phone" style="color:var(--gold); margin-right:5px;"></i>+91 74190 74650
+          <i class="fas fa-phone" style="color:#c9a84c;margin-right:5px;"></i>+91 74190 74650
         </p>
-        <p style="font-size:10px; color:var(--text-dim); margin-top:8px;">
+        <p style="font-size:10px;color:#556b60;margin-top:8px;">
           This is a computer-generated invoice. No physical signature required.
         </p>
       </div>
+    </div>
+  </div>
 
-    </div><!-- /invoice-body -->
-  </div><!-- /invoice-card -->
-
-  <!-- ─── DOWNLOAD ─── -->
   <div class="download-wrap" id="downloadSection">
     <h3><i class="fas fa-download"></i>&nbsp; Save Your Invoice</h3>
-    <p>
-      Please download or take a screenshot of your invoice before confirming.<br>
-      This is your proof of purchase.
-    </p>
+    <p>Download as PDF or save as an image. Both options work perfectly.</p>
     <div class="dl-btns">
       <button class="dl-btn dl-btn-primary" onclick="downloadPDF()">
         <i class="fas fa-file-pdf"></i> Download as PDF
       </button>
       <button class="dl-btn dl-btn-secondary" onclick="downloadScreenshot()">
-        <i class="fas fa-camera"></i> Take Screenshot
+        <i class="fas fa-image"></i> Take screenshot
       </button>
     </div>
   </div>
 
-  <!-- ─── CONFIRM ─── -->
   <div class="confirm-wrap">
     <div class="confirm-note" id="confirmNote">
       <i class="fas fa-lock"></i>
-      Please download or screenshot your invoice first to unlock confirmation
+      Please download your invoice first to unlock confirmation
     </div>
     <br>
     <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmOrder()">
@@ -1359,9 +519,8 @@ h1,h2,h3,h4,h5 {
     </button>
   </div>
 
-</div><!-- /page-wrap -->
+</div>
 
-<!-- ─── FOOTER ─── -->
 <footer class="site-footer">
   <div class="footer-grid">
     <div class="footer-brand">
@@ -1390,135 +549,107 @@ h1,h2,h3,h4,h5 {
     <p>Crafted with 🌿 for a healthier India.</p>
   </div>
   <div class="footer-disclaimer">
-    <strong>Disclaimer:</strong> SugarMukt by Vayur is an Ayurvedic formulation intended to support healthy blood sugar levels as part of an overall wellness routine. It is not a substitute for prescribed medical treatment. Results may vary. Please consult your physician before use if you are on medication or have a medical condition. This product has not been evaluated by the Food and Drug Administration (FSSAI claims pending).
+    <strong>Disclaimer:</strong> SugarMukt by Vayur is an Ayurvedic formulation intended to support healthy blood sugar levels as part of an overall wellness routine. It is not a substitute for prescribed medical treatment. Results may vary. Please consult your physician before use if you are on medication or have a medical condition.
   </div>
 </footer>
 
-<!-- ─── WhatsApp ─── -->
-<a href="https://wa.me/917419074650" class="wa-btn" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-  <i class="fab fa-whatsapp"></i>
-</a>
-
-<!-- ─── Scroll Top ─── -->
 <a href="#" class="scroll-top" id="scrollTop" aria-label="Back to top">
   <i class="fas fa-chevron-up"></i>
 </a>
-
-<!-- ─── Mobile Bar ─── -->
 <div class="mobile-bar">
   <a href="index.html">🏠 Back to Home</a>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════════ -->
 <script>
-/* ─── Mobile Menu ─── */
 function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('open');
 }
 
-/* ─── Scroll Top ─── */
-const scrollTopBtn = document.getElementById('scrollTop');
-window.addEventListener('scroll', () => {
+var scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', function() {
   scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
 });
 
-/* ─── Toast ─── */
-function showToast(msg, type = 'info') {
-  const wrap = document.getElementById('toastWrap');
-  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-  const t = document.createElement('div');
-  t.className = `toast toast-${type}`;
-  t.innerHTML = `<span class="toast-icon"><i class="fas ${icons[type]}"></i></span><span class="toast-msg">${msg}</span>`;
+function showToast(msg, type) {
+  type = type || 'info';
+  var wrap = document.getElementById('toastWrap');
+  var icons = { success:'fa-check-circle', error:'fa-exclamation-circle', info:'fa-info-circle' };
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.innerHTML = '<span class="toast-icon"><i class="fas ' + icons[type] + '"></i></span><span class="toast-msg">' + msg + '</span>';
   wrap.appendChild(t);
-  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
-  setTimeout(() => {
-    t.classList.remove('show');
-    setTimeout(() => t.remove(), 500);
-  }, 4000);
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ t.classList.add('show'); }); });
+  setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); }, 500); }, 4000);
 }
 
-/* ─── State ─── */
-let invoiceDownloaded = false;
-let orderData = null;
+var invoiceDownloaded = false;
+var orderData = null;
 
-/* ─── Load Order ─── */
-window.onload = function () {
-  let stored = null;
+window.onload = function() {
   try {
-    stored = localStorage.getItem('sugarmukt_order');
+    var stored = localStorage.getItem('sugarmukt_order');
     if (stored) orderData = JSON.parse(stored);
-  } catch (e) { orderData = null; }
+  } catch(e) { orderData = null; }
 
   if (!orderData) {
     showError('No order found! Redirecting to order page…');
-    setTimeout(() => { window.location.href = 'order.html'; }, 3000);
+    setTimeout(function(){ window.location.href = 'order.html'; }, 3000);
     return;
   }
 
-  const isOnlinePaid = ['success','paid'].includes(orderData.paymentStatus) || !!orderData.transactionId || !!orderData.paymentId;
-  const isCOD       = orderData.paymentMethod === 'COD' && orderData.paymentStatus === 'pending';
+  var isOnlinePaid = ['success','paid'].indexOf(orderData.paymentStatus) > -1 || !!orderData.transactionId || !!orderData.paymentId;
+  var isCOD = orderData.paymentMethod === 'COD' && orderData.paymentStatus === 'pending';
 
   if (!isOnlinePaid && !isCOD) {
     showError('Payment not completed. Redirecting to payment…');
-    setTimeout(() => { window.location.href = 'payment.html'; }, 3000);
+    setTimeout(function(){ window.location.href = 'payment.html'; }, 3000);
     return;
   }
 
-  /* ── COD tweaks ── */
   if (isCOD) {
-    document.getElementById('codBadge').style.display = 'inline-flex';
-    document.getElementById('invStatus').className    = 'inv-status cod';
+    document.getElementById('codBadge').style.display    = 'inline-flex';
+    document.getElementById('invStatus').className       = 'inv-status cod';
     document.getElementById('invStatusText').textContent = 'Cash on Delivery';
-    document.getElementById('paymentStatus').className  = 'chip-value status-cod';
-    document.getElementById('paymentStatus').innerHTML  = '<i class="fas fa-clock"></i>&nbsp; Pending (COD)';
+    document.getElementById('paymentStatus').className   = 'chip-value status-cod';
+    document.getElementById('paymentStatus').innerHTML   = '<i class="fas fa-clock"></i>&nbsp; Pending (COD)';
   }
 
-  /* ── Populate ── */
-  const paidAt = orderData.paidAt || orderData.orderDate || new Date().toISOString();
-  let formattedDate = '—';
-  try {
-    formattedDate = new Date(paidAt).toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' });
-  } catch(e) { formattedDate = paidAt; }
+  var paidAt = orderData.paidAt || orderData.orderDate || new Date().toISOString();
+  var formattedDate = '—';
+  try { formattedDate = new Date(paidAt).toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' }); }
+  catch(e) { formattedDate = paidAt; }
 
-  document.getElementById('invNumber').textContent  = 'Invoice #\u00A0' + (orderData.orderId || 'N/A');
-  document.getElementById('orderId').textContent    = orderData.orderId    || 'N/A';
-  document.getElementById('paymentDate').textContent = formattedDate;
-  document.getElementById('paymentMethod').textContent = orderData.paymentMethod || 'UPI';
+  document.getElementById('invNumber').textContent     = 'Invoice \u00A0#\u00A0' + (orderData.orderId || 'N/A');
+  document.getElementById('orderId').textContent       = orderData.orderId        || 'N/A';
+  document.getElementById('paymentDate').textContent   = formattedDate;
+  document.getElementById('paymentMethod').textContent = orderData.paymentMethod  || 'UPI';
   document.getElementById('transactionId').textContent = orderData.paymentId || orderData.transactionId || 'N/A';
-  document.getElementById('custName').textContent   = orderData.name  || '—';
-  document.getElementById('custPhone').textContent  = orderData.phone || '—';
+  document.getElementById('custName').textContent      = orderData.name   || '—';
+  document.getElementById('custPhone').textContent     = orderData.phone  || '—';
 
-  const addrParts = [orderData.house, orderData.area, orderData.city, orderData.district, orderData.state].filter(Boolean);
-  const pin = orderData.pincode ? ' – ' + orderData.pincode : '';
-  document.getElementById('fullAddress').textContent = addrParts.join(', ') + pin || '—';
+  var addrParts = [orderData.house, orderData.area, orderData.city, orderData.district, orderData.state].filter(Boolean);
+  var pin = orderData.pincode ? ' – ' + orderData.pincode : '';
+  document.getElementById('fullAddress').textContent = (addrParts.join(', ') + pin) || '—';
 
-  document.getElementById('productName').textContent    = orderData.product  || '—';
-  document.getElementById('productQty').textContent     = orderData.quantity || '—';
-  document.getElementById('productPrice').textContent   = orderData.price    ? '₹' + orderData.price    : '—';
+  document.getElementById('productName').textContent     = orderData.product  || '—';
+  document.getElementById('productQty').textContent      = orderData.quantity || '—';
+  document.getElementById('productPrice').textContent    = orderData.price    ? '₹' + orderData.price    : '—';
   document.getElementById('productSubtotal').textContent = orderData.subtotal ? '₹' + orderData.subtotal : '—';
 
-  /* ── Shipping ── */
-  const ship = orderData.shipping;
+  var ship = orderData.shipping;
   document.getElementById('shippingCost').innerHTML =
-    (!ship || ship == 0)
-      ? '<span class="free-badge">FREE</span>'
-      : '₹' + ship;
+    (!ship || ship == 0) ? '<span class="free-badge">FREE</span>' : '₹' + ship;
 
-  /* ── Discount ── */
   if (orderData.discount && orderData.discount > 0) {
     document.getElementById('discountRow').style.display = '';
     document.getElementById('discountAmt').textContent   = '− ₹' + orderData.discount;
   }
 
-  /* ── Grand Total ── */
   document.getElementById('grandTotal').textContent = orderData.finalAmount
     ? '₹' + orderData.finalAmount
     : (orderData.total ? '₹' + orderData.total : '—');
 
-  /* ── Show success toast ── */
-  setTimeout(() => {
+  setTimeout(function(){
     showToast(
       isCOD
         ? 'Order confirmed! Pay ₹' + (orderData.total || '') + ' on delivery.'
@@ -1528,9 +659,8 @@ window.onload = function () {
   }, 600);
 };
 
-/* ─── Error Banner ─── */
 function showError(msg) {
-  const eb = document.getElementById('errorBanner');
+  var eb = document.getElementById('errorBanner');
   eb.innerHTML = '<i class="fas fa-exclamation-triangle"></i>&nbsp;' + msg;
   eb.classList.add('show');
   document.getElementById('downloadSection').style.display = 'none';
@@ -1540,62 +670,198 @@ function showError(msg) {
   showToast(msg, 'error');
 }
 
-/* ─── Enable Confirm ─── */
 function enableConfirmButton() {
   if (invoiceDownloaded) return;
   invoiceDownloaded = true;
-  const btn = document.getElementById('confirmBtn');
+  var btn = document.getElementById('confirmBtn');
   btn.disabled = false;
   btn.classList.add('enabled');
   document.getElementById('confirmNote').classList.add('hidden');
   showToast('Invoice saved! You can now confirm your order.', 'success');
 }
 
-/* ─── Download PDF (Print) ─── */
+/* ── PDF Download using window.print() ── */
 function downloadPDF() {
   window.print();
   setTimeout(enableConfirmButton, 2000);
 }
 
-/* ─── Download Screenshot ─── */
+/* ════════════════════════════════════════════════════════
+   SCREENSHOT — Opens a NEW POPUP WINDOW with a clean,
+   self-contained invoice (no CSS vars, no backdrop-filter,
+   no fixed backgrounds) then calls print() on it so the
+   user can "Save as PDF" or use browser screenshot.
+   This completely bypasses html2canvas and all its bugs.
+════════════════════════════════════════════════════════ */
 function downloadScreenshot() {
   if (!orderData) return;
-  const el   = document.getElementById('invoice');
-  const dlSec = document.getElementById('downloadSection');
-  const fname = 'SugarMukt-Invoice-' + (orderData.orderId || 'order') + '.png';
 
-  dlSec.style.display = 'none';
+  /* Collect all current field values */
+  var fields = {
+    invNumber:      document.getElementById('invNumber').textContent,
+    orderId:        document.getElementById('orderId').textContent,
+    paymentDate:    document.getElementById('paymentDate').textContent,
+    paymentMethod:  document.getElementById('paymentMethod').textContent,
+    transactionId:  document.getElementById('transactionId').textContent,
+    custName:       document.getElementById('custName').textContent,
+    custPhone:      document.getElementById('custPhone').textContent,
+    fullAddress:    document.getElementById('fullAddress').textContent,
+    productName:    document.getElementById('productName').textContent,
+    productQty:     document.getElementById('productQty').textContent,
+    productPrice:   document.getElementById('productPrice').textContent,
+    productSubtotal:document.getElementById('productSubtotal').textContent,
+    shippingCost:   document.getElementById('shippingCost').innerHTML,
+    grandTotal:     document.getElementById('grandTotal').textContent,
+    statusClass:    document.getElementById('invStatus').className,
+    statusText:     document.getElementById('invStatusText').textContent,
+    payStatusHTML:  document.getElementById('paymentStatus').innerHTML,
+    payStatusClass: document.getElementById('paymentStatus').className,
+    discountVisible: document.getElementById('discountRow').style.display !== 'none',
+    discountAmt:    document.getElementById('discountAmt').textContent
+  };
 
-  html2canvas(el, {
-    scale: 2,
-    useCORS: true,
-    allowTaint: false,
-    logging: false,
-    backgroundColor: '#0d2818',
-    windowWidth: el.scrollWidth,
-    windowHeight: el.scrollHeight
-  }).then(canvas => {
-    dlSec.style.display = 'block';
-    const link = document.createElement('a');
-    link.download = fname;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    enableConfirmButton();
-  }).catch(err => {
-    dlSec.style.display = 'block';
-    console.error('Screenshot error:', err);
-    showToast('Screenshot failed. Please use "Download as PDF" instead.', 'error');
-  });
+  var isCOD = fields.statusClass.indexOf('cod') > -1;
+
+  var popupHTML = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+  '<title>Invoice | SugarMukt by Vayur</title>' +
+  '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">' +
+  '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">' +
+  '<style>' +
+  '*{margin:0;padding:0;box-sizing:border-box}' +
+  'body{font-family:"DM Sans",sans-serif;background:#0d2818;color:#f0ede6;padding:24px;min-height:100vh}' +
+  'h2,h3{font-family:"Cormorant Garamond",serif}' +
+  '.card{background:#0d2818;border:1px solid rgba(201,168,76,0.3);border-radius:16px;overflow:hidden;max-width:800px;margin:0 auto;box-shadow:0 4px 32px rgba(0,0,0,0.6)}' +
+  '.head{background:linear-gradient(135deg,#0d2818,#0a1f10);border-bottom:1px solid rgba(201,168,76,0.25);padding:32px 40px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px}' +
+  '.head h2{font-size:28px;color:#f0ede6;margin-bottom:4px}' +
+  '.head h2 span{color:#c9a84c}' +
+  '.head p{font-size:11px;color:#8a9e92;letter-spacing:1.5px;text-transform:uppercase}' +
+  '.inv-num{font-size:12px;color:#8a9e92;margin-bottom:8px}' +
+  '.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:50px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}' +
+  '.badge.paid{background:rgba(26,122,74,0.3);border:1px solid rgba(45,158,99,0.5);color:#6ee09a}' +
+  '.badge.cod{background:rgba(201,168,76,0.2);border:1px solid rgba(201,168,76,0.45);color:#e8c96d}' +
+  '.dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}' +
+  '.body{padding:36px 40px;background:#0d2818}' +
+  '.divider{height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:28px 0;opacity:0.4}' +
+  '.sec-title{display:flex;align-items:center;gap:10px;margin-bottom:16px}' +
+  '.sec-icon{width:32px;height:32px;border-radius:8px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.28);display:flex;align-items:center;justify-content:center;color:#c9a84c;font-size:12px;flex-shrink:0}' +
+  '.sec-title h3{font-size:18px;color:#f0ede6}' +
+  '.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}' +
+  '.chip{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);border-radius:10px;padding:12px 16px}' +
+  '.chip.full{grid-column:1/-1}' +
+  '.lbl{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#8a9e92;margin-bottom:4px}' +
+  '.val{font-size:12px;color:#f0ede6;font-weight:500;word-break:break-all;line-height:1.4}' +
+  '.val.mono{font-family:"Courier New",monospace;color:#e8c96d;font-size:11px;background:rgba(201,168,76,0.08);padding:2px 7px;border-radius:4px;border:1px solid rgba(201,168,76,0.2);display:inline-block}' +
+  '.val.green{color:#6ee09a;font-weight:700}' +
+  '.val.gold{color:#e8c96d;font-weight:700}' +
+  'table{width:100%;border-collapse:collapse;margin-top:4px}' +
+  'thead tr{background:rgba(201,168,76,0.12);border-bottom:1px solid rgba(201,168,76,0.3)}' +
+  'th{padding:11px 16px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#c9a84c;text-align:left}' +
+  'td{padding:12px 16px;font-size:12px;color:#f0ede6;border-bottom:1px solid rgba(255,255,255,0.06)}' +
+  '.sub td{color:#8a9e92;padding:9px 16px}' +
+  '.sub td:last-child{text-align:right}' +
+  '.disc td{color:#6ee09a}' +
+  '.tot{background:rgba(201,168,76,0.12);border-top:1px solid rgba(201,168,76,0.35)}' +
+  '.tot td{font-size:15px;font-weight:700;color:#e8c96d;padding:14px 16px;border:none}' +
+  '.tot td:last-child{text-align:right}' +
+  '.free{background:rgba(26,122,74,0.22);border:1px solid rgba(45,158,99,0.4);color:#6ee09a;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700}' +
+  '.picon{width:28px;height:28px;border-radius:6px;background:rgba(26,122,74,0.22);border:1px solid rgba(45,158,99,0.35);display:inline-flex;align-items:center;justify-content:center;font-size:13px;vertical-align:middle;margin-right:6px}' +
+  '.foot{margin-top:28px;text-align:center;padding-top:20px;border-top:1px solid rgba(255,255,255,0.06)}' +
+  '.foot p{font-size:11px;color:#8a9e92;line-height:1.8}' +
+  '.foot strong{color:#f0ede6}' +
+  '.foot .gold{color:#c9a84c}' +
+  '.foot small{font-size:9px;color:#556b60;display:block;margin-top:6px}' +
+  '@media print{' +
+  'body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0}' +
+  '.card{border:none;border-radius:0;box-shadow:none}' +
+  '.head{background:#0d2818 !important;-webkit-print-color-adjust:exact}' +
+  '.body{background:#fff !important}' +
+  '.chip{background:#f9f9f9 !important;border-color:#ddd !important}' +
+  '.lbl{color:#555 !important}' +
+  '.val{color:#111 !important}' +
+  '.val.mono{color:#b8930f !important;background:#fff8e8 !important;border-color:#e0c875 !important}' +
+  '.val.green{color:#1a7a4a !important}' +
+  '.val.gold{color:#b8930f !important}' +
+  'th{background:#0d2818 !important;-webkit-print-color-adjust:exact}' +
+  'td{color:#111 !important}' +
+  '.sub td{color:#555 !important}' +
+  '.disc td{color:#1a7a4a !important}' +
+  '.tot td{color:#b8930f !important;background:#fff8e8 !important}' +
+  '.print-btn{display:none !important}' +
+  '}' +
+  '</style></head><body>' +
+  '<div style="max-width:800px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:10px">' +
+  '<button class="print-btn" onclick="window.print()" style="background:linear-gradient(135deg,#b8930f,#c9a84c);color:#0a1f14;border:none;padding:10px 24px;border-radius:50px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🖨 Print / Save PDF</button>' +
+  '<button class="print-btn" onclick="window.close()" style="background:rgba(255,255,255,0.08);color:#f0ede6;border:1px solid rgba(255,255,255,0.14);padding:10px 24px;border-radius:50px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:600;cursor:pointer;">✕ Close</button>' +
+  '</div>' +
+  '<div class="card">' +
+  '<div class="head">' +
+  '<div><h2>SugarMukt <span>by Vayur</span></h2><p>Natural Diabetes Care · 100% Ayurvedic</p></div>' +
+  '<div style="text-align:right">' +
+  '<div class="inv-num">' + fields.invNumber + '</div>' +
+  '<div class="badge ' + (isCOD ? 'cod' : 'paid') + '"><span class="dot"></span>' + fields.statusText + '</div>' +
+  '</div>' +
+  '</div>' +
+  '<div class="body">' +
+  '<div class="sec-title"><div class="sec-icon"><i class="fas fa-file-invoice"></i></div><h3>Invoice Details</h3></div>' +
+  '<div class="grid">' +
+  '<div class="chip"><div class="lbl">Order ID</div><div class="val">' + fields.orderId + '</div></div>' +
+  '<div class="chip"><div class="lbl">Date &amp; Time</div><div class="val">' + fields.paymentDate + '</div></div>' +
+  '<div class="chip"><div class="lbl">Payment Method</div><div class="val">' + fields.paymentMethod + '</div></div>' +
+  '<div class="chip"><div class="lbl">Transaction ID</div><div class="val mono">' + fields.transactionId + '</div></div>' +
+  '<div class="chip"><div class="lbl">Payment Status</div><div class="val ' + (isCOD ? 'gold' : 'green') + '">' + (isCOD ? '⏳ Pending (COD)' : '✓ Paid') + '</div></div>' +
+  '<div class="chip"><div class="lbl">Customer Name</div><div class="val">' + fields.custName + '</div></div>' +
+  '</div>' +
+  '<div class="divider"></div>' +
+  '<div class="sec-title"><div class="sec-icon"><i class="fas fa-map-marker-alt"></i></div><h3>Delivery Details</h3></div>' +
+  '<div class="grid">' +
+  '<div class="chip"><div class="lbl">Mobile</div><div class="val">' + fields.custPhone + '</div></div>' +
+  '<div class="chip full"><div class="lbl">Delivery Address</div><div class="val">' + fields.fullAddress + '</div></div>' +
+  '</div>' +
+  '<div class="divider"></div>' +
+  '<div class="sec-title"><div class="sec-icon"><i class="fas fa-shopping-bag"></i></div><h3>Order Summary</h3></div>' +
+  '<table>' +
+  '<thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr></thead>' +
+  '<tbody><tr>' +
+  '<td><span class="picon">🌿</span>' + fields.productName + '</td>' +
+  '<td>' + fields.productQty + '</td>' +
+  '<td>' + fields.productPrice + '</td>' +
+  '<td>' + fields.productSubtotal + '</td>' +
+  '</tr></tbody>' +
+  '<tfoot>' +
+  '<tr class="sub"><td colspan="3">Shipping Charges</td><td>' + fields.shippingCost + '</td></tr>' +
+  (fields.discountVisible ? '<tr class="sub disc"><td colspan="3">🏷 UPI Discount Applied</td><td>' + fields.discountAmt + '</td></tr>' : '') +
+  '<tr class="tot"><td colspan="3"><strong>Grand Total</strong></td><td>' + fields.grandTotal + '</td></tr>' +
+  '</tfoot>' +
+  '</table>' +
+  '<div class="foot">' +
+  '<p><strong>Thank you for choosing SugarMukt by Vayur!</strong><br>' +
+  '<span class="gold"><i class="fas fa-envelope"></i></span> Aushadhimantra99@gmail.com &nbsp;·&nbsp; ' +
+  '<span class="gold"><i class="fas fa-phone"></i></span> +91 74190 74650</p>' +
+  '<small>This is a computer-generated invoice. No physical signature required.</small>' +
+  '</div>' +
+  '</div></div>' +
+  '<script>window.onload=function(){window.print();}<\/script>' +
+  '</body></html>';
+
+  var popup = window.open('', '_blank', 'width=900,height=700,scrollbars=yes,menubar=yes,toolbar=yes');
+  if (!popup) {
+    showToast('Popup blocked! Please allow popups for this site and try again.', 'error');
+    return;
+  }
+  popup.document.open();
+  popup.document.write(popupHTML);
+  popup.document.close();
+
+  enableConfirmButton();
 }
 
-/* ─── Confirm Order ─── */
 function confirmOrder() {
   if (!invoiceDownloaded) {
-    showToast('Please download or screenshot your invoice first!', 'error');
+    showToast('Please download your invoice first!', 'error');
     return;
   }
   showToast('Thank you! Your order is confirmed. Redirecting…', 'success');
-  setTimeout(() => {
+  setTimeout(function(){
     localStorage.removeItem('sugarmukt_order');
     window.location.href = 'index.html';
   }, 2500);
