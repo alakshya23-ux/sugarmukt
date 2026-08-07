@@ -1145,7 +1145,7 @@ function payWithRazorpay(method) {
       localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
       sendToGoogleSheet(orderData);
       showToast('success', 'Payment Successful!', 'Redirecting to your invoice…');
-      setTimeout(() => window.location.href = 'billing.html', 1500);
+      setTimeout(() => window.location.href = 'thankyou.html', 1500);
     },
     prefill: {
       name:    orderData.name  || '',
@@ -1186,7 +1186,7 @@ function payWithCOD() {
   orderData.orderDate     = new Date().toISOString();
   localStorage.setItem('sugarmukt_order', JSON.stringify(orderData));
   sendToGoogleSheet(orderData);
-  setTimeout(() => window.location.href = 'billing.html', 3000);
+  setTimeout(() => window.location.href = 'thankyou.html', 3000);
 }
 
 /* ── Toast ────────────────────────────────────────────── */
